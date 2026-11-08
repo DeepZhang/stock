@@ -6,7 +6,11 @@ config.json
 data/
 *.log
 __pycache__/
+.venv/
 **/__pycache__/
 *.py[cod]
 shots/
 xhs_auth.json
+*_auth.json
+*.parquet
+*.csv.gz
