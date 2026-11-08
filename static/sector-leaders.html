@@ -42,11 +42,12 @@ dl{display:grid;grid-template-columns:90px 1fr;gap:4px;margin-top:8px}dd{overflo
 <script>
 const text = v => String(v ?? "").replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;"}[c]));
 const pct = (v, digits=2) => (v === null || v === undefined || Number.isNaN(Number(v))) ? "—" : (Number(v) * 100).toFixed(digits) + "%";
+const ppct = (v, digits=2) => (v === null || v === undefined || Number.isNaN(Number(v))) ? "—" : Number(v).toFixed(digits) + "%";
 const num = (v, digits=2) => (v === null || v === undefined || Number.isNaN(Number(v))) ? "—" : Number(v).toFixed(digits);
 function pickCard(p) {
   const live = p.excluded_live ? " · 线上不覆盖（30/688 开头）" : "";
   const signal = p.signal ? text(p.signal) : "—";
-  const day = (p.ret_5d === null || p.ret_5d === undefined) ? "" : " · 5 日涨幅 " + pct(p.ret_5d) + " · 量比 " + num(p.vol_ratio) + " · 换手率 " + pct(p.turnover);
+  const day = (p.ret_5d === null || p.ret_5d === undefined) ? "" : " · 量比 " + num(p.vol_ratio) + " · 换手率 " + ppct(p.turnover);
   return "<article class=\"pick\"><h3><a href=\"/kline?code=" + text(p.code) + "&name=" + encodeURIComponent(p.name || "") + "\">" + text(p.name) + "（" + text(p.code) + "）</a></h3>" +
     "<dl><dt>信号</dt><dd>" + signal + day + "</dd>" +
     "<dt>历史 5 日胜率</dt><dd><span class=\"rate\">" + pct(p.win_rate) + "</span>（n=" + (p.n ?? "—") + "，胜场 " + (p.wins ?? "—") + "）</dd>" +
