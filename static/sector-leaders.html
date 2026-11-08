@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>板块龙头 Top 3 · 股票看板</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0e17;color:#e5e7eb;font-family:"PingFang SC","Microsoft YaHei",sans-serif;font-size:13px;line-height:1.8}
+nav{background:#111827;border-bottom:1px solid #1f2937;padding:14px 24px;display:flex;gap:24px;flex-wrap:wrap}
+a{color:#9ca3af;text-decoration:none}a:hover{color:#fff}.brand,.active,h2{color:#ff9f43}
+main{max-width:1100px;margin:auto;padding:20px 16px}.card{background:#111827;border:1px solid #1f2937;border-radius:12px;padding:18px 20px;margin-bottom:16px}
+h1{font-size:22px}h2{font-size:17px;margin-bottom:10px}h3{font-size:15px;color:#fff}.muted,dt{color:#9ca3af}.notice{color:#fbbf24}.meta{margin:8px 0 18px;color:#9ca3af}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(285px,1fr));gap:12px}.pick{background:#0a0e17;border:1px solid #1f2937;border-radius:8px;padding:14px}
+dl{display:grid;grid-template-columns:90px 1fr;gap:4px;margin-top:8px}dd{overflow-wrap:anywhere}.empty{color:#9ca3af;padding:20px 0}.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;white-space:nowrap}th,td{text-align:left;padding:8px;border-bottom:1px solid #1f2937}th{color:#9ca3af;font-weight:normal}pre{white-space:pre-wrap;font:inherit;color:#9ca3af}summary{cursor:pointer;color:#ff9f43}.rate{color:#ff9f43;font-weight:bold}
+</style>
+</head>
+<body>
+<nav><strong class="brand">📊 股票看板</strong><a href="/">资金流向</a><a href="/market">行情总览/每日复盘</a><a href="/rank">排行榜</a><a href="/kline">个股K线</a><a href="/screener">选股器</a><a href="/sector-leaders" class="active">板块龙头</a><a href="/shortterm">短线选股</a><a href="/precious">贵金属</a></nav>
+<main>
+<h1>板块龙头 Top 3 · 研究候选</h1>
+<div class="meta" id="meta">正在读取每日结果…</div>
+<div class="card notice">组合胜率 48.77% 未过 50%：回测组合（基线 5 日涨幅≥5% 加保留过滤器）全期 n=166876，胜率 48.77%，平均收益 1.16%，盈亏比 1.451。Top 3 是板块内按胜率排出的相对优选，各板块胜率多在 53%~66%，只证明有挑选效应，不是可直接交易的组合胜率。信号收盘买入，持有 5 个交易日后按收盘判定胜负；不含费用与滑点；仅用于研究，不自动交易。</div>
+<section class="card"><h2>口径与局限</h2>
+<p class="muted">信号：当日 5 日涨幅≥5%、量比≤3、换手率 1%~20%。只扫描成交额前 1500 只、前复权日线；板块按东财资金流向 23 个概念板块划分，板块成分按 2026-11-08 当日冻结；当日板块内按 5 日涨幅降序取前 3 只。</p>
+<p class="muted">回测统计期 2024-01-01~2026-11-06（2024-2025 标定，2026 验证；2026 年参与了验证的检验，验证期不是严格独立检验）。组合胜率：全期 48.77%（n=166876），标定 48.48%（n=110590），验证 49.36%（n=56286）；基线（仅 5 日涨幅≥5%）47.79%（n=207436）。</p>
+<p class="muted">局限：板块成分按当日冻结，历史上已调出成分与已退市的票不在榜内，Top 3 有前视与幸存者偏差，胜率会被高估；概念板块重叠，一票可进多个板块的 Top 3（如宏明电子进 4 榜、宁德时代进 3 榜），各榜不是相互独立的推荐；Top 3 里多创业板 / 科创板（30/688 开头）代码，线上选股器不覆盖，榜单不等于线上可推的票；ST 按当日名称剔除；小样本 Top 3（如 n=20）胜率波动大；微盘股板块成分仅 4 只，几乎没有可选余地。</p>
+<p class="muted">数据来源：<span id="source">stock-analysis/sector_leaders_backtest.md</span>。每日产物缺失时，页面回退到回测 Top 3，并在顶部注明来源。</p>
+</section>
+<section class="card"><h2>回测汇总</h2>
+<div class="table-wrap"><table><thead><tr><th>口径</th><th>统计期</th><th>胜场 / 样本</th><th>胜率</th><th>平均收益</th><th>盈亏比</th></tr></thead><tbody>
+<tr><td>基线（仅 5 日涨幅≥5%）</td><td>2024-01-01~2026-11-06</td><td>99124 / 207436</td><td>47.79%</td><td>0.97%</td><td>1.423</td></tr>
+<tr><td>组合（基线 + 保留过滤器）</td><td>2024-01-01~2026-11-06</td><td>81393 / 166876</td><td>48.77%</td><td>1.16%</td><td>1.451</td></tr>
+<tr><td>组合 · 标定</td><td>2024-01-01~2025-12-31</td><td>53611 / 110590</td><td>48.48%</td><td>1.26%</td><td>1.546</td></tr>
+<tr><td>组合 · 验证</td><td>2026-01-01~2026-11-06</td><td>27782 / 56286</td><td>49.36%</td><td>0.97%</td><td>1.305</td></tr>
+</tbody></table></div>
+<p class="muted">Top 3 各板块胜率多在 53%~66%，最高宏明电子 80.00%（n=20，恰为入榜门槛）；Top 3 按胜率、样本数、平均收益降序入榜，本身就是挑选的结果。</p>
+</section>
+<div id="sectors"></div>
+<details class="card"><summary>当日候选摘要（仅生成，未发送）</summary><pre id="summary"></pre></details>
+</main>
+<script>
+const text = v => String(v ?? "").replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;"}[c]));
+const pct = (v, digits=2) => (v === null || v === undefined || Number.isNaN(Number(v))) ? "—" : (Number(v) * 100).toFixed(digits) + "%";
+const num = (v, digits=2) => (v === null || v === undefined || Number.isNaN(Number(v))) ? "—" : Number(v).toFixed(digits);
+function pickCard(p) {
+  const live = p.excluded_live ? " · 线上不覆盖（30/688 开头）" : "";
+  const signal = p.signal ? text(p.signal) : "—";
+  const day = (p.ret_5d === null || p.ret_5d === undefined) ? "" : " · 5 日涨幅 " + pct(p.ret_5d) + " · 量比 " + num(p.vol_ratio) + " · 换手率 " + pct(p.turnover);
+  return "<article class=\"pick\"><h3><a href=\"/kline?code=" + text(p.code) + "&name=" + encodeURIComponent(p.name || "") + "\">" + text(p.name) + "（" + text(p.code) + "）</a></h3>" +
+    "<dl><dt>信号</dt><dd>" + signal + day + "</dd>" +
+    "<dt>历史 5 日胜率</dt><dd><span class=\"rate\">" + pct(p.win_rate) + "</span>（n=" + (p.n ?? "—") + "，胜场 " + (p.wins ?? "—") + "）</dd>" +
+    "<dt>历史平均收益</dt><dd>" + pct(p.mean_ret) + " · 盈亏比 " + num(p.payoff) + "</dd>" +
+    "<dt>最近信号日</dt><dd>" + text(p.last_signal || "—") + "</dd>" +
+    "<dt>备注</dt><dd>" + (p.signals_2026 ?? "—") + " 个 2026 年信号" + live + "</dd></dl></article>";
+}
+function sectorCard(name, entry) {
+  const combo = entry.combo && entry.combo.full ? entry.combo.full : null;
+  const comboText = combo ? "板块组合胜率 " + pct(combo.win_rate) + "（n=" + combo.n + "，平均收益 " + pct(combo.mean_ret) + "）" : "该板块暂无组合统计";
+  const picks = entry.top3 || [];
+  const body = picks.length ? picks.map(pickCard).join("") : "<p class=\"empty\">该板块当日无符合条件的候选。</p>";
+  return "<section class=\"card\"><h2>" + text(name) + "</h2><p class=\"muted\">" + comboText + " · 板块内候选 " + (entry.candidates ?? "—") + " 只</p><div class=\"grid\">" + body + "</div></section>";
+}
+function render(d) {
+  const source = d.source === "daily" ? "当日扫描" : (d.source === "backtest" ? "回测 Top 3（每日产物缺失时回退）" : "暂无数据");
+  document.getElementById("meta").textContent = d.as_of ? "数据日期：" + d.as_of + "（" + source + "） | 生成时间：" + d.generated_at + " | " + d.counts.sectors + " 个板块，" + d.counts.picks + " 只入榜" : "暂无每日结果：" + source + "；当前无可用行情日期。";
+  const wrap = document.getElementById("sectors");
+  wrap.innerHTML = "";
+  const names = Object.keys(d.sectors || {});
+  if (!names.length) {
+    wrap.innerHTML = "<p class=\"empty\">暂无板块龙头数据。</p>";
+  } else {
+    names.forEach(function (name) { wrap.insertAdjacentHTML("beforeend", sectorCard(name, d.sectors[name])); });
+  }
+  document.getElementById("summary").textContent = d.summary || "暂无摘要。";
+}
+fetch("/api/sector-leaders", {cache: "no-store"}).then(function (r) { return r.json(); }).then(render).catch(function () { document.getElementById("meta").textContent = "读取失败，请稍后重试。"; });
+</script>
+</body>
+</html>

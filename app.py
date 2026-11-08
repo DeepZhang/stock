@@ -772,6 +772,11 @@ def api_sector_leaders():
 
 # ===================== 页面路由 =====================
 
+@app.route("/sector-leaders")
+def sector_leaders_page():
+    return send_file("static/sector-leaders.html")
+
+
 @app.route("/")
 def index():
     return send_file("static/index.html")

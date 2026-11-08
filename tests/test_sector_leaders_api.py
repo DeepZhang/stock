@@ -104,5 +104,21 @@ class SectorLeadersApiTest(unittest.TestCase):
         self.assertEqual(self.client.get("/api/screen").status_code, 200)
 
 
+class SectorLeadersPageTest(unittest.TestCase):
+    def setUp(self):
+        self.client = site.app.test_client()
+
+    def test_page_renders_with_disclosures(self):
+        resp = self.client.get("/sector-leaders")
+        self.assertEqual(resp.status_code, 200)
+        html = resp.get_data(as_text=True)
+        for text in ("板块龙头", "48.77%", "stock-analysis/sector_leaders_backtest.md", "/api/sector-leaders", "回测 Top 3", "挑选效应", "概念板块重叠"):
+            self.assertIn(text, html)
+
+    def test_page_nav_marks_sector_leaders_active(self):
+        html = self.client.get("/sector-leaders").get_data(as_text=True)
+        self.assertIn("<a href=\"/sector-leaders\" class=\"active\">板块龙头</a>", html)
+
+
 if __name__ == "__main__":
     unittest.main()
