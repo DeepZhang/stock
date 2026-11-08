@@ -3,8 +3,8 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-EXPECTED = [("/", "资金流向"), ("/market", "行情总览/每日复盘"), ("/rank", "排行榜"), ("/kline", "个股K线"), ("/screener", "选股器"), ("/shortterm", "短线选股"), ("/precious", "贵金属")]
-PAGES = ["index.html", "kline.html", "market.html", "market2.html", "precious.html", "rank.html", "screener.html", "sentiment.html", "shortterm.html"]
+EXPECTED = [("/", "资金流向"), ("/market", "行情总览/每日复盘"), ("/rank", "排行榜"), ("/kline", "个股K线"), ("/screener", "选股器"), ("/sector-leaders", "板块龙头"), ("/shortterm", "短线选股"), ("/precious", "贵金属")]
+PAGES = ["index.html", "kline.html", "market.html", "market2.html", "precious.html", "rank.html", "screener.html", "sector-leaders.html", "sentiment.html", "shortterm.html"]
 
 class NavConsistencyTest(unittest.TestCase):
     def test_nav_links_same_text_and_order(self):
