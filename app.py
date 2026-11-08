@@ -795,6 +795,11 @@ def api_unified():
     return response
 
 
+@app.route("/unified")
+def unified_page():
+    return send_file("static/unified.html")
+
+
 @app.route("/")
 def index():
     return send_file("static/index.html")

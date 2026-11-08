@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>统一榜单 · 股票看板</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0e17;color:#e5e7eb;font-family:"PingFang SC","Microsoft YaHei",sans-serif;font-size:13px;line-height:1.8}
+nav{background:#111827;border-bottom:1px solid #1f2937;padding:14px 24px;display:flex;gap:24px;flex-wrap:wrap}
+a{color:#9ca3af;text-decoration:none}a:hover{color:#fff}.brand,.active,h2{color:#ff9f43}
+main{max-width:1100px;margin:auto;padding:20px 16px}.card{background:#111827;border:1px solid #1f2937;border-radius:12px;padding:18px 20px;margin-bottom:16px}
+h1{font-size:22px}h2{font-size:17px;margin-bottom:10px}h3{font-size:15px;color:#fff}.muted,dt{color:#9ca3af}.notice{color:#fbbf24}.meta{margin:8px 0 18px;color:#9ca3af}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(285px,1fr));gap:12px}.pick{background:#0a0e17;border:1px solid #1f2937;border-radius:8px;padding:14px}
+dl{display:grid;grid-template-columns:90px 1fr;gap:4px;margin-top:8px}dd{overflow-wrap:anywhere}.empty{color:#9ca3af;padding:20px 0}.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;white-space:nowrap}th,td{text-align:left;padding:8px;border-bottom:1px solid #1f2937}th{color:#9ca3af;font-weight:normal}pre{white-space:pre-wrap;font:inherit;color:#9ca3af}summary{cursor:pointer;color:#ff9f43}.rate{color:#ff9f43;font-weight:bold}
+</style>
+</head>
+<body>
+<nav><strong class="brand">📊 股票看板</strong><a href="/">资金流向</a><a href="/market">行情总览/每日复盘</a><a href="/rank">排行榜</a><a href="/kline">个股K线</a><a href="/screener">选股器</a><a href="/sector-leaders" class="active">板块龙头</a><a href="/shortterm">短线选股</a><a href="/precious">贵金属</a></nav>
+<main>
+<h1>统一榜单 · 按板块推荐</h1>
+<div class="meta" id="meta">正在读取每日结果。</div>
+<div class="card notice">胜率是“信号出现后持有 N 天上涨的比例”。三个来源持有天数不同（涨停次日 1 天、超跌反弹 3–5 天、板块龙头 5 天），数字不能直接比大小。短线策略按真实可执行方式（次日开盘买入、T+1）测得平均收益 -0.083%，尚未证明可交易盈利。板块龙头组合胜率 48.77%（n=166876）未过 50%，Top 3 的高胜率有挑选效应。旧突破选股器没有单独回测胜率，标为“未单独回测”。板块组合胜率低于 50% 的板块整个跳过，见下方“未推荐板块”。</div>
+<section class="card"><h2>口径与局限</h2>
+<p class="muted">信号：涨停次日（收盘涨停，次日持有 1 天）、超跌反弹（超跌后反弹信号，持有 3–5 天）、板块龙头（当日 5 日涨幅≥5%、量比≥3、换手率 1%–20%，持有 5 个交易日后按收盘判定胜负）、旧突破选股器（突破信号，无单独回测）。</p>
+<p class="muted">胜率口径：涨停次日 63.03%（n=10762，2024-01-01~2026-11-06）；超跌反弹 69.03%（n=3213，同口径）；板块龙头每只票的历史 5 日胜率与样本数 n 各不相同，组合全期 48.77%（n=166876）。</p>
+<p class="muted">门槛：只推荐板块组合胜率（full 口径）≥50% 的板块，每板块最多 3 只，按每只票各信号胜率的最大值降序排，胜率相同时样本数 n 大的在前；一只票触发多个信号时合并为一行，行内列出全部信号。</p>
+<p class="muted">局限：短线信号按收盘统计，信号胜率不等于交易胜率；次日开盘买入、T+1 退出测得平均收益 -0.083%，尚未证明可交易盈利。板块成分按 2026-11-08 当日冻结，Top 3 有前视/幸存者偏差，胜率会被高估；验证期（2026 年）参与了过滤器筛选，不是严格独立检验。统计不含费用与滑点；仅用于研究，不自动交易。</p>
+</section>
+<div id="sectors"></div>
+<section class="card" id="skipped-card"><h2>未推荐板块</h2>
+<p class="muted">以下板块组合胜率低于 50%，整个跳过、不推荐。</p>
+<div class="table-wrap"><table id="skipped-table"><thead><tr><th>板块</th><th>组合胜率</th><th>样本数 n</th><th>未推荐原因</th></tr></thead><tbody></tbody></table></div>
+</section>
+</main>
+<script>
+const text = (v) => String(v ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+const pct = (v) => (v === null || v === undefined) ? "—" : (Number(v) * 100).toFixed(2) + "%";
+const num = (v) => (v === null || v === undefined) ? "—" : v;
+function signalText(s) {
+  const rate = s.win_rate === null || s.win_rate === undefined ? "未单独回测" : pct(s.win_rate) + "（n=" + s.n + "）";
+  const hold = s.holding ? "，持有 " + s.holding : "";
+  const date = s.date ? "，最近信号日 " + s.date : "";
+  return text(s.signal) + " " + rate + hold + date;
+}
+function pickRow(p) {
+  const best = p.best_win_rate === null || p.best_win_rate === undefined ? "未单独回测" : pct(p.best_win_rate);
+  const bestN = p.best_n === null || p.best_n === undefined ? "—" : p.best_n;
+  const sigs = p.signals.map(signalText).join("<br>");
+  return "<tr><td><a href=\"/kline?code=" + encodeURIComponent(p.code) + "&name=" + encodeURIComponent(p.name || "") + "\">" + text(p.code) + "</a></td><td>" + text(p.name) + "</td><td>" + sigs + "</td><td class=\"rate\">" + best + "</td><td>" + text(p.best_signal || "—") + "</td><td>" + bestN + "</td></tr>";
+}
+function sectorCard(s) {
+  const rows = s.picks.map(pickRow).join("");
+  const body = rows || "<tr><td colspan=\"6\" class=\"muted\">该板块当日无符合条件的候选。</td></tr>";
+  return "<section class=\"card\"><h2>" + text(s.sector) + "</h2><p class=\"muted\">组合胜率 " + pct(s.combo_win_rate) + "（n=" + num(s.combo_n) + "）· 候选 " + s.candidate_count + " 只，取前 " + s.picks.length + " 只</p><div class=\"table-wrap\"><table><thead><tr><th>代码</th><th>名称</th><th>信号（胜率 / 样本数 / 持有天数 / 最近信号日）</th><th>排序胜率</th><th>胜率来源</th><th>样本数 n</th></tr></thead><tbody>" + body + "</tbody></table></div></section>";
+}
+function render(d) {
+  const meta = document.getElementById("meta");
+  meta.textContent = "信号日 " + (d.as_of || "—") + " · 门槛：板块组合胜率 ≥50% · 共推荐 " + d.counts.recommended_sectors + " 个板块 / " + d.counts.picks + " 只 · 跳过 " + d.counts.skipped_sectors + " 个板块";
+  const wrap = document.getElementById("sectors");
+  if (!d.sectors.length) { wrap.innerHTML = "<p class=\"empty\">暂无推荐板块。</p>"; }
+  else { wrap.innerHTML = d.sectors.map(sectorCard).join(""); }
+  const tb = document.querySelector("#skipped-table tbody");
+  tb.innerHTML = d.skipped.map(function(x) {
+    return "<tr><td>" + text(x.sector) + "</td><td>" + pct(x.combo_win_rate) + "</td><td>" + num(x.combo_n) + "</td><td>" + text(x.reason) + "</td></tr>";
+  }).join("") || "<tr><td colspan=\"4\" class=\"muted\">无。</td></tr>";
+}
+fetch("/api/unified", {cache: "no-store"}).then(function(r) { return r.json(); }).then(render).catch(function() { document.getElementById("meta").textContent = "读取失败，请稍后重试。"; });
+</script>
+</body>
+</html>
