@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>每日复盘</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0e17;color:#e5e7eb;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;padding:12px;font-size:13px}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.header h1{font-size:18px}
+.back{color:#60a5fa;text-decoration:none;font-size:14px}
+.controls{display:flex;gap:8px;align-items:center}
+.controls input{background:#111827;border:1px solid #374151;color:#e5e7eb;padding:6px 10px;border-radius:6px}
+.controls button{background:#1f2937;color:#e5e7eb;border:1px solid #374151;padding:6px 12px;border-radius:6px;cursor:pointer}
+.card{background:#111827;border:1px solid #1f2937;border-radius:8px;padding:12px;margin-bottom:10px}
+.q-num{display:inline-block;background:#f97316;color:#fff;width:22px;height:22px;border-radius:50%;text-align:center;line-height:22px;font-size:12px;margin-right:8px}
+.q-title{font-size:14px;font-weight:700;color:#fbbf24;margin-bottom:8px;display:flex;align-items:center}
+.q-answer{background:#0a0e17;padding:10px;border-radius:6px;margin-bottom:8px}
+.big{font-size:20px;font-weight:700}
+.up{color:#ef4444}.down{color:#22c55e}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-top:8px}
+.idx{background:#0a0e17;padding:8px;border-radius:6px}
+.idx .n{font-size:11px;color:#9ca3af}.idx .v{font-size:15px;font-weight:700;margin:2px 0}
+.stat{display:flex;gap:16px;flex-wrap:wrap;margin-top:6px}
+.stat div{text-align:center}.stat .v{font-size:18px;font-weight:700}.stat .l{font-size:10px;color:#6b7280}
+table{width:100%;font-size:12px;border-collapse:collapse}
+th{text-align:left;color:#6b7280;padding:4px 6px;border-bottom:1px solid #1f2937;font-weight:normal}
+td{padding:5px 6px;border-bottom:1px solid #1f293733}
+a{color:#e5e7eb;text-decoration:none}a:hover{color:#60a5fa}
+.sector{background:#0a0e17;padding:10px;border-radius:6px;margin-bottom:8px}
+.sector-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.badge{font-size:10px;padding:2px 6px;border-radius:3px;margin-left:6px}
+.badge-good{background:#7f1d1d;color:#fca5a5}
+.badge-warn{background:#78350f;color:#fcd34d}
+.tag{font-size:10px;padding:1px 5px;border-radius:3px;background:#1f2937;color:#9ca3af;margin-left:4px}
+</style>
+</head>
+<body>
+<div class="header">
+  <a class="back" href="/market">← 行情</a>
+  <h1>每日复盘</h1>
+  <div class="controls">
+    <input type="date" id="datePicker">
+    <button onclick="load()">查看</button>
+  </div>
+</div>
+<div id="content">加载中...</div>
+<script>
+async function load(){
+  const date = document.getElementById("datePicker").value || new Date().toISOString().slice(0,10);
+  document.getElementById("content").innerHTML = '<div style="text-align:center;padding:30px;color:#6b7280">加载中...</div>';
+  try{
+    const r = await fetch(`/api/daily_report?date=${date}`);
+    render(await r.json());
+  }catch(e){document.getElementById("content").innerHTML="加载失败: "+e}
+}
+function render(d){
+  if(!d?.indices){document.getElementById("content").innerHTML="无数据";return}
+  let h = "";
+
+  // Q1 进攻还是防守
+  h += `<div class="card"><div class="q-title"><span class="q-num">1</span>今天市场环境是进攻还是防守？</div>
+    <div class="q-answer"><span class="big" style="color:${d.q1==='进攻'?'#ef4444':d.q1==='防守'?'#22c55e':'#fbbf24'}">${d.q1}</span><div style="color:#9ca3af;font-size:12px;margin-top:4px">${d.q1_detail}</div></div>
+    <div class="grid2">`;
+  d.indices.forEach(x=>{
+    const c=x.change_pct>=0?"up":"down";
+    h += `<div class="idx"><div class="n">${x.name}</div><div class="v ${c}">${x.price.toFixed(1)}</div><div class="${c}">${x.change_pct>=0?"+":""}${x.change_pct}% · ${x.amount}亿</div></div>`;
+  });
+  h += `</div></div>`;
+
+  // Q2 赚钱效应
+  const b=d.breadth, l=d.limit;
+  h += `<div class="card"><div class="q-title"><span class="q-num">2</span>今天赚钱效应怎么样？</div>
+    <div class="q-answer" style="color:${d.q2_good?'#ef4444':'#22c55e'}">${d.q2_good?'✅ 赚钱效应好，可参与':'⚠️ 亏钱效应，谨慎'}</div>
+    <div class="stat">
+      <div><div class="v up">${b.up}</div><div class="l">上涨</div></div>
+      <div><div class="v down">${b.down}</div><div class="l">下跌</div></div>
+      <div><div class="v up">${b.big_up}</div><div class="l">大涨≥5%</div></div>
+      <div><div class="v down">${b.big_down}</div><div class="l">大跌≤-5%</div></div>
+      <div><div class="v up">${l.limit_up}</div><div class="l">涨停</div></div>
+      <div><div class="v down">${l.limit_down}</div><div class="l">跌停</div></div>
+      <div><div class="v" style="color:#fbbf24">${l.max_streak}板</div><div class="l">最高连板</div></div>
+    </div></div>`;
+
+  // Q3-5 板块方向
+  h += `<div class="card"><div class="q-title"><span class="q-num">3</span>资金集中在哪些方向？${'<br><span style="font-size:11px;color:#9ca3af;font-weight:normal">Q4: 是否持续？Q5: 主线候选？</span>'}</div>`;
+  (d.sectors_top||[]).forEach(s=>{
+    const persist = s.persistent;
+    h += `<div class="sector">
+      <div class="sector-head">
+        <span style="font-weight:700;color:#fbbf24">${s.name}
+          <span class="badge ${persist?'badge-good':'badge-warn'}">${persist?'持续流入':'一日行情'}</span>
+          ${s.breadth>60?'<span class="tag">普涨</span>':''}
+          ${s.max_streak?`<span class="tag" style="color:#ef4444">最高${s.max_streak}板</span>`:''}
+        </span>
+        <span><span class="${s.pct>=0?'up':'down'}" style="font-weight:700">${s.pct>=0?"+":""}${s.pct}%</span>
+        <span style="color:#6b7280;font-size:11px"> 资金${s.flow>=0?"+":""}${s.flow}亿</span></span>
+      </div>
+      <div style="font-size:11px;color:#6b7280;margin-bottom:4px">板块内 涨${s.up}/跌${s.down} (${s.breadth}%上涨)</div>
+      <table><tr><th>个股</th><th>涨幅</th><th>Alpha</th><th>资金</th></tr>`;
+    (s.stocks||[]).forEach(st=>{
+      const code = st.code.startsWith("6")?"sh"+st.code:"sz"+st.code;
+      const alphaCls = Math.abs(st.alpha)>5?"up":st.alpha<0?"down":"";
+      h += `<tr><td><a href="/kline?code=${code}&name=${encodeURIComponent(st.name)}">${st.name}</a></td>
+        <td class="${st.pct>=0?'up':'down'}">${st.pct>=0?"+":""}${st.pct}%</td>
+        <td class="${alphaCls}">${st.alpha>=0?"+":""}${st.alpha}%</td>
+        <td style="color:${st.flow>=0?'#ef4444':'#22c55e'}">${st.flow>=0?"+":""}${st.flow}</td></tr>`;
+    });
+    h += `</table></div>`;
+  });
+  h += `</div>`;
+
+  // Q7 Alpha说明
+  h += `<div class="card"><div class="q-title"><span class="q-num">7</span>板块Beta还是个股Alpha？</div>
+    <div style="font-size:12px;color:#9ca3af;line-height:1.8">
+      • <b style="color:#ef4444">Alpha > 5%</b>：明显跑赢板块，资金真喜欢，有独立逻辑<br>
+      • <b>Alpha -5%~5%</b>：基本跟随板块，Beta行情<br>
+      • <b style="color:#22c55e">Alpha < -5%</b>：弱于板块，跟风股
+    </div></div>`;
+
+  // Q8 阶段
+  h += `<div class="card"><div class="q-title"><span class="q-num">8</span>强势股处于什么阶段？</div>
+    <div style="font-size:12px;color:#9ca3af;line-height:1.8">
+      • 连板越高 → 越接近加速/分歧阶段，追高风险大<br>
+      • 首板启动 → 观察确认阶段，风险相对低<br>
+      • 板块第一天大涨 → 观察；第二天继续强 → 确认；第三天扩散 → 主线成立
+    </div></div>`;
+
+  // Q9 风险
+  h += `<div class="card"><div class="q-title"><span class="q-num">9</span>现在参与风险在哪？</div>
+    <div style="font-size:12px;color:#9ca3af;line-height:1.8">
+      ${d.q1==='防守'?'<span class="down">当前防守环境，高位股杀跌风险大，不建议追高</span>':''}
+      ${d.q1==='混沌'?'<span style="color:#fbbf24">混沌轮动，追高容易吃面，快进快出</span>':''}
+      ${d.q1==='进攻'?'<span class="up">进攻环境，但注意连板高位股分歧风险</span>':''}
+    </div></div>`;
+
+  // Q10 观察名单
+  h += `<div class="card"><div class="q-title"><span class="q-num">10</span>明日观察名单 & 失效条件</div>`;
+  h += `<table><tr><th>板块</th><th>核心股</th><th>关注条件</th><th>失效条件</th></tr>`;
+  (d.sectors_top||[]).slice(0,5).forEach(s=>{
+    const top1 = (s.stocks||[])[0];
+    if(!top1) return;
+    const code = top1.code.startsWith("6")?"sh"+top1.code:"sz"+top1.code;
+    h += `<tr><td>${s.name}</td>
+      <td><a href="/kline?code=${code}&name=${encodeURIComponent(top1.name)}">${top1.name}</a></td>
+      <td style="color:#9ca3af">板块继续强+个股不跌破5日线</td>
+      <td style="color:#22c55e">板块跌>3%或个股放量破位</td></tr>`;
+  });
+  h += `</table></div>`;
+
+  // 涨停股
+  h += `<div class="card"><div class="q-title">涨停股（${l.limit_up}家）</div>`;
+  if(l.stocks?.length){
+    h += `<table><tr><th>代码</th><th>名称</th><th>连板</th><th>题材</th></tr>`;
+    l.stocks.slice(0,20).forEach(s=>{
+      const code = s.code.startsWith("6")?"sh"+s.code:"sz"+s.code;
+      h += `<tr><td style="color:#6b7280">${s.code}</td><td><a href="/kline?code=${code}&name=${encodeURIComponent(s.name)}">${s.name}</a></td><td class="up">${s.streak}板</td><td style="color:#6b7280">${s.reason||''}</td></tr>`;
+    });
+    h += `</table>`;
+  }
+  h += `</div>`;
+
+  document.getElementById("content").innerHTML = h;
+}
+document.getElementById("datePicker").value = new Date().toISOString().slice(0,10);
+load();
+</script>
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>选股器 · 横盘放量突破</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0e17; font-family: "PingFang SC","Microsoft YaHei",sans-serif; color: #e5e7eb; min-height: 100vh; }
+  .navbar { background: #111827; border-bottom: 1px solid #1f2937; padding: 0 24px; display: flex; align-items: center; height: 56px; position: sticky; top: 0; z-index: 100; }
+  .navbar .brand { font-size: 16px; font-weight: 700; color: #ff9f43; margin-right: 40px; }
+  .navbar a { color: #9ca3af; text-decoration: none; padding: 8px 16px; border-radius: 6px; font-size: 14px; }
+  .navbar a:hover { color: #fff; background: #1f2937; }
+  .navbar a.active { color: #ff9f43; background: rgba(255,159,67,0.1); }
+  .container { max-width: 1100px; margin: 0 auto; padding: 20px 16px; }
+  .strategy-card { background: #111827; border-radius: 12px; padding: 18px 20px; border: 1px solid #1f2937; margin-bottom: 16px; }
+  .strategy-title { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+  .strategy-desc { font-size: 12px; color: #9ca3af; line-height: 1.8; }
+  .strategy-desc b { color: #ff9f43; }
+  .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .update-time { font-size: 12px; color: #6b7280; }
+  .btn-screen { padding: 10px 24px; background: #ff9f43; color: #111827; border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; }
+  .btn-screen:disabled { opacity: 0.5; cursor: not-allowed; }
+  .sector-block { background: #111827; border-radius: 10px; border: 1px solid #1f2937; margin-bottom: 12px; overflow: hidden; }
+  .sector-header { padding: 12px 16px; background: #1a2332; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+  .sector-name { font-size: 14px; font-weight: 700; color: #ff9f43; }
+  .sector-count { font-size: 12px; color: #9ca3af; }
+  .stock-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1px; background: #1f2937; }
+  .stock-item { background: #111827; padding: 10px 14px; cursor: pointer; transition: background 0.15s; }
+  .stock-item:hover { background: #1f2937; }
+  .stock-name { font-size: 13px; font-weight: 600; color: #fff; }
+  .stock-info { font-size: 11px; color: #6b7280; margin-top: 2px; }
+  .up { color: #ef4444; }
+  .down { color: #22c55e; }
+  .loading { text-align: center; padding: 40px; color: #9ca3af; }
+  .empty { text-align: center; padding: 60px; color: #6b7280; }
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="brand">📊 股票看板</div>
+  <button class="hamburger" onclick="document.getElementById('navMenu').classList.toggle('show')">☰</button>
+  <div class="nav-links" id="navMenu">
+    <a href="/">资金流向</a>
+    <a href="/market">行情总览</a>
+    <a href="/rank">排行榜</a>
+    <a href="/kline">个股K线</a>
+    <a href="/screener" class="active">选股器</a>
+    <a href="/precious">贵金属</a>
+  </div>
+</nav>
+<style>
+.nav-links { display: none; position: absolute; top: 56px; left: 0; right: 0; background: #111827; flex-direction: column; padding: 8px 0; border-bottom: 1px solid #1f2937; }
+.nav-links.show { display: flex; }
+.nav-links a { padding: 12px 24px !important; }
+.hamburger { margin-left: auto; background: none; border: none; color: #e5e7eb; font-size: 22px; cursor: pointer; padding: 8px 12px; }
+@media(min-width:768px){
+  .nav-links { display: flex !important; position: static; flex-direction: row; background: none; border: none; padding: 0; }
+  .hamburger { display: none; }
+}
+</style>
+<div class="container">
+  <div class="strategy-card">
+    <div class="strategy-title">🎯 横盘放量突破选股</div>
+    <div class="strategy-desc">
+      <b>股票池：</b>资金流向页全部23个板块，排除创业板(30)和科创板(688)<br>
+      <b>放量条件：</b>近3日成交量 > 5日前的20日均量 × 1.8<br>
+      <b>MACD形态：</b>A-零轴粘合 / B-金叉后红柱放大 / C-零上红柱放大<br>
+      <b>突破条件：</b>收盘价 > 30日最高价×0.95 且 > MA20<br>
+      <b>说明：</b>每天收盘后自动运行，结果按板块分组展示
+    </div>
+  </div>
+
+  <div class="header-row">
+    <div class="update-time" id="updateTime">加载中...</div>
+    <button class="btn-screen" id="btnScreen" onclick="runScreen()">重新选股</button>
+  </div>
+
+  <div id="loading" class="loading" style="display:none;">正在选股中，请等待...</div>
+  <div id="empty" class="empty" style="display:none;">暂无选股结果，点击上方按钮手动运行</div>
+  <div id="resultArea"></div>
+</div>
+
+<script>
+async function loadCached() {
+  try {
+    const res = await fetch("/api/screen_cached");
+    const j = await res.json();
+    if (j.list && j.list.length > 0) {
+      renderResult(j.list, j.time || "");
+    } else {
+      document.getElementById("empty").style.display = "block";
+      document.getElementById("updateTime").textContent = "暂无缓存";
+    }
+  } catch(e) {
+    document.getElementById("empty").style.display = "block";
+  }
+}
+
+let currentList = [];
+
+function renderResult(list, time) {
+  currentList = list;
+  document.getElementById("updateTime").textContent = "更新时间: " + time + " | 共 " + list.length + " 只";
+  document.getElementById("empty").style.display = "none";
+
+  // 按板块分组
+  const groups = {};
+  list.forEach(s => {
+    const sec = s.sector || "其他";
+    if (!groups[sec]) groups[sec] = [];
+    groups[sec].push(s);
+  });
+
+  const html = Object.keys(groups).sort().map(sec => {
+    const stocks = groups[sec];
+    const items = stocks.map(s => `
+      <div class="stock-item" onclick="goKline('${s.qtmk}','${s.name}')" data-qtmk="${s.qtmk}">
+        <div class="stock-name">${s.name} <span style="color:#6b7280;font-weight:400;font-size:11px">${s.code}</span></div>
+        <div class="stock-info">
+          <span class="rt-pct ${s.change_pct>=0?'up':'down'}">${s.change_pct>=0?'+':''}${s.change_pct.toFixed(2)}%</span>
+          | 放量 <span class="up">${s.vol_ratio.toFixed(1)}x</span>
+          | MACD ${s.macd_type}
+        </div>
+      </div>
+    `).join("");
+    return `<div class="sector-block">
+      <div class="sector-header">
+        <span class="sector-name">${sec}</span>
+        <span class="sector-count">${stocks.length} 只</span>
+      </div>
+      <div class="stock-list">${items}</div>
+    </div>`;
+  }).join("");
+
+  document.getElementById("resultArea").innerHTML = html;
+  // 加载实时行情
+  fetchRealtime();
+}
+
+async function fetchRealtime() {
+  if (!currentList || currentList.length === 0) return;
+  try {
+    const codes = currentList.map(s => s.qtmk).join(",");
+    const res = await fetch("/api/quote_batch?codes=" + codes);
+    const j = await res.json();
+    // j is { qtmk: {name, price, change, change_pct, ...} }
+    document.querySelectorAll(".stock-item").forEach(el => {
+      const qtmk = el.getAttribute("data-qtmk");
+      const q = j[qtmk];
+      if (q && q.change_pct !== undefined) {
+        const pctEl = el.querySelector(".rt-pct");
+        if (pctEl) {
+          const pct = q.change_pct;
+          pctEl.textContent = (pct>=0?'+':'') + pct.toFixed(2) + '%';
+          pctEl.className = "rt-pct " + (pct>=0?'up':'down');
+        }
+        // 更新股票名称旁的价格
+        const nameEl = el.querySelector(".stock-name");
+        if (nameEl && q.price) {
+          const codeSpan = nameEl.querySelector("span");
+          const priceStr = q.price ? q.price.toFixed(2) : '';
+          // 在代码后面加实时价
+          let priceEl = el.querySelector(".rt-price");
+          if (!priceEl) {
+            priceEl = document.createElement("span");
+            priceEl.className = "rt-price";
+            priceEl.style.cssText = "font-weight:400;font-size:11px;margin-left:4px;";
+            nameEl.appendChild(priceEl);
+          }
+          priceEl.textContent = priceStr;
+          priceEl.style.color = q.change_pct >= 0 ? '#ef4444' : '#22c55e';
+        }
+      }
+    });
+  } catch(e) {
+    console.error("实时行情加载失败:", e);
+  }
+}
+
+async function runScreen() {
+  const btn = document.getElementById("btnScreen");
+  btn.disabled = true;
+  btn.textContent = "选股中...";
+  document.getElementById("loading").style.display = "block";
+  document.getElementById("resultArea").innerHTML = "";
+  try {
+    const res = await fetch("/api/screen");
+    const j = await res.json();
+    renderResult(j.list || [], new Date().toLocaleString("zh-CN"));
+  } catch(e) {
+    alert("选股失败: " + e);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "重新选股";
+    document.getElementById("loading").style.display = "none";
+  }
+}
+
+function goKline(code, name) {
+  window.location.href = `/kline?code=${encodeURIComponent(code)}&name=${encodeURIComponent(name)}`;
+}
+
+loadCached();
+setInterval(fetchRealtime, 10000);  // 每10秒刷新实时涨跌幅
+</script>
+</body>
+</html>

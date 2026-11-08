@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>行情总览</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0e17;
+    font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+    color: #e5e7eb;
+    min-height: 100vh;
+  }
+  .navbar {
+    background: #111827;
+    border-bottom: 1px solid #1f2937;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    height: 56px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .navbar .brand {
+    font-size: 16px;
+    font-weight: 700;
+    color: #ff9f43;
+    margin-right: 40px;
+  }
+  .navbar a {
+    color: #9ca3af;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: all 0.2s;
+  }
+  .navbar a:hover { color: #fff; background: #1f2937; }
+  .navbar a.active { color: #ff9f43; background: rgba(255,159,67,0.1); }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px 16px;
+  }
+  .page-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #fff;
+  }
+  .update-time {
+    color: #6b7280;
+    font-size: 13px;
+    margin-bottom: 24px;
+  }
+
+  /* 指数卡片 */
+  .index-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .index-card {
+    background: #111827;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #1f2937;
+  }
+  .index-card .name {
+    font-size: 14px;
+    color: #9ca3af;
+    margin-bottom: 8px;
+  }
+  .index-card .price {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .index-card .change {
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .up { color: #ef4444; }
+  .down { color: #22c55e; }
+
+  /* 情绪仪表盘 */
+  .sentiment-hero {
+    background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    border: 1px solid #374151;
+  }
+  .gauge-wrap {
+    position: relative;
+    width: 160px;
+    height: 160px;
+    flex-shrink: 0;
+  }
+  .gauge-wrap svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+  }
+  .gauge-bg { fill: none; stroke: #1f2937; stroke-width: 12; }
+  .gauge-fg {
+    fill: none; stroke-width: 12; stroke-linecap: round;
+    transition: stroke-dashoffset 1s ease, stroke 0.5s ease;
+  }
+  .gauge-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  .gauge-score { font-size: 36px; font-weight: 800; line-height: 1; }
+  .gauge-label { font-size: 12px; color: #9ca3af; margin-top: 4px; }
+  .hero-info { flex: 1; }
+  .hero-level { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+  .hero-desc { font-size: 14px; color: #9ca3af; line-height: 1.6; }
+
+  /* 涨跌家数 */
+  .breadth-section {
+    background: #111827;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #1f2937;
+    margin-bottom: 24px;
+  }
+  .section-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: #fff;
+  }
+  .breadth-bar {
+    height: 28px;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    margin-bottom: 12px;
+  }
+  .breadth-up { background: #ef4444; }
+  .breadth-down { background: #22c55e; }
+  .breadth-flat { background: #6b7280; }
+  .breadth-legend {
+    display: flex;
+    gap: 24px;
+    font-size: 13px;
+    color: #9ca3af;
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 2px; }
+
+  /* 涨跌停统计 */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .stat-card {
+    background: #111827;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #1f2937;
+    text-align: center;
+  }
+  .stat-card .label { font-size: 13px; color: #9ca3af; margin-bottom: 8px; }
+  .stat-card .value { font-size: 30px; font-weight: 700; }
+  .stat-card .sub { font-size: 12px; color: #6b7280; margin-top: 4px; }
+
+  /* 复盘要点卡片 */
+  .review-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .review-card {
+    background: #111827;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #1f2937;
+  }
+  .review-card h4 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #fff;
+  }
+  .review-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #1f293750;
+    font-size: 13px;
+  }
+  .review-item:last-child { border-bottom: none; }
+  .review-item .name { color: #d1d5db; }
+  .review-item .val { font-weight: 600; font-family: "SF Mono", Consolas, monospace; }
+
+  /* 情绪构成 */
+  .factor-section {
+    background: #111827;
+    border-radius: 12px;
+    padding: 24px;
+    border: 1px solid #1f2937;
+    margin-bottom: 24px;
+  }
+  .factor-item { margin-bottom: 16px; }
+  .factor-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+  .factor-name { color: #9ca3af; }
+  .factor-score { font-weight: 600; }
+  .factor-bar {
+    height: 8px;
+    background: #1f2937;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .factor-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.8s ease;
+  }
+  .factor-desc { font-size: 12px; color: #6b7280; margin-top: 4px; }
+
+  /* 复盘结论 */
+  .conclusion-box {
+    background: #111827;
+    border-radius: 12px;
+    padding: 24px;
+    border: 1px solid #1f2937;
+    border-left: 4px solid #ff9f43;
+  }
+  .conclusion-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #ff9f43;
+  }
+  .conclusion-text {
+    font-size: 14px;
+    line-height: 1.8;
+    color: #d1d5db;
+  }
+  .conclusion-text strong { color: #fff; }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="brand">📊 股票看板</div>
+  <button class="hamburger" onclick="document.getElementById('navMenu').classList.toggle('show')">☰</button>
+  <div class="nav-links" id="navMenu">
+    <a href="/">资金流向</a>
+    <a href="/market" class="active">行情总览</a>
+    <a href="/rank">排行榜</a>
+    <a href="/kline">个股K线</a>
+    <a href="/screener">选股器</a>
+    <a href="/precious">贵金属</a>
+  </div>
+</nav>
+<style>
+.nav-links { display: none; position: absolute; top: 56px; left: 0; right: 0; background: #111827; flex-direction: column; padding: 8px 0; border-bottom: 1px solid #1f2937; }
+.nav-links.show { display: flex; }
+.nav-links a { padding: 12px 24px !important; }
+.hamburger { margin-left: auto; background: none; border: none; color: #e5e7eb; font-size: 22px; cursor: pointer; padding: 8px 12px; }
+@media(min-width:768px){
+  .nav-links { display: flex !important; position: static; flex-direction: row; background: none; border: none; padding: 0; }
+  .hamburger { display: none; }
+}
+</style>
+
+  </div>
+
+</div>
+
+
+
+<!-- 每日复盘模块 -->
+<div style="max-width:1200px;margin:20px auto;padding:12px">
+  <div style="background:#111827;border:1px solid #1f2937;border-radius:8px;padding:16px;margin-bottom:16px">
+    <h2 style="color:#fbbf24;font-size:16px;margin-bottom:12px;border-bottom:1px solid #1f2937;padding-bottom:8px">📊 每日复盘 · 10问</h2>
+    <div id="dailyReview"><div style="color:#6b7280;text-align:center;padding:20px">加载中...</div></div>
+  </div>
+</div>
+<script>
+async function loadDailyReview(){
+  const el = document.getElementById("dailyReview");
+  if(!el) return;
+  try{
+    const today = new Date().toISOString().slice(0,10);
+    // 取实时数据
+    const r = await fetch("/api/market-overview");
+    const d = await r.json();
+    if(!d || !d.indices){ el.innerHTML = "<div style='color:#6b7280'>数据加载中...</div>"; return; }
+    let h = "";
+
+    // 市场环境判断
+    const upCount = d.limit_stats.up_count||0, downCount = d.limit_stats.down_count||0;
+    const total = upCount + downCount;
+    const upRatio = total > 0 ? (upCount/total*100).toFixed(0) : 0;
+    const env = upRatio > 55 ? "进攻" : (upRatio < 45 ? "防守" : "震荡");
+    const l = d.limit_stats;
+    const envDetail = "指数" + (d.indices[0]?d.indices[0].change_pct.toFixed(2):"0") + "% +涨停" + l.limit_up + "家+上涨占比" + upRatio + "%";
+
+    h += '<div style="margin-bottom:14px"><div style="font-weight:700;color:#fbbf24;margin-bottom:4px">1. 市场环境：进攻还是防守？</div>';
+    h += '<div style="background:#0a0e17;padding:10px;border-radius:6px"><span style="font-size:18px;font-weight:700;color:'+(env==='进攻'?'#ef4444':'#22c55e')+'">'+env+'</span> <span style="color:#9ca3af;font-size:12px">'+envDetail+'，控制仓位</span>';
+    h += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-top:8px">';
+    d.indices.forEach(function(x){
+      const c=x.change_pct>=0?'#ef4444':'#22c55e';
+      h += '<div style="background:#111827;padding:6px;border-radius:4px"><div style="font-size:10px;color:#6b7280">'+x.name+'</div><div style="font-weight:700;color:'+c+'">'+Number(x.price).toFixed(1)+'</div><div style="font-size:10px;color:'+c+'">'+(x.change_pct>=0?'+':'')+x.change_pct+'%</div></div>';
+    });
+    h += '</div></div></div>';
+
+    h += '<div style="margin-bottom:14px"><div style="font-weight:700;color:#fbbf24;margin-bottom:4px">2. 赚钱效应</div>';
+    h += '<div style="background:#0a0e17;padding:10px;border-radius:6px;display:flex;gap:14px;flex-wrap:wrap">';
+    h += '<div style="text-align:center"><div style="font-size:18px;font-weight:700;color:#ef4444">'+l.up_count+'</div><div style="font-size:10px;color:#6b7280">上涨</div></div>';
+    h += '<div style="text-align:center"><div style="font-size:18px;font-weight:700;color:#22c55e">'+l.down_count+'</div><div style="font-size:10px;color:#6b7280">下跌</div></div>';
+    h += '<div style="text-align:center"><div style="font-size:18px;font-weight:700;color:#ef4444">'+l.limit_up+'</div><div style="font-size:10px;color:#6b7280">涨停</div></div>';
+    h += '<div style="text-align:center"><div style="font-size:18px;font-weight:700;color:#22c55e">'+l.limit_down+'</div><div style="font-size:10px;color:#6b7280">跌停</div></div>';
+    h += '</div></div>';
+
+    h += '<div style="margin-bottom:14px"><div style="font-weight:700;color:#fbbf24;margin-bottom:4px">关注板块异动</div>';
+    h += '<div id="watchList" style="background:#0a0e17;padding:10px;border-radius:6px;font-size:12px;color:#6b7280">加载中...</div></div>';
+
+    h += '<div style="margin-bottom:14px"><div style="font-weight:700;color:#fbbf24;margin-bottom:4px">Alpha说明</div>';
+    h += '<div style="background:#0a0e17;padding:10px;border-radius:6px;font-size:12px;color:#9ca3af;line-height:1.8">';
+    h += 'Alpha = 个股涨幅 - 板块涨幅<br>';
+    h += '<span style="color:#ef4444">Alpha&gt;5%</span>：真Alpha，资金独立选股<br>';
+    h += 'Alpha -5%~5%：跟随板块Beta<br>';
+    h += '<span style="color:#22c55e">Alpha&lt;-5%</span>：跟风弱于板块</div></div>';
+
+    el.innerHTML = h;
+
+    fetch("/api/watch_sectors").then(function(r){return r.json();}).then(function(list){
+      const el2 = document.getElementById("watchList");
+      if(!el2) return;
+      const alert = (list||[]).filter(function(s){ return s.pct>1 || s.flow>5; });
+      if(!alert.length){ el2.innerHTML='<div style="color:#6b7280;padding:8px">关注板块今日无异动</div>'; return; }
+      let t = '';
+      alert.forEach(function(s){
+        const c = s.pct>=0?'#ef4444':'#22c55e';
+        t += '<div style="margin-bottom:8px;padding:6px;background:#111827;border-radius:4px">';
+        t += '<div style="display:flex;justify-content:space-between"><span><a href="/kline?code='+s.bk+'&name='+encodeURIComponent(s.name)+'" style="color:#fbbf24;font-weight:700">'+s.name+'</a> <span style="color:#9ca3af;font-size:11px">涨'+s.up+'/跌'+s.down+'</span></span><span style="color:'+c+';font-weight:700">'+(s.pct>=0?'+':'')+s.pct+'% <span style="color:#9ca3af;font-size:11px">资金'+(s.flow>=0?'+':'')+s.flow+'亿</span></span></div>';
+        if(s.alpha_stocks && s.alpha_stocks.length){
+          t += '<div style="margin-top:4px;padding-left:8px;border-left:2px solid #f97316">';
+          s.alpha_stocks.forEach(function(st){
+            const code = st.code.startsWith("6")?"sh"+st.code:("bj"+st.code if st.code.startsWith("9") else "sz"+st.code);
+            t += '<div style="font-size:11px;padding:2px 0"><a href="/kline?code='+code+'&name='+encodeURIComponent(st.name)+'" style="color:#e5e7eb">'+st.name+'</a> <span style="color:#ef4444;font-weight:700">'+st.pct+'%</span> <span style="color:#6b7280">Alpha+'+st.alpha+'%</span></div>';
+          });
+          t += '</div>';
+        }
+        t += '</div>';
+      });
+      el2.innerHTML = t;
+    });
+  }catch(e){ el.innerHTML = '<div style="color:#f00">错误: '+e+'</div>'; }
+}
+document.title="SCRIPT_OK";loadDailyReview();setInterval(loadDailyReview, 60000);
+</script>
+
+<script src="/js/market.js?v=4"></script>
+</body>
+</html>

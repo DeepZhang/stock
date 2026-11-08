@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>排行榜</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0e17;
+    font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+    color: #e5e7eb;
+    min-height: 100vh;
+  }
+  .navbar {
+    background: #111827;
+    border-bottom: 1px solid #1f2937;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    height: 56px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .navbar .brand {
+    font-size: 16px;
+    font-weight: 700;
+    color: #ff9f43;
+    margin-right: 40px;
+  }
+  .navbar a {
+    color: #9ca3af;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: all 0.2s;
+  }
+  .navbar a:hover { color: #fff; background: #1f2937; }
+  .navbar a.active { color: #ff9f43; background: rgba(255,159,67,0.1); }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 16px;
+  }
+  .page-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #fff;
+  }
+
+  .rank-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+    gap: 20px;
+  }
+  .rank-card {
+    background: #111827;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #1f2937;
+  }
+  .rank-card h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #1f2937;
+  }
+  .rank-card .rank-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #1f293750;
+    font-size: 14px;
+  }
+  .rank-card .rank-item:last-child { border-bottom: none; }
+  .rank-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 13px;
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+  .rank-num.top1 { background: #fbbf24; color: #000; }
+  .rank-num.top2 { background: #d1d5db; color: #000; }
+  .rank-num.top3 { background: #b45309; color: #fff; }
+  .rank-num.normal { background: #1f2937; color: #9ca3af; }
+
+  .rank-name {
+    flex: 1;
+    font-weight: 500;
+  }
+  .rank-value {
+    font-weight: 600;
+    font-family: "SF Mono", Consolas, monospace;
+    text-align: right;
+    min-width: 90px;
+  }
+  .up { color: #ef4444; }
+  .down { color: #22c55e; }
+
+  .loading {
+    text-align: center;
+    padding: 40px;
+    color: #6b7280;
+  }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="brand">📊 股票看板</div>
+  <button class="hamburger" onclick="document.getElementById('navMenu').classList.toggle('show')">☰</button>
+  <div class="nav-links" id="navMenu">
+    <a href="/">资金流向</a>
+    <a href="/market">行情总览</a>
+    <a href="/rank" class="active">排行榜</a>
+    <a href="/kline">个股K线</a>
+    <a href="/screener">选股器</a>
+    <a href="/precious">贵金属</a>
+  </div>
+</nav>
+<style>
+.nav-links { display: none; position: absolute; top: 56px; left: 0; right: 0; background: #111827; flex-direction: column; padding: 8px 0; border-bottom: 1px solid #1f2937; }
+.nav-links.show { display: flex; }
+.nav-links a { padding: 12px 24px !important; }
+.hamburger { margin-left: auto; background: none; border: none; color: #e5e7eb; font-size: 22px; cursor: pointer; padding: 8px 12px; }
+@media(min-width:768px){
+  .nav-links { display: flex !important; position: static; flex-direction: row; background: none; border: none; padding: 0; }
+  .hamburger { display: none; }
+}
+</style>
+
+<div class="container">
+  <div class="page-title">排行榜</div>
+
+  <div class="rank-grid">
+    <!-- 资金流放最前面 -->
+    <div class="rank-card">
+      <h3>💰 主力资金流入 TOP10（板块）</h3>
+      <div id="rankUpFund"><div class="loading">加载中...</div></div>
+    </div>
+    <div class="rank-card">
+      <h3>💸 主力资金流出 TOP10（板块）</h3>
+      <div id="rankDownFund"><div class="loading">加载中...</div></div>
+    </div>
+    <!-- 个股资金流 -->
+    <div class="rank-card">
+      <h3>📈 个股资金流入 TOP10</h3>
+      <div id="rankStockIn"><div class="loading">加载中...</div></div>
+    </div>
+    <div class="rank-card">
+      <h3>📉 个股资金流出 TOP10</h3>
+      <div id="rankStockOut"><div class="loading">加载中...</div></div>
+    </div>
+    <!-- 板块涨跌幅 -->
+    <div class="rank-card">
+      <h3>📊 板块涨幅 TOP10</h3>
+      <div id="rankUpPct"><div class="loading">加载中...</div></div>
+    </div>
+    <div class="rank-card">
+      <h3>📊 板块跌幅 TOP10</h3>
+      <div id="rankDownPct"><div class="loading">加载中...</div></div>
+    </div>
+  </div>
+</div>
+
+<script src="/js/rank.js?v=3"></script>
+</body>
+</html>

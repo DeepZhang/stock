@@ -1,0 +1,12 @@
+.env
+.env.*
+!.env.example
+config.local.json
+config.json
+data/
+*.log
+__pycache__/
+**/__pycache__/
+*.py[cod]
+shots/
+xhs_auth.json

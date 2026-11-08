@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>个股K线 · 技术分析</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0e17;
+    font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+    color: #e5e7eb;
+    min-height: 100vh;
+  }
+  .navbar {
+    background: #111827;
+    border-bottom: 1px solid #1f2937;
+    padding: 0 24px;
+    display: flex; align-items: center; height: 48px;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .navbar .brand { font-size: 15px; font-weight: 700; color: #ff9f43; margin-right: 32px; }
+  .navbar a { color: #9ca3af; text-decoration: none; padding: 6px 14px; border-radius: 6px; font-size: 13px; }
+  .navbar a:hover { color: #fff; background: #1f2937; }
+  .navbar a.active { color: #ff9f43; background: rgba(255,159,67,0.1); }
+
+  /* 顶部行情栏 */
+  .quote-bar {
+    background: #111827;
+    padding: 10px 16px;
+    display: flex; align-items: center; gap: 20px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid #1f2937;
+  }
+  .quote-left { display: flex; align-items: baseline; gap: 10px; }
+  .q-name { font-size: 18px; font-weight: 700; color: #fff; }
+  .q-code { font-size: 13px; color: #6b7280; font-family: monospace; }
+  .q-price { font-size: 28px; font-weight: 700; line-height: 1; }
+  .q-chg { font-size: 13px; font-weight: 600; padding: 2px 8px; border-radius: 4px; }
+  .up { color: #ef4444; }
+  .down { color: #22c55e; }
+  .up-bg { background: rgba(239,68,68,0.15); }
+  .down-bg { background: rgba(34,197,94,0.15); }
+  .quote-stats { display: flex; gap: 18px; flex-wrap: wrap; font-size: 12px; }
+  .quote-stats .item { color: #6b7280; }
+  .quote-stats .item span { color: #d1d5db; margin-left: 3px; }
+
+  /* 周期导航条 */
+  .period-bar {
+    background: #111827;
+    display: flex; align-items: center;
+    padding: 0 16px; gap: 0;
+    border-bottom: 1px solid #1f2937;
+    overflow-x: auto;
+  }
+  .period-bar button {
+    padding: 8px 14px; border: none; background: transparent;
+    color: #9ca3af; cursor: pointer; font-size: 13px; white-space: nowrap;
+    border-bottom: 2px solid transparent;
+  }
+  .period-bar button:hover { color: #fff; }
+  .period-bar button.active { color: #ff9f43; border-bottom-color: #ff9f43; font-weight: 600; }
+
+  /* 主体：左图右盘口 */
+  .main-body { display: flex; gap: 0; padding: 8px; }
+  .chart-wrap { flex: 1; min-width: 0; }
+  .orderbook {
+    width: 180px; flex-shrink: 0;
+    background: #111827; border-radius: 8px;
+    padding: 8px; font-size: 12px;
+    align-self: flex-start;
+  }
+  .orderbook .ob-row {
+    display: flex; justify-content: space-between; padding: 2px 4px;
+    line-height: 1.6;
+  }
+  .orderbook .ob-row .label { color: #6b7280; }
+  .orderbook .ob-ask .price { color: #ef4444; }
+  .orderbook .ob-bid .price { color: #22c55e; }
+  .orderbook .ob-header { color: #6b7280; padding: 2px 4px; border-bottom: 1px solid #1f2937; margin-bottom: 4px; }
+  .orderbook .ob-price { font-weight: 600; }
+
+  /* 指标标签 */
+  .indicator-tabs {
+    display: flex; gap: 0; background: #1f2937; border-radius: 6 6 0 0;
+    overflow: hidden;
+  }
+  .indicator-tabs button {
+    padding: 4px 12px; border: none; background: transparent;
+    color: #9ca3af; cursor: pointer; font-size: 11px;
+  }
+  .indicator-tabs button.active { background: #111827; color: #ff9f43; font-weight: 600; }
+
+  #mainChart { width: 100%; height: 600px; touch-action: none; border: 1px solid #1f2937; border-radius: 4px; margin-bottom: 4px; }
+  
+
+  .search-bar { padding: 8px 16px; background: #111827; }
+  .search-box input {
+    width: 260px; padding: 6px 12px; border-radius: 6px;
+    border: 1px solid #374151; background: #0a0e17; color: #fff;
+    font-size: 13px; outline: none;
+  }
+  .search-dropdown {
+    position: absolute; background: #1f2937; border: 1px solid #374151;
+    border-radius: 6px; max-height: 300px; overflow-y: auto; z-index: 200; display: none;
+  }
+  .search-dropdown .item { padding: 8px 12px; cursor: pointer; font-size: 13px; }
+  .search-dropdown .item:hover { background: #374151; }
+
+  @media (max-width: 768px) {
+    .orderbook { display: none; }
+    #mainChart { height: 500px; }
+    
+    .quote-stats { gap: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="brand">📊 股票看板</div>
+  <button class="hamburger" onclick="document.getElementById('navMenu').classList.toggle('show')">☰</button>
+  <div class="nav-links" id="navMenu">
+    <a href="/">资金流向</a>
+    <a href="/market">行情总览</a>
+    <a href="/rank">排行榜</a>
+    <a href="/kline" class="active">个股K线</a>
+    <a href="/screener">选股器</a>
+    <a href="/precious">贵金属</a>
+  </div>
+</nav>
+<style>
+.nav-links { display: none; position: absolute; top: 56px; left: 0; right: 0; background: #111827; flex-direction: column; padding: 8px 0; border-bottom: 1px solid #1f2937; }
+.nav-links.show { display: flex; }
+.nav-links a { padding: 12px 24px !important; }
+.hamburger { margin-left: auto; background: none; border: none; color: #e5e7eb; font-size: 22px; cursor: pointer; padding: 8px 12px; }
+@media(min-width:768px){
+  .nav-links { display: flex !important; position: static; flex-direction: row; background: none; border: none; padding: 0; }
+  .hamburger { display: none; }
+}
+</style>
+
+<!-- 搜索 -->
+<div class="search-bar">
+  <div style="position:relative;display:inline-block;">
+    <input type="text" id="searchInput" placeholder="输入代码/名称，如 600519 / 茅台" autocomplete="off">
+    <div class="search-dropdown" id="searchDropdown"></div>
+  </div>
+</div>
+
+<!-- 顶部行情 -->
+<div class="quote-bar" id="quoteBar" style="display:none;">
+  <div class="quote-left">
+    <span class="q-name" id="qName">--</span>
+    <span class="q-code" id="qCode">--</span>
+    <span class="q-price" id="qPrice">--</span>
+    <span class="q-chg" id="qChg">--</span>
+  </div>
+  <div class="quote-stats" id="qStats"></div>
+</div>
+
+<!-- 周期导航 -->
+<div class="period-bar" id="periodTabs">
+  <button data-period="day" class="active">日K</button>
+  <button data-period="week">周K</button>
+  <button data-period="month">月K</button>
+</div>
+
+<!-- 主体 -->
+<div class="main-body">
+  <div class="chart-wrap">
+    <div id="mainChart"></div>
+    <div id="volChart" style="width:100%;height:90px;touch-action:none;border:1px solid #1f2937;border-radius:4px;margin-bottom:4px;"></div>
+    <div id="macdChart" style="width:100%;height:90px;touch-action:none;border:1px solid #1f2937;border-radius:4px;margin-bottom:4px;"></div>
+    <div id="kdjChart" style="width:100%;height:90px;touch-action:none;border:1px solid #1f2937;border-radius:4px;"></div>
+    <div id="fundBox" style="background:#111827;border:1px solid #1f2937;border-radius:6px;padding:12px;margin-top:4px;display:none;">
+      <div style="display:flex;gap:8px;margin-bottom:10px;border-bottom:1px solid #1f2937;padding-bottom:8px;">
+        <button class="fund-tab active" data-tab="operate" style="background:none;border:none;color:#f97316;font-size:13px;font-weight:700;cursor:pointer;padding:2px 8px;">操盘必读</button>
+        <button class="fund-tab" data-tab="finance" style="background:none;border:none;color:#9ca3af;font-size:13px;cursor:pointer;padding:2px 8px;">财务分析</button>
+        <button class="fund-tab" data-tab="shareholder" style="background:none;border:none;color:#9ca3af;font-size:13px;cursor:pointer;padding:2px 8px;">股本股东</button>
+        <button class="fund-tab" data-tab="company" style="background:none;border:none;color:#9ca3af;font-size:13px;cursor:pointer;padding:2px 8px;">公司概况</button>
+        <span id="fundReport" style="color:#6b7280;font-size:11px;margin-left:auto;line-height:24px;"></span>
+      </div>
+      <div id="fundOperate"></div>
+      <div id="fundFinance" style="display:none;"></div>
+      <div id="fundShareholder" style="display:none;"></div>
+      <div id="fundCompany" style="display:none;"></div>
+    </div>
+    <div id="sectorStocksBox" style="background:#111827;border:1px solid #1f2937;border-radius:6px;padding:12px;margin-top:4px;display:none;">
+      <div style="font-weight:700;color:#fbbf24;margin-bottom:8px;border-bottom:1px solid #1f2937;padding-bottom:6px;">板块成分股（按涨幅）</div>
+      <div id="sectorStocksList"></div>
+    </div>
+  </div>
+  <div class="orderbook" id="orderbook"></div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<script src="/js/kline.js?v=92"></script>
+</body>
+</html>
