@@ -685,6 +685,90 @@ def api_shortterm():
 def shortterm_page():
     return send_file("static/shortterm.html")
 
+SECTOR_LEADERS_RESULT = os.path.join(BASE_DIR, "data/sector_leaders_picks.json")
+SECTOR_LEADERS_BACKTEST = os.path.join(BASE_DIR, "stock-analysis/sector_leaders_results.json")
+
+
+def _sector_leaders_from_backtest():
+    # 每日产物缺失时回退到回测 Top 3
+    try:
+        with open(SECTOR_LEADERS_BACKTEST, encoding="utf-8") as f:
+            raw = json.load(f)
+        sectors = {}
+        for name, sec in raw["sectors"].items():
+            picks = []
+            for top in sec.get("top3", []):
+                full = top.get("full", {})
+                picks.append({
+                    "code": top.get("code"),
+                    "name": top.get("name"),
+                    "signal": "回测 Top 3",
+                    "ret_5d": None,
+                    "vol_ratio": None,
+                    "turnover": None,
+                    "close": None,
+                    "win_rate": full.get("win_rate"),
+                    "n": full.get("n"),
+                    "wins": full.get("wins"),
+                    "mean_ret": full.get("mean_ret"),
+                    "payoff": full.get("payoff"),
+                    "last_signal": top.get("last_signal"),
+                    "signals_2026": top.get("signals_2026"),
+                    "excluded_live": bool(top.get("excluded_live", False)),
+                })
+            sectors[name] = {
+                "combo": sec.get("combo", {}),
+                "candidates": sec.get("candidates"),
+                "top3": picks,
+            }
+        return {
+            "as_of": "",
+            "generated_at": raw.get("generated_at", ""),
+            "source": "backtest",
+            "sectors": sectors,
+            "counts": {
+                "sectors": len(sectors),
+                "picks": sum(len(v["top3"]) for v in sectors.values()),
+            },
+            "summary": "",
+            "research_only": True,
+            "backtest": {
+                "combo": raw.get("combo", {}),
+                "source": "stock-analysis/sector_leaders_backtest.md",
+            },
+        }
+    except (OSError, ValueError, AttributeError, TypeError):
+        return None
+
+
+@app.route("/api/sector-leaders")
+def api_sector_leaders():
+    # 只读每日产物；缺失时回退回测 Top 3；绝不在请求中扫描或调用外部服务。
+    empty = {
+        "as_of": "",
+        "generated_at": "",
+        "source": "none",
+        "sectors": {},
+        "counts": {"sectors": 0, "picks": 0},
+        "summary": "",
+        "research_only": True,
+        "backtest": {"combo": {}, "source": "stock-analysis/sector_leaders_backtest.md"},
+    }
+    try:
+        with open(SECTOR_LEADERS_RESULT, encoding="utf-8") as f:
+            result = json.load(f)
+        if not isinstance(result, dict):
+            raise ValueError("sector leaders result object required")
+        empty.update(result)
+    except (OSError, ValueError):
+        fallback = _sector_leaders_from_backtest()
+        if fallback is not None:
+            empty.update(fallback)
+    response = jsonify(empty)
+    response.headers["Cache-Control"] = "no-store"
+    return response
+
+
 
 # ===================== 页面路由 =====================
 
