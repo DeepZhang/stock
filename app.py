@@ -554,6 +554,33 @@ def _daily_screen():
 def screener_page():
     return send_file("static/screener.html")
 
+SHORTTERM_RESULT = os.path.join(BASE_DIR, "data/shortterm_picks.json")
+
+
+@app.route("/api/shortterm")
+def api_shortterm():
+    # 只读每日任务产物；绝不在请求中扫描、补数据或调用外部服务。
+    empty = {"as_of": "", "generated_at": "", "limit_up": [], "oversold": [],
+             "counts": {"limit_up": 0, "oversold": 0}, "summary": "",
+             "research_only": True, "backtest": {"rows": []}}
+    try:
+        with open(SHORTTERM_RESULT, encoding="utf-8") as f:
+            result = json.load(f)
+        if not isinstance(result, dict):
+            raise ValueError("shortterm result object required")
+        empty.update(result)
+    except (OSError, ValueError):
+        pass
+    response = jsonify(empty)
+    response.headers["Cache-Control"] = "no-store"
+    return response
+
+
+@app.route("/shortterm")
+def shortterm_page():
+    return send_file("static/shortterm.html")
+
+
 # ===================== 页面路由 =====================
 
 @app.route("/")
@@ -664,30 +691,3 @@ if __name__ == "__main__":
     threading.Thread(target=_daily_screen, daemon=True).start()
     stock_data.start_collector()
     app.run(host="0.0.0.0", port=5000, debug=False)
-SHORTTERM_RESULT = os.path.join(BASE_DIR, "data/shortterm_picks.json")
-
-
-@app.route("/api/shortterm")
-def api_shortterm():
-    # 只读每日任务产物；绝不在请求中扫描、补数据或调用外部服务。
-    empty = {"as_of": "", "generated_at": "", "limit_up": [], "oversold": [],
-             "counts": {"limit_up": 0, "oversold": 0}, "summary": "",
-             "research_only": True, "backtest": {"rows": []}}
-    try:
-        with open(SHORTTERM_RESULT, encoding="utf-8") as f:
-            result = json.load(f)
-        if not isinstance(result, dict):
-            raise ValueError("shortterm result object required")
-        empty.update(result)
-    except (OSError, ValueError):
-        pass
-    response = jsonify(empty)
-    response.headers["Cache-Control"] = "no-store"
-    return response
-
-
-@app.route("/shortterm")
-def shortterm_page():
-    return send_file("static/shortterm.html")
-
-
