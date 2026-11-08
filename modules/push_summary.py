@@ -141,6 +141,21 @@ def generate_daily_summary():
     
     return text
 
+def generate_shortterm_summary(result):
+    """复用每日摘要的日期标题、分策略TOP名单口径；纯格式化，零行情/发送调用。"""
+    text = f"📊 短线候选摘要 {result['as_of']}（研究选股）\n"
+    for key, label in (('limit_up', '主策略·涨停次日'), ('oversold', '副策略·超跌反弹')):
+        items = result.get(key, [])
+        text += f"\n【{label} TOP10】筛后{result.get('counts', {}).get(key, 0)}只，展示{len(items)}只\n"
+        for i, item in enumerate(items, 1):
+            rate = item.get('expected_win_rate')
+            score = '未校准' if rate is None else f"同类历史信号胜率{rate:.3f}%"
+            text += f"{i}. {item['name']}（{item['code']}）：{score}\n"
+        if not items:
+            text += "暂无候选\n"
+    return text + "\n仅研究，不下单；信号胜率非开盘买入盈利概率。新买仓位须遵守T+1。"
+
+
 def send_to_feishu(text):
     data = {
         "msg_type": "text",
