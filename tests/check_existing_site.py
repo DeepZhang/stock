@@ -54,6 +54,10 @@ def inspect(module,temp,in_process=False):
         Path(module.SCREEN_CACHE).write_text(json.dumps(cached))
     if hasattr(module,'SHORTTERM_RESULT'):
         module.SHORTTERM_RESULT=str(temp/'data/shortterm_picks.json')
+    if hasattr(module,'MARKET_OVERVIEW_CACHE'):
+        module.MARKET_OVERVIEW_CACHE=str(temp/'data/market_overview.json')
+        Path(module.MARKET_OVERVIEW_CACHE).write_text(json.dumps({
+            **module._empty_market_overview(), 'update_time':'2026-11-06 15:30:00'}))
     with ExitStack() as stack:
         stack.enter_context(patch('requests.get',return_value=Response()))
         stack.enter_context(patch('stock_screener.run_screen',return_value=fixture))

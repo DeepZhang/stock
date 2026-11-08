@@ -304,8 +304,11 @@ async function loadDailyReview(){
   if(!el) return;
   try{
     const r = await fetch("/api/market-overview");
+    if(!r.ok) throw new Error("market overview unavailable");
     const d = await r.json();
-    if(!d || !d.indices){ el.innerHTML = "<div style='color:#6b7280'>数据加载中...</div>"; return; }
+    if(!d || !Array.isArray(d.indices) || !d.indices.length || !d.limit_stats) {
+      el.innerHTML = "<div style='color:#6b7280'>数据加载中，稍后重试</div>"; return;
+    }
     let h = "";
 
     const l = d.limit_stats;
@@ -421,7 +424,7 @@ async function loadDailyReview(){
       });
       el2.innerHTML = t;
     });
-  }catch(e){ el.innerHTML = '<div style="color:#f00">错误: '+e+'</div>'; }
+  }catch(e){ el.innerHTML = '<div style="color:#6b7280">数据加载中，稍后重试</div>'; }
 }
 document.title="行情总览";loadDailyReview();setInterval(loadDailyReview, 60000);
 </script>

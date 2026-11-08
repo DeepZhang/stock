@@ -208,10 +208,88 @@ def api_dates():
     return jsonify({"dates": dates})
 
 
+MARKET_OVERVIEW_CACHE = os.path.join(BASE_DIR, "data/market_overview.json")
+MARKET_OVERVIEW_CACHE_MAX_AGE = 30
+_market_overview_lock = threading.Lock()
+_market_overview_refreshing = False
+
+
+def _empty_market_overview():
+    """未取得行情时保留原字段，不伪造行情数值或更新时间。"""
+    return {"update_time": "", "indices": [], "limit_stats": None,
+            "flow_analysis": {}, "fund_flow": None}
+
+
+def _validate_market_overview(data):
+    if (not isinstance(data, dict) or
+            not isinstance(data.get("update_time"), str) or
+            not isinstance(data.get("indices"), list) or
+            not isinstance(data.get("flow_analysis"), dict) or
+            "limit_stats" not in data or "fund_flow" not in data or
+            not isinstance(data["limit_stats"], (dict, type(None))) or
+            not isinstance(data["fund_flow"], (dict, type(None)))):
+        raise ValueError("invalid market overview cache")
+    # 同时拒绝 NaN/Infinity，确保返回标准 JSON。
+    json.dumps(data, allow_nan=False)
+    return data
+
+
+def _read_market_overview_cache():
+    try:
+        with open(MARKET_OVERVIEW_CACHE, encoding="utf-8") as f:
+            return _validate_market_overview(json.load(f))
+    except (OSError, ValueError, TypeError):
+        return _empty_market_overview()
+
+
+def _market_overview_worker():
+    global _market_overview_refreshing
+    tmp = None
+    try:
+        payload = _validate_market_overview(market_data.get_market_overview())
+        directory = os.path.dirname(MARKET_OVERVIEW_CACHE)
+        os.makedirs(directory, exist_ok=True)
+        with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", dir=directory,
+                                         delete=False) as f:
+            tmp = f.name
+            json.dump(payload, f, ensure_ascii=False, allow_nan=False)
+        os.replace(tmp, MARKET_OVERVIEW_CACHE)
+    except Exception:
+        app.logger.exception("后台行情总览刷新失败，保留原缓存")
+    finally:
+        try:
+            if tmp and os.path.exists(tmp):
+                os.unlink(tmp)
+        finally:
+            with _market_overview_lock:
+                _market_overview_refreshing = False
+
+
+def _start_market_overview_refresh(cached):
+    global _market_overview_refreshing
+    with _market_overview_lock:
+        if _market_overview_refreshing:
+            return
+        try:
+            age = time.time() - os.path.getmtime(MARKET_OVERVIEW_CACHE)
+        except OSError:
+            age = MARKET_OVERVIEW_CACHE_MAX_AGE
+        if cached["update_time"] and age < MARKET_OVERVIEW_CACHE_MAX_AGE:
+            return
+        _market_overview_refreshing = True
+        try:
+            threading.Thread(target=_market_overview_worker, name="market-overview",
+                             daemon=True).start()
+        except Exception:
+            _market_overview_refreshing = False
+            app.logger.exception("启动后台行情总览线程失败")
+
+
 @app.route("/api/market-overview")
 def api_market_overview():
-    data = market_data.get_market_overview()
-    return jsonify(data)
+    cached = _read_market_overview_cache()
+    _start_market_overview_refresh(cached)
+    return jsonify(cached)
 
 
 @app.route("/api/sector-rank")
