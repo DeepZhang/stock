@@ -69,6 +69,9 @@ today_data = {
 _data_lock = threading.Lock()
 _current_date = datetime.now().strftime("%Y-%m-%d")
 
+# 资金快照目录不存在时采集与读取都会静默失败，先建出来
+os.makedirs("data/funds", exist_ok=True)
+
 
 def is_trading_day(d=None):
     """判断是否A股交易日：排除周末和节假日"""

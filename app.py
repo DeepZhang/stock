@@ -23,8 +23,50 @@ app = Flask(__name__)
 
 # ===================== 数据接口 =====================
 
+FUND_DATA_DIR = os.path.join(BASE_DIR, "data", "funds")
+os.makedirs(FUND_DATA_DIR, exist_ok=True)
+
+# 单点快照画不成线：只有不少于 2 个时间点的快照才算可用
+MIN_FUND_POINTS = 2
+
+
+def _load_fund_file(path):
+    # 读一份资金快照；可用（时间点数不少于 2 且有板块数据）时返回数据，否则返回 None。
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except Exception:
+        return None
+    if not data.get("times") or not data.get("sectors"):
+        return None
+    if len(data["times"]) < MIN_FUND_POINTS:
+        return None
+    return data
+
+
+def _usable_fund_dates():
+    # 返回有可用数据的日期列表（倒序）。
+    dates = []
+    for path in sorted(glob.glob(os.path.join(FUND_DATA_DIR, "*_fund.json"))):
+        name = os.path.basename(path)
+        if len(name) == 20 and name[:10].replace("-", "").isdigit() and _load_fund_file(path) is not None:
+            dates.append(name[:10])
+    return sorted(dates, reverse=True)
+
+
+def _latest_usable_fund(before=None):
+    # 返回 (日期, 数据)：最近一个可用快照；before 给定时只取该日期及之前的。
+    for date in _usable_fund_dates():
+        if before is None or date <= before:
+            data = _load_fund_file(os.path.join(FUND_DATA_DIR, date + "_fund.json"))
+            if data is not None:
+                return date, data
+    return None
+
+
+
 def _read_latest_data(target_date=None):
-    """读取数据：可指定日期；默认读当天，当天无数据则实时拉取"""
+    """读取数据：可指定日期；无当日数据时回退最近可用快照，单点快照不可用"""
     base_dir = BASE_DIR
     now = datetime.datetime.now()
     today_str = now.strftime("%Y-%m-%d")
@@ -39,18 +81,10 @@ def _read_latest_data(target_date=None):
     if target_date is None:
         is_trading_time = (weekday < 5) and ((now.hour == 9 and now.minute >= 15) or (10 <= now.hour < 15))
         if weekday >= 5 or not is_trading_time:
-            # 找最近有数据的文件
-            import glob
-            files = sorted(glob.glob(os.path.join(BASE_DIR, "data/funds/*_fund.json")))
-            if files:
-                latest = files[-1]
-                try:
-                    with open(latest, "r", encoding="utf-8") as f:
-                        data = json.load(f)
-                    if data.get("times") and data.get("sectors") and len(data["times"]) > 0:
-                        return data, latest.split("/")[-1].replace("_fund.json","")
-                except:
-                    pass
+            # 找最近有数据的文件：单点快照不成线，不可用
+            latest = _latest_usable_fund()
+            if latest:
+                return latest[1], latest[0]
 
 
     if target_date:
@@ -102,7 +136,10 @@ def _read_latest_data(target_date=None):
                     import time
                     time.sleep(1)
 
-        # 其他历史日期：没有就返回空
+        # 指定日期无可用快照：回退到该日期之前的最近可用快照，仍无则返回空（带请求日期）
+        prev = _latest_usable_fund(before=target_date)
+        if prev:
+            return prev[1], prev[0]
         return {"times": [], "sectors": {}}, target_date
 
     # 默认：读当天
@@ -113,25 +150,28 @@ def _read_latest_data(target_date=None):
     # 判断是否实时模式（9:15之后就开始实时拉取）
     hour = now.hour
     minute = now.minute
+    # 仅交易日 9:15-15:00 为实时模式；周末不拉取，避免产生单点当日序列
     is_realtime = (
-        (hour == 9 and minute >= 15) or
-        (hour == 10) or
-        (hour == 11) or
-        (hour == 13) or
-        (hour == 14) or
-        (hour == 15 and minute <= 0)
+        weekday < 5
+        and (
+            (hour == 9 and minute >= 15)
+            or hour in (10, 11, 13, 14)
+            or (hour == 15 and minute <= 0)
+        )
     )
 
-    # 非实时模式：读本地文件（9:15之前）
+    # 非实时模式：读本地文件 (9:15之前)，单点快照不可用
     if not is_realtime:
-        if os.path.exists(today_file):
-            try:
-                with open(today_file, "r", encoding="utf-8") as f:
-                    data = json.load(f)
-                if data.get("times") and data.get("sectors") and len(data["times"]) > 0:
-                    return data, today_str
-            except:
-                pass
+        data = _load_fund_file(today_file)
+        if data is not None:
+            return data, today_str
+
+    # 非交易时段不再实时拉取：避免把单点快照当成当日数据返回
+    if not is_realtime:
+        latest = _latest_usable_fund()
+        if latest:
+            return latest[1], latest[0]
+        return {"times": [], "sectors": {}}, today_str
 
     # 交易时间内，实时拉取最新数据，追加到历史数据后面
     for retry in range(3):
@@ -191,21 +231,8 @@ def api_data():
 
 @app.route("/api/dates")
 def api_dates():
-    """返回所有有数据的日期列表（倒序）"""
-    base_dir = BASE_DIR
-    pattern = os.path.join(base_dir, "data", "funds", "*_fund.json")
-    files = glob.glob(pattern)
-    dates = []
-    for f in files:
-        fname = os.path.basename(f)
-        # 提取日期部分：YYYY-MM-DD_fund.json
-        if fname.endswith("_fund.json"):
-            d = fname[:-len("_fund.json")]
-            # 简单校验格式
-            if len(d) == 10 and d[4] == "-" and d[7] == "-":
-                dates.append(d)
-    dates.sort(reverse=True)
-    return jsonify({"dates": dates})
+    # 只返回有可用（多点）数据的真实日期
+    return jsonify({"dates": _usable_fund_dates()})
 
 
 MARKET_OVERVIEW_CACHE = os.path.join(BASE_DIR, "data/market_overview.json")
