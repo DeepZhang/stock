@@ -1,0 +1,2476 @@
+{
+  "generated_at": "2026-11-08T10:40:31.745146+00:00",
+  "universe": {
+    "fetched_at": "2026-11-08T05:40:10.280355+00:00",
+    "total_listed": 5563,
+    "sample": 1500,
+    "sample_after_st_exclusion": 1495,
+    "sha256": "a61506728642585565571b3e4b872b5a2574db3b0d87270fac5167bb0b588e29"
+  },
+  "members_fetched_at": "2026-11-08T10:29:25.686292+00:00",
+  "excluded_st_by_current_name": [
+    "300010",
+    "600745",
+    "688270",
+    "002759",
+    "002667"
+  ],
+  "history": {
+    "start": "2023-11-01",
+    "end": "2026-11-06",
+    "stats_period": "2024-01-01~2026-11-06",
+    "stocks_with_history": 1495,
+    "missing_history": [],
+    "total_bars": 1055804,
+    "excluded_st_bars": 3638,
+    "adjust": "forward-adjusted fqt=1"
+  },
+  "base": {
+    "label": "5日涨幅>=5%",
+    "stats": {
+      "full": {
+        "n": 207436,
+        "wins": 99124,
+        "win_rate": 0.47785341020844985,
+        "mean_ret": 0.009716040533780716,
+        "payoff": 1.422639319891799
+      },
+      "calibration": {
+        "n": 141769,
+        "wins": 67198,
+        "win_rate": 0.47399643081350645,
+        "mean_ret": 0.010190559643067285,
+        "payoff": 1.4883047268590313
+      },
+      "validation": {
+        "n": 65667,
+        "wins": 31926,
+        "win_rate": 0.48618027319658275,
+        "mean_ret": 0.00869159751667247,
+        "payoff": 1.3040784639778114
+      }
+    }
+  },
+  "filters": [
+    {
+      "name": "vol_ratio_ge_1_5",
+      "label": "量比>=1.5",
+      "stats": {
+        "full": {
+          "n": 83861,
+          "wins": 38209,
+          "win_rate": 0.4556229951944289,
+          "mean_ret": 0.008504904166452214,
+          "payoff": 1.4770188938835382
+        },
+        "calibration": {
+          "n": 59826,
+          "wins": 27072,
+          "win_rate": 0.45251228562832213,
+          "mean_ret": 0.008942755514479725,
+          "payoff": 1.5204656039835769
+        },
+        "validation": {
+          "n": 24035,
+          "wins": 11137,
+          "win_rate": 0.4633659246931558,
+          "mean_ret": 0.007415039604476189,
+          "payoff": 1.3787939966131488
+        }
+      },
+      "kept": false
+    },
+    {
+      "name": "vol_ratio_le_3",
+      "label": "量比<=3",
+      "stats": {
+        "full": {
+          "n": 190246,
+          "wins": 92281,
+          "win_rate": 0.4850614467584075,
+          "mean_ret": 0.011023316400395498,
+          "payoff": 1.4416943076046111
+        },
+        "calibration": {
+          "n": 128594,
+          "wins": 62149,
+          "win_rate": 0.4832962657666765,
+          "mean_ret": 0.012110275154970243,
+          "payoff": 1.5323881846567338
+        },
+        "validation": {
+          "n": 61652,
+          "wins": 30132,
+          "win_rate": 0.4887432686693051,
+          "mean_ret": 0.008756133274369015,
+          "payoff": 1.295576428938864
+        }
+      },
+      "kept": true
+    },
+    {
+      "name": "ma_bull",
+      "label": "均线多头 MA5>MA10>MA20 且收盘>MA5",
+      "stats": {
+        "full": {
+          "n": 116842,
+          "wins": 52800,
+          "win_rate": 0.4518922990020712,
+          "mean_ret": 0.006461710800739883,
+          "payoff": 1.4328217947234754
+        },
+        "calibration": {
+          "n": 80079,
+          "wins": 35484,
+          "win_rate": 0.44311242647885213,
+          "mean_ret": 0.005374016883946853,
+          "payoff": 1.455728693413348
+        },
+        "validation": {
+          "n": 36763,
+          "wins": 17316,
+          "win_rate": 0.4710170551913609,
+          "mean_ret": 0.008830979934457727,
+          "payoff": 1.3752105685456466
+        }
+      },
+      "kept": false
+    },
+    {
+      "name": "rs_sector_ge_5",
+      "label": "相对强度：20日涨幅高于同板块中位数 5pp",
+      "stats": {
+        "full": {
+          "n": 84443,
+          "wins": 39848,
+          "win_rate": 0.47189228236798786,
+          "mean_ret": 0.008129392938294828,
+          "payoff": 1.3672651688292772
+        },
+        "calibration": {
+          "n": 55035,
+          "wins": 25401,
+          "win_rate": 0.46154265467429817,
+          "mean_ret": 0.006915631200230585,
+          "payoff": 1.4011552683754043
+        },
+        "validation": {
+          "n": 29408,
+          "wins": 14447,
+          "win_rate": 0.49126088139281826,
+          "mean_ret": 0.010400862513048826,
+          "payoff": 1.298963325183729
+        }
+      },
+      "kept": false
+    },
+    {
+      "name": "ret20_ge_10",
+      "label": "20日涨幅>=10%",
+      "stats": {
+        "full": {
+          "n": 111254,
+          "wins": 49787,
+          "win_rate": 0.44750750534812234,
+          "mean_ret": 0.005950012710450312,
+          "payoff": 1.42451754474187
+        },
+        "calibration": {
+          "n": 75360,
+          "wins": 33180,
+          "win_rate": 0.44028662420382164,
+          "mean_ret": 0.005191255854904246,
+          "payoff": 1.451412501871403
+        },
+        "validation": {
+          "n": 35894,
+          "wins": 16607,
+          "win_rate": 0.4626678553518694,
+          "mean_ret": 0.0075430342916045804,
+          "payoff": 1.365190007879809
+        }
+      },
+      "kept": false
+    },
+    {
+      "name": "turnover_1_20",
+      "label": "换手率 1%~20%",
+      "stats": {
+        "full": {
+          "n": 180546,
+          "wins": 86894,
+          "win_rate": 0.4812845479822317,
+          "mean_ret": 0.010530560609982304,
+          "payoff": 1.4387786976001364
+        },
+        "calibration": {
+          "n": 121251,
+          "wins": 57737,
+          "win_rate": 0.4761775160617232,
+          "mean_ret": 0.010871103807283775,
+          "payoff": 1.5093307309196384
+        },
+        "validation": {
+          "n": 59295,
+          "wins": 29157,
+          "win_rate": 0.491727801669618,
+          "mean_ret": 0.0098341915532996,
+          "payoff": 1.3161939078803608
+        }
+      },
+      "kept": true
+    },
+    {
+      "name": "amount_ge_100m",
+      "label": "成交额>=1亿元",
+      "stats": {
+        "full": {
+          "n": 186882,
+          "wins": 88105,
+          "win_rate": 0.47144722338159906,
+          "mean_ret": 0.008041469168150562,
+          "payoff": 1.3906894601881339
+        },
+        "calibration": {
+          "n": 123173,
+          "wins": 57332,
+          "win_rate": 0.46545915095028945,
+          "mean_ret": 0.008082921075908335,
+          "payoff": 1.4458796512051797
+        },
+        "validation": {
+          "n": 63709,
+          "wins": 30773,
+          "win_rate": 0.4830243764617244,
+          "mean_ret": 0.00796132733835809,
+          "payoff": 1.2958603281136356
+        }
+      },
+      "kept": false
+    },
+    {
+      "name": "ret5_ge_10",
+      "label": "5日涨幅>=10%",
+      "stats": {
+        "full": {
+          "n": 94304,
+          "wins": 44406,
+          "win_rate": 0.47088140481845947,
+          "mean_ret": 0.009297939768573097,
+          "payoff": 1.3951565310314695
+        },
+        "calibration": {
+          "n": 61256,
+          "wins": 28134,
+          "win_rate": 0.4592856210003918,
+          "mean_ret": 0.00808162644901112,
+          "payoff": 1.433516754872341
+        },
+        "validation": {
+          "n": 33048,
+          "wins": 16272,
+          "win_rate": 0.4923747276688453,
+          "mean_ret": 0.01155243289079195,
+          "payoff": 1.3215395078382324
+        }
+      },
+      "kept": false
+    }
+  ],
+  "kept_filters": [
+    "vol_ratio_le_3",
+    "turnover_1_20"
+  ],
+  "combo": {
+    "full": {
+      "n": 166876,
+      "wins": 81393,
+      "win_rate": 0.4877453917879144,
+      "mean_ret": 0.011628735983021917,
+      "payoff": 1.4512185963310176
+    },
+    "calibration": {
+      "n": 110590,
+      "wins": 53611,
+      "win_rate": 0.4847725834162221,
+      "mean_ret": 0.012589384447899761,
+      "payoff": 1.5457155193909045
+    },
+    "validation": {
+      "n": 56286,
+      "wins": 27782,
+      "win_rate": 0.4935863269729595,
+      "mean_ret": 0.009741266386126757,
+      "payoff": 1.3046733602741265
+    }
+  },
+  "sectors": {
+    "半导体": {
+      "combo": {
+        "full": {
+          "n": 16648,
+          "wins": 8571,
+          "win_rate": 0.5148366170110524,
+          "mean_ret": 0.015583552997940698,
+          "payoff": 1.3963886795772167
+        },
+        "calibration": {
+          "n": 10051,
+          "wins": 4977,
+          "win_rate": 0.49517460949159287,
+          "mean_ret": 0.013962130643272962,
+          "payoff": 1.5143219082748152
+        },
+        "validation": {
+          "n": 6597,
+          "wins": 3594,
+          "win_rate": 0.5447930877671668,
+          "mean_ret": 0.018053905595601067,
+          "payoff": 1.2346590995738609
+        }
+      },
+      "top3": [
+        {
+          "full": {
+            "n": 50,
+            "wins": 32,
+            "win_rate": 0.64,
+            "mean_ret": 0.046638761300514205,
+            "payoff": 1.1979548022183435
+          },
+          "validation": {
+            "n": 50,
+            "wins": 32,
+            "win_rate": 0.64,
+            "mean_ret": 0.046638761300514205,
+            "payoff": 1.1979548022183435
+          },
+          "last_signal": "2026-09-23",
+          "signals_2026": 50,
+          "signals_on_last_day": false,
+          "code": "688807",
+          "name": "优迅股份",
+          "excluded_live": true
+        },
+        {
+          "full": {
+            "n": 57,
+            "wins": 36,
+            "win_rate": 0.631578947368421,
+            "mean_ret": 0.008289820566872786,
+            "payoff": 0.7277446080706658
+          },
+          "validation": {
+            "n": 57,
+            "wins": 36,
+            "win_rate": 0.631578947368421,
+            "mean_ret": 0.008289820566872786,
+            "payoff": 0.7277446080706658
+          },
+          "last_signal": "2026-09-18",
+          "signals_2026": 57,
+          "signals_on_last_day": false,
+          "code": "688809",
+          "name": "强一股份",
+          "excluded_live": true
+        },
+        {
+          "full": {
+            "n": 182,
+            "wins": 108,
+            "win_rate": 0.5934065934065934,
+            "mean_ret": 0.03210961503177479,
+            "payoff": 1.3802899153855344
+          },
+          "validation": {
+            "n": 71,
+            "wins": 42,
+            "win_rate": 0.5915492957746479,
+            "mean_ret": 0.04393635336478041,
+            "payoff": 1.5797602339636485
+          },
+          "last_signal": "2026-09-23",
+          "signals_2026": 71,
+          "signals_on_last_day": false,
+          "code": "688416",
+          "name": "恒烁股份",
+          "excluded_live": true
+        }
+      ],
+      "candidates": 122
+    },
+    "CPO概念": {
+      "combo": {
+        "full": {
+          "n": 12319,
+          "wins": 6366,
+          "win_rate": 0.516762724247098,
+          "mean_ret": 0.015644868544470347,
+          "payoff": 1.3822932227634286
+        },
+        "calibration": {
+          "n": 7899,
+          "wins": 4029,
+          "win_rate": 0.5100645651348272,
+          "mean_ret": 0.014347610029536861,
+          "payoff": 1.4256805289053225
+        },
+        "validation": {
+          "n": 4420,
+          "wins": 2337,
+          "win_rate": 0.5287330316742082,
+          "mean_ret": 0.017963204519461203,
+          "payoff": 1.3100498954008648
+        }
+      },
+      "top3": [
+        {
+          "full": {
+            "n": 131,
+            "wins": 84,
+            "win_rate": 0.6412213740458015,
+            "mean_ret": 0.047698343772170276,
+            "payoff": 1.7544276883822345
+          },
+          "validation": {
+            "n": 67,
+            "wins": 46,
+            "win_rate": 0.6865671641791045,
+            "mean_ret": 0.07273675848497821,
+            "payoff": 1.5743174770057815
+          },
+          "last_signal": "2026-10-16",
+          "signals_2026": 67,
+          "signals_on_last_day": false,
+          "code": "002980",
+          "name": "华盛昌",
+          "excluded_live": false
+        },
+        {
+          "full": {
+            "n": 124,
+            "wins": 75,
+            "win_rate": 0.6048387096774194,
+            "mean_ret": 0.022383739972926215,
+            "payoff": 1.1770208643241054
+          },
+          "validation": {
+            "n": 65,
+            "wins": 33,
+            "win_rate": 0.5076923076923077,
+            "mean_ret": 0.01749636037117558,
+            "payoff": 1.3698984294133134
+          },
+          "last_signal": "2026-09-18",
+          "signals_2026": 65,
+          "signals_on_last_day": false,
+          "code": "600330",
+          "name": "天通股份",
+          "excluded_live": false
+        },
+        {
+          "full": {
+            "n": 191,
+            "wins": 114,
+            "win_rate": 0.5968586387434555,
+            "mean_ret": 0.02816880992834549,
+            "payoff": 1.3416167845626803
+          },
+          "validation": {
+            "n": 76,
+            "wins": 39,
+            "win_rate": 0.5131578947368421,
+            "mean_ret": 0.015096834940178456,
+            "payoff": 1.270276391994111
+          },
+          "last_signal": "2026-09-22",
+          "signals_2026": 76,
+          "signals_on_last_day": false,
+          "code": "600105",
+          "name": "永鼎股份",
+          "excluded_live": false
+        }
+      ],
+      "candidates": 79
+    },
+    "PCB": {
+      "combo": {
+        "full": {
+          "n": 16900,
+          "wins": 8713,
+          "win_rate": 0.5155621301775148,
+          "mean_ret": 0.016263376306910108,
+          "payoff": 1.4569216661922355
+        },
+        "calibration": {
+          "n": 10499,
+          "wins": 5182,
+          "win_rate": 0.49357081626821603,
+          "mean_ret": 0.012096677016999324,
+          "payoff": 1.4865617826752289
+        },
+        "validation": {
+          "n": 6401,
+          "wins": 3531,
+          "win_rate": 0.5516325574129042,
+          "mean_ret": 0.023097648427637067,
+          "payoff": 1.3684304246749448
+        }
+      },
+      "top3": [
+        {
+          "full": {
+            "n": 211,
+            "wins": 129,
+            "win_rate": 0.6113744075829384,
+            "mean_ret": 0.04269353665305272,
+            "payoff": 1.8670380128814188
+          },
+          "validation": {
+            "n": 68,
+            "wins": 46,
+            "win_rate": 0.6764705882352942,
+            "mean_ret": 0.05522504683705985,
+            "payoff": 1.5734343638186121
+          },
+          "last_signal": "2026-08-31",
+          "signals_2026": 68,
+          "signals_on_last_day": false,
+          "code": "301377",
+          "name": "鼎泰高科",
+          "excluded_live": true
+        },
+        {
+          "full": {
+            "n": 124,
+            "wins": 75,
+            "win_rate": 0.6048387096774194,
+            "mean_ret": 0.022383739972926215,
+            "payoff": 1.1770208643241054
+          },
+          "validation": {
+            "n": 65,
+            "wins": 33,
+            "win_rate": 0.5076923076923077,
+            "mean_ret": 0.01749636037117558,
+            "payoff": 1.3698984294133134
+          },
+          "last_signal": "2026-09-18",
+          "signals_2026": 65,
+          "signals_on_last_day": false,
+          "code": "600330",
+          "name": "天通股份",
+          "excluded_live": false
+        },
+        {
+          "full": {
+            "n": 155,
+            "wins": 92,
+            "win_rate": 0.5935483870967742,
+            "mean_ret": 0.02934842501388759,
+            "payoff": 1.6085011638675968
+          },
+          "validation": {
+            "n": 63,
+            "wins": 43,
+            "win_rate": 0.6825396825396826,
+            "mean_ret": 0.05687421435125923,
+            "payoff": 1.5413824965906038
+          },
+          "last_signal": "2026-09-18",
+          "signals_2026": 63,
+          "signals_on_last_day": false,
+          "code": "002008",
+          "name": "大族激光",
+          "excluded_live": false
+        }
+      ],
+      "candidates": 116
+    },
+    "有色金属": {
+      "combo": {
+        "full": {
+          "n": 10195,
+          "wins": 5058,
+          "win_rate": 0.49612555174104955,
+          "mean_ret": 0.010590421165623599,
+          "payoff": 1.374645893616772
+        },
+        "calibration": {
+          "n": 6732,
+          "wins": 3343,
+          "win_rate": 0.49658348187759954,
+          "mean_ret": 0.011941607867889226,
+          "payoff": 1.486882249327761
+        },
+        "validation": {
+          "n": 3463,
+          "wins": 1715,
+          "win_rate": 0.4952353450765232,
+          "mean_ret": 0.007963742309241217,
+          "payoff": 1.2303175753570945
+        }
+      },
+      "top3": [
+        {
+          "full": {
+            "n": 182,
+            "wins": 119,
+            "win_rate": 0.6538461538461539,
+            "mean_ret": 0.03704859942617634,
+            "payoff": 1.3864257247048402
+          },
+          "validation": {
+            "n": 70,
+            "wins": 51,
+            "win_rate": 0.7285714285714285,
+            "mean_ret": 0.054938449411806485,
+            "payoff": 1.1960453053712925
+          },
+          "last_signal": "2026-08-12",
+          "signals_2026": 70,
+          "signals_on_last_day": false,
+          "code": "605376",
+          "name": "博迁新材",
+          "excluded_live": false
+        },
+        {
+          "full": {
+            "n": 62,
+            "wins": 38,
+            "win_rate": 0.6129032258064516,
+            "mean_ret": 0.0382410346636076,
+            "payoff": 1.4435809657638556
+          },
+          "validation": {
+            "n": 21,
+            "wins": 8,
+            "win_rate": 0.38095238095238093,
+            "mean_ret": -0.003669664168333454,
+            "payoff": 1.528527760853316
+          },
+          "last_signal": "2026-07-28",
+          "signals_2026": 21,
+          "signals_on_last_day": false,
+          "code": "300139",
+          "name": "晓程科技",
+          "excluded_live": true
+        },
+        {
+          "full": {
+            "n": 172,
+            "wins": 105,
+            "win_rate": 0.6104651162790697,
+            "mean_ret": 0.03227042540398704,
+            "payoff": 1.3716086440616497
+          },
+          "validation": {
+            "n": 54,
+            "wins": 28,
+            "win_rate": 0.5185185185185185,
+            "mean_ret": 0.036845260614301704,
+            "payoff": 1.6161292040216506
+          },
+          "last_signal": "2026-08-28",
+          "signals_2026": 54,
+          "signals_on_last_day": false,
+          "code": "000603",
+          "name": "盛达资源",
+          "excluded_live": false
+        }
+      ],
+      "candidates": 75
+    },
+    "微盘股": {
+      "combo": {
+        "full": {
+          "n": 439,
+          "wins": 224,
+          "win_rate": 0.510250569476082,
+          "mean_ret": 0.0012095095251171018,
+          "payoff": 1.002142371819765
+        },
+        "calibration": {
+          "n": 333,
+          "wins": 161,
+          "win_rate": 0.48348348348348347,
+          "mean_ret": -0.001059503294243412,
+          "payoff": 1.0308882507082524
+        },
+        "validation": {
+          "n": 106,
+          "wins": 63,
+          "win_rate": 0.5943396226415094,
+          "mean_ret": 0.008337634702919473,
+          "payoff": 0.9881906823231861
+        }
+      },
+      "top3": [
+        {
+          "full": {
+            "n": 144,
+            "wins": 76,
+            "win_rate": 0.5277777777777778,
+            "mean_ret": 0.003740379066439437,
+            "payoff": 1.0397594337174696
+          },
+          "validation": {
+            "n": 40,
+            "wins": 23,
+            "win_rate": 0.575,
+            "mean_ret": 0.007717157225633894,
+            "payoff": 0.9917885784611065
+          },
+          "last_signal": "2026-09-22",
+          "signals_2026": 40,
+          "signals_on_last_day": false,
+          "code": "002652",
+          "name": "扬子新材",
+          "excluded_live": false
+        },
+        {
+          "full": {
+            "n": 133,
+            "wins": 69,
+            "win_rate": 0.518796992481203,
+            "mean_ret": -0.0035433379113114344,
+            "payoff": 0.840679000019915
+          },
+          "validation": {
+            "n": 28,
+            "wins": 21,
+            "win_rate": 0.75,
+            "mean_ret": 0.02267358924809129,
+            "payoff": 0.8316542750928788
+          },
+          "last_signal": "2026-08-07",
+          "signals_2026": 28,
+          "signals_on_last_day": false,
+          "code": "002529",
+          "name": "海源复材",
+          "excluded_live": false
+        },
+        {
+          "full": {
+            "n": 101,
+            "wins": 50,
+            "win_rate": 0.49504950495049505,
+            "mean_ret": 0.005370392801995413,
+            "payoff": 1.233811844785865
+          },
+          "validation": {
+            "n": 25,
+            "wins": 13,
+            "win_rate": 0.52,
+            "mean_ret": -0.0003377430118670599,
+            "payoff": 0.9052099428812912
+          },
+          "last_signal": "2026-09-23",
+          "signals_2026": 25,
+          "signals_on_last_day": false,
+          "code": "300030",
+          "name": "阳普医疗",
+          "excluded_live": true
+        }
+      ],
+      "candidates": 4
+    },
+    "液冷服务器": {
+      "combo": {
+        "full": {
+          "n": 14242,
+          "wins": 7194,
+          "win_rate": 0.5051256845948603,
+          "mean_ret": 0.014347859196700929,
+          "payoff": 1.4450560499107528
+        },
+        "calibration": {
+          "n": 9493,
+          "wins": 4785,
+          "win_rate": 0.5040556199304751,
+          "mean_ret": 0.016950019878349064,
+          "payoff": 1.6035077452026638
+        },
+        "validation": {
+          "n": 4749,
+          "wins": 2409,
+          "win_rate": 0.50726468730259,
+          "mean_ret": 0.009146277526689192,
+          "payoff": 1.2128835493181667
+        }
+      },
+      "top3": [
+        {
+          "full": {
+            "n": 135,
+            "wins": 79,
+            "win_rate": 0.5851851851851851,
+            "mean_ret": 0.03969965234953006,
+            "payoff": 1.8045957549897824
+          },
+          "validation": {
+            "n": 72,
+            "wins": 47,
+            "win_rate": 0.6527777777777778,
+            "mean_ret": 0.06239889964828747,
+            "payoff": 1.6619148194982374
+          },
+          "last_signal": "2026-09-07",
+          "signals_2026": 72,
+          "signals_on_last_day": false,
+          "code": "003018",
+          "name": "金富科技",
+          "excluded_live": false
+        },
+        {
+          "full": {
+            "n": 151,
+            "wins": 88,
+            "win_rate": 0.5827814569536424,
+            "mean_ret": 0.015295282904074066,
+            "payoff": 1.191401117449448
+          },
+          "validation": {
+            "n": 53,
+            "wins": 33,
+            "win_rate": 0.6226415094339622,
+            "mean_ret": 0.029458807010323756,
+            "payoff": 1.2363474897213376
+          },
+          "last_signal": "2026-10-30",
+          "signals_2026": 53,
+          "signals_on_last_day": false,
+          "code": "300976",
+          "name": "达瑞电子",
+          "excluded_live": true
+        },
+        {
+          "full": {
+            "n": 162,
+            "wins": 94,
+            "win_rate": 0.5802469135802469,
+            "mean_ret": 0.031240061738822784,
+            "payoff": 1.607079675680055
+          },
+          "validation": {
+            "n": 64,
+            "wins": 41,
+            "win_rate": 0.640625,
+            "mean_ret": 0.02190821348343667,
+            "payoff": 0.9161692136348577
+          },
+          "last_signal": "2026-09-08",
+          "signals_2026": 64,
+          "signals_on_last_day": false,
+          "code": "002536",
+          "name": "飞龙股份",
+          "excluded_live": false
+        }
+      ],
+      "candidates": 101
+    },
+    "光纤概念": {
+      "combo": {
+        "full": {
+          "n": 7943,
+          "wins": 4060,
+          "win_rate": 0.5111418859373033,
+          "mean_ret": 0.016908014799663876,
+          "payoff": 1.4462753554390115
+        },
+        "calibration": {
+          "n": 4907,
+          "wins": 2417,
+          "win_rate": 0.49256164662726715,
+          "mean_ret": 0.013947750809295553,
+          "payoff": 1.4960830703212282
+        },
+        "validation": {
+          "n": 3036,
+          "wins": 1643,
+          "win_rate": 0.5411725955204216,
+          "mean_ret": 0.02169260485260768,
+          "payoff": 1.35152952514929
+        }
+      },
+      "top3": [
+        {
+          "full": {
+            "n": 114,
+            "wins": 69,
+            "win_rate": 0.6052631578947368,
+            "mean_ret": 0.027744552672547697,
+            "payoff": 1.522356638824889
+          },
+          "validation": {
+            "n": 77,
+            "wins": 53,
+            "win_rate": 0.6883116883116883,
+            "mean_ret": 0.04286149906322935,
+            "payoff": 1.4240791747133796
+          },
+          "last_signal": "2026-09-18",
+          "signals_2026": 77,
+          "signals_on_last_day": false,
+          "code": "300408",
+          "name": "三环集团",
+          "excluded_live": true
+        },
+        {
+          "full": {
+            "n": 191,
+            "wins": 114,
+            "win_rate": 0.5968586387434555,
+            "mean_ret": 0.02816880992834549,
+            "payoff": 1.3416167845626803
+          },
+          "validation": {
+            "n": 76,
+            "wins": 39,
+            "win_rate": 0.5131578947368421,
+            "mean_ret": 0.015096834940178456,
+            "payoff": 1.270276391994111
+          },
+          "last_signal": "2026-09-22",
+          "signals_2026": 76,
+          "signals_on_last_day": false,
+          "code": "600105",
+          "name": "永鼎股份",
+          "excluded_live": false
+        },
+        {
+          "full": {
+            "n": 155,
+            "wins": 92,
+            "win_rate": 0.5935483870967742,
+            "mean_ret": 0.02934842501388759,
+            "payoff": 1.6085011638675968
+          },
+          "validation": {
+            "n": 63,
+            "wins": 43,
+            "win_rate": 0.6825396825396826,
+            "mean_ret": 0.05687421435125923,
+            "payoff": 1.5413824965906038
+          },
+          "last_signal": "2026-09-18",
+          "signals_2026": 63,
+          "signals_on_last_day": false,
+          "code": "002008",
+          "name": "大族激光",
+          "excluded_live": false
+        }
+      ],
+      "candidates": 55
+    },
+    "机器人": {
+      "combo": {
+        "full": {
+          "n": 913,
+          "wins": 495,
+          "win_rate": 0.5421686746987951,
+          "mean_ret": 0.015962572126390955,
+          "payoff": 1.3680516117389356
+        },
+        "calibration": {
+          "n": 627,
+          "wins": 341,
+          "win_rate": 0.543859649122807,
+          "mean_ret": 0.018465491877119246,
+          "payoff": 1.5079916739193446
+        },
+        "validation": {
+          "n": 286,
+          "wins": 154,
+          "win_rate": 0.5384615384615384,
+          "mean_ret": 0.010475401903640465,
+          "payoff": 1.1426290281929536
+        }
+      },
+      "top3": [
+        {
+          "full": {
+            "n": 225,
+            "wins": 133,
+            "win_rate": 0.5911111111111111,
+            "mean_ret": 0.027057212628482968,
+            "payoff": 1.508714318119527
+          },
+          "validation": {
+            "n": 70,
+            "wins": 38,
+            "win_rate": 0.5428571428571428,
+            "mean_ret": 0.018028860910915233,
+            "payoff": 1.3863381301048836
+          },
+          "last_signal": "2026-09-24",
+          "signals_2026": 70,
+          "signals_on_last_day": false,
+          "code": "688090",
+          "name": "瑞松科技",
+          "excluded_live": true
+        },
+        {
+          "full": {
+            "n": 137,
+            "wins": 79,
+            "win_rate": 0.5766423357664233,
+            "mean_ret": 0.01704311557143487,
+            "payoff": 1.3007814592074214
+          },
+          "validation": {
+            "n": 40,
+            "wins": 25,
+            "win_rate": 0.625,
+            "mean_ret": 0.01281992584895141,
+            "payoff": 0.9081650877586797
+          },
+          "last_signal": "2026-10-29",
+          "signals_2026": 40,
+          "signals_on_last_day": false,
+          "code": "002747",
+          "name": "埃斯顿",
+          "excluded_live": false
+        },
+        {
+          "full": {
+            "n": 165,
+            "wins": 92,
+            "win_rate": 0.5575757575757576,
+            "mean_ret": 0.01394625535657325,
+            "payoff": 1.2114577670674818
+          },
+          "validation": {
+            "n": 46,
+            "wins": 20,
+            "win_rate": 0.43478260869565216,
+            "mean_ret": 0.001922078866003707,
+            "payoff": 1.374855368949368
+          },
+          "last_signal": "2026-10-29",
+          "signals_2026": 46,
+          "signals_on_last_day": false,
+          "code": "002979",
+          "name": "雷赛智能",
+          "excluded_live": false
+        }
+      ],
+      "candidates": 7
+    },
+    "商业航天": {
+      "combo": {
+        "full": {
+          "n": 17715,
+          "wins": 8663,
+          "win_rate": 0.4890206040079029,
+          "mean_ret": 0.011718426779384053,
+          "payoff": 1.4441213080169322
+        },
+        "calibration": {
+          "n": 11872,
+          "wins": 5848,
+          "win_rate": 0.4925876010781671,
+          "mean_ret": 0.01587963270775235,
+          "payoff": 1.643761753047999
+        },
+        "validation": {
+          "n": 5843,
+          "wins": 2815,
+          "win_rate": 0.48177306178333046,
+          "mean_ret": 0.003263551410294809,
+          "payoff": 1.166069022055184
+        }
+      },
+      "top3": [
+        {
+          "full": {
+            "n": 20,
+            "wins": 16,
+            "win_rate": 0.8,
+            "mean_ret": 0.028714052116323146,
+            "payoff": 0.939867970649384
+          },
+          "validation": {
+            "n": 20,
+            "wins": 16,
+            "win_rate": 0.8,
+            "mean_ret": 0.028714052116323146,
+            "payoff": 0.939867970649384
+          },
+          "last_signal": "2026-09-21",
+          "signals_2026": 20,
+          "signals_on_last_day": false,
+          "code": "301682",
+          "name": "宏明电子",
+          "excluded_live": true
+        },
+        {
+          "full": {
+            "n": 130,
+            "wins": 86,
+            "win_rate": 0.6615384615384615,
+            "mean_ret": 0.038889549709246,
+            "payoff": 1.5537451633497932
+          },
+          "validation": {
+            "n": 72,
+            "wins": 56,
+            "win_rate": 0.7777777777777778,
+            "mean_ret": 0.06920680487445821,
+            "payoff": 1.2304738098009456
+          },
+          "last_signal": "2026-09-17",
+          "signals_2026": 72,
+          "signals_on_last_day": false,
+          "code": "000636",
+          "name": "风华高科",
+          "excluded_live": false
+        },
+        {
+          "full": {
+            "n": 124,
+            "wins": 75,
+            "win_rate": 0.6048387096774194,
+            "mean_ret": 0.022383739972926215,
+            "payoff": 1.1770208643241054
+          },
+          "validation": {
+            "n": 65,
+            "wins": 33,
+            "win_rate": 0.5076923076923077,
+            "mean_ret": 0.01749636037117558,
+            "payoff": 1.3698984294133134
+          },
+          "last_signal": "2026-09-18",
+          "signals_2026": 65,
+          "signals_on_last_day": false,
+          "code": "600330",
+          "name": "天通股份",
+          "excluded_live": false
+        }
+      ],
+      "candidates": 139
+    },
+    "创新药": {
+      "combo": {
+        "full": {
+          "n": 6520,
+          "wins": 3072,
+          "win_rate": 0.47116564417177914,
+          "mean_ret": 0.007899533571224457,
+          "payoff": 1.4349290098694971
+        },
+        "calibration": {
+          "n": 4451,
+          "wins": 2082,
+          "win_rate": 0.4677600539204673,
+          "mean_ret": 0.005997510261152164,
+          "payoff": 1.3860225432569262
+        },
+        "validation": {
+          "n": 2069,
+          "wins": 990,
+          "win_rate": 0.47849202513291444,
+          "mean_ret": 0.011991319822133964,
+          "payoff": 1.5220195392663558
+        }
+      },
+      "top3": [
+        {
+          "full": {
+            "n": 32,
+            "wins": 19,
+            "win_rate": 0.59375,
+            "mean_ret": -0.002046628638344837,
+            "payoff": 0.5806451018963338
+          },
+          "validation": {
+            "n": 14,
+            "wins": 8,
+            "win_rate": 0.5714285714285714,
+            "mean_ret": -0.0022083844162798516,
+            "payoff": 0.6007583587410242
+          },
+          "last_signal": "2026-09-28",
+          "signals_2026": 14,
+          "signals_on_last_day": false,
+          "code": "600196",
+          "name": "复星医药",
+          "excluded_live": false
+        },
+        {
+          "full": {
+            "n": 181,
+            "wins": 104,
+            "win_rate": 0.574585635359116,
+            "mean_ret": 0.007204041953451586,
+            "payoff": 0.9337930690370497
+          },
+          "validation": {
+            "n": 55,
+            "wins": 35,
+            "win_rate": 0.6363636363636364,
+            "mean_ret": 0.02067975114066037,
+            "payoff": 1.121675478378639
+          },
+          "last_signal": "2026-10-30",
+          "signals_2026": 55,
+          "signals_on_last_day": false,
+          "code": "688131",
+          "name": "皓元医药",
+          "excluded_live": true
+        },
+        {
+          "full": {
+            "n": 160,
+            "wins": 91,
+            "win_rate": 0.56875,
+            "mean_ret": 0.020198841082323414,
+            "payoff": 1.4419767519959907
+          },
+          "validation": {
+            "n": 52,
+            "wins": 34,
+            "win_rate": 0.6538461538461539,
+            "mean_ret": 0.05659405815019665,
+            "payoff": 1.9755976924288075
+          },
+          "last_signal": "2026-10-30",
+          "signals_2026": 52,
+          "signals_on_last_day": false,
+          "code": "301080",
+          "name": "百普赛斯",
+          "excluded_live": true
+        }
+      ],
+      "candidates": 64
+    },
+    "培育钻石": {
+      "combo": {
+        "full": {
+          "n": 1348,
+          "wins": 651,
+          "win_rate": 0.48293768545994065,
+          "mean_ret": 0.017182913406689676,
+          "payoff": 1.6454525906500463
+        },
+        "calibration": {
+          "n": 842,
+          "wins": 367,
+          "win_rate": 0.4358669833729216,
+          "mean_ret": 0.012294498906803054,
+          "payoff": 1.792964529467556
+        },
+        "validation": {
+          "n": 506,
+          "wins": 284,
+          "win_rate": 0.5612648221343873,
+          "mean_ret": 0.025317389708872554,
+          "payoff": 1.3968900673664726
+        }
+      },
+      "top3": [
+        {
+          "full": {
+            "n": 133,
+            "wins": 71,
+            "win_rate": 0.5338345864661654,
+            "mean_ret": 0.04003707255592973,
+            "payoff": 2.0249212430559544
+          },
+          "validation": {
+            "n": 47,
+            "wins": 35,
+            "win_rate": 0.7446808510638298,
+            "mean_ret": 0.0602805703374849,
+            "payoff": 1.2015204096995733
+          },
+          "last_signal": "2026-09-24",
+          "signals_2026": 47,
+          "signals_on_last_day": false,
+          "code": "600172",
+          "name": "黄河旋风",
+          "excluded_live": false
+        },
+        {
+          "full": {
+            "n": 120,
+            "wins": 64,
+            "win_rate": 0.5333333333333333,
+            "mean_ret": 0.019197845235974943,
+            "payoff": 1.4429635855924263
+          },
+          "validation": {
+            "n": 47,
+            "wins": 32,
+            "win_rate": 0.6808510638297872,
+            "mean_ret": 0.04958554109165262,
+            "payoff": 1.3192487060067162
+          },
+          "last_signal": "2026-09-18",
+          "signals_2026": 47,
+          "signals_on_last_day": false,
+          "code": "300179",
+          "name": "四方达",
+          "excluded_live": true
+        },
+        {
+          "full": {
+            "n": 189,
+            "wins": 98,
+            "win_rate": 0.5185185185185185,
+            "mean_ret": 0.03694178317230186,
+            "payoff": 2.0205872797203965
+          },
+          "validation": {
+            "n": 80,
+            "wins": 48,
+            "win_rate": 0.6,
+            "mean_ret": 0.04609573565434577,
+            "payoff": 1.819910662823014
+          },
+          "last_signal": "2026-09-22",
+          "signals_2026": 80,
+          "signals_on_last_day": false,
+          "code": "688028",
+          "name": "沃尔德",
+          "excluded_live": true
+        }
+      ],
+      "candidates": 9
+    },
+    "先进封装": {
+      "combo": {
+        "full": {
+          "n": 10409,
+          "wins": 5413,
+          "win_rate": 0.5200307426265731,
+          "mean_ret": 0.017463050633365642,
+          "payoff": 1.4345807818383183
+        },
+        "calibration": {
+          "n": 6364,
+          "wins": 3176,
+          "win_rate": 0.49905719673161536,
+          "mean_ret": 0.01486660852591649,
+          "payoff": 1.5308489616000673
+        },
+        "validation": {
+          "n": 4045,
+          "wins": 2237,
+          "win_rate": 0.5530284301606923,
+          "mean_ret": 0.021548033963849293,
+          "payoff": 1.2850575219867075
+        }
+      },
+      "top3": [
+        {
+          "full": {
+            "n": 124,
+            "wins": 75,
+            "win_rate": 0.6048387096774194,
+            "mean_ret": 0.022383739972926215,
+            "payoff": 1.1770208643241054
+          },
+          "validation": {
+            "n": 65,
+            "wins": 33,
+            "win_rate": 0.5076923076923077,
+            "mean_ret": 0.01749636037117558,
+            "payoff": 1.3698984294133134
+          },
+          "last_signal": "2026-09-18",
+          "signals_2026": 65,
+          "signals_on_last_day": false,
+          "code": "600330",
+          "name": "天通股份",
+          "excluded_live": false
+        },
+        {
+          "full": {
+            "n": 155,
+            "wins": 92,
+            "win_rate": 0.5935483870967742,
+            "mean_ret": 0.02934842501388759,
+            "payoff": 1.6085011638675968
+          },
+          "validation": {
+            "n": 63,
+            "wins": 43,
+            "win_rate": 0.6825396825396826,
+            "mean_ret": 0.05687421435125923,
+            "payoff": 1.5413824965906038
+          },
+          "last_signal": "2026-09-18",
+          "signals_2026": 63,
+          "signals_on_last_day": false,
+          "code": "002008",
+          "name": "大族激光",
+          "excluded_live": false
+        },
+        {
+          "full": {
+            "n": 135,
+            "wins": 80,
+            "win_rate": 0.5925925925925926,
+            "mean_ret": 0.014237889434122302,
+            "payoff": 1.0867116572396593
+          },
+          "validation": {
+            "n": 42,
+            "wins": 22,
+            "win_rate": 0.5238095238095238,
+            "mean_ret": -0.006167435636205029,
+            "payoff": 0.7675212320523923
+          },
+          "last_signal": "2026-09-21",
+          "signals_2026": 42,
+          "signals_on_last_day": false,
+          "code": "603005",
+          "name": "晶方科技",
+          "excluded_live": false
+        }
+      ],
+      "candidates": 72
+    },
+    "玻璃基板": {
+      "combo": {
+        "full": {
+          "n": 6105,
+          "wins": 3072,
+          "win_rate": 0.5031941031941032,
+          "mean_ret": 0.012901325125129747,
+          "payoff": 1.4161885832178125
+        },
+        "calibration": {
+          "n": 3831,
+          "wins": 1857,
+          "win_rate": 0.48472983555207516,
+          "mean_ret": 0.012350755623232445,
+          "payoff": 1.5585113904284045
+        },
+        "validation": {
+          "n": 2274,
+          "wins": 1215,
+          "win_rate": 0.5343007915567283,
+          "mean_ret": 0.013828867676479163,
+          "payoff": 1.2150441315537743
+        }
+      },
+      "top3": [
+        {
+          "full": {
+            "n": 155,
+            "wins": 92,
+            "win_rate": 0.5935483870967742,
+            "mean_ret": 0.02934842501388759,
+            "payoff": 1.6085011638675968
+          },
+          "validation": {
+            "n": 63,
+            "wins": 43,
+            "win_rate": 0.6825396825396826,
+            "mean_ret": 0.05687421435125923,
+            "payoff": 1.5413824965906038
+          },
+          "last_signal": "2026-09-18",
+          "signals_2026": 63,
+          "signals_on_last_day": false,
+          "code": "002008",
+          "name": "大族激光",
+          "excluded_live": false
+        },
+        {
+          "full": {
+            "n": 135,
+            "wins": 80,
+            "win_rate": 0.5925925925925926,
+            "mean_ret": 0.014237889434122302,
+            "payoff": 1.0867116572396593
+          },
+          "validation": {
+            "n": 42,
+            "wins": 22,
+            "win_rate": 0.5238095238095238,
+            "mean_ret": -0.006167435636205029,
+            "payoff": 0.7675212320523923
+          },
+          "last_signal": "2026-09-21",
+          "signals_2026": 42,
+          "signals_on_last_day": false,
+          "code": "603005",
+          "name": "晶方科技",
+          "excluded_live": false
+        },
+        {
+          "full": {
+            "n": 138,
+            "wins": 80,
+            "win_rate": 0.5797101449275363,
+            "mean_ret": 0.0287312238238818,
+            "payoff": 1.4797381678768156
+          },
+          "validation": {
+            "n": 55,
+            "wins": 31,
+            "win_rate": 0.5636363636363636,
+            "mean_ret": 0.04617407061710094,
+            "payoff": 1.7159651182714843
+          },
+          "last_signal": "2026-09-22",
+          "signals_2026": 55,
+          "signals_on_last_day": false,
+          "code": "600584",
+          "name": "长电科技",
+          "excluded_live": false
+        }
+      ],
+      "candidates": 42
+    },
+    "锂矿概念": {
+      "combo": {
+        "full": {
+          "n": 2527,
+          "wins": 1208,
+          "win_rate": 0.4780371982588049,
+          "mean_ret": 0.005564789111863788,
+          "payoff": 1.2894893545291082
+        },
+        "calibration": {
+          "n": 1698,
+          "wins": 832,
+          "win_rate": 0.48998822143698467,
+          "mean_ret": 0.01355001968532022,
+          "payoff": 1.5861577027544815
+        },
+        "validation": {
+          "n": 829,
+          "wins": 376,
+          "win_rate": 0.45355850422195415,
+          "mean_ret": -0.010790966634492092,
+          "payoff": 0.8857839716273456
+        }
+      },
+      "top3": [
+        {
+          "full": {
+            "n": 28,
+            "wins": 19,
+            "win_rate": 0.6785714285714286,
+            "mean_ret": 0.023680694358462373,
+            "payoff": 1.3285720932458351
+          },
+          "validation": {
+            "n": 7,
+            "wins": 5,
+            "win_rate": 0.7142857142857143,
+            "mean_ret": 0.018557583929455407,
+            "payoff": 2.0046768052606714
+          },
+          "last_signal": "2026-07-27",
+          "signals_2026": 7,
+          "signals_on_last_day": false,
+          "code": "300750",
+          "name": "宁德时代",
+          "excluded_live": true
+        },
+        {
+          "full": {
+            "n": 56,
+            "wins": 32,
+            "win_rate": 0.5714285714285714,
+            "mean_ret": -0.00029151058930385255,
+            "payoff": 0.7416695490636126
+          },
+          "validation": {
+            "n": 19,
+            "wins": 6,
+            "win_rate": 0.3157894736842105,
+            "mean_ret": -0.03917564376861661,
+            "payoff": 0.36336150349337437
+          },
+          "last_signal": "2026-08-26",
+          "signals_2026": 19,
+          "signals_on_last_day": false,
+          "code": "000408",
+          "name": "藏格矿业",
+          "excluded_live": false
+        },
+        {
+          "full": {
+            "n": 99,
+            "wins": 53,
+            "win_rate": 0.5353535353535354,
+            "mean_ret": 0.00306543878403324,
+            "payoff": 0.9838187351362833
+          },
+          "validation": {
+            "n": 43,
+            "wins": 17,
+            "win_rate": 0.3953488372093023,
+            "mean_ret": -0.015904858566708608,
+            "payoff": 0.8316424114438911
+          },
+          "last_signal": "2026-08-26",
+          "signals_2026": 43,
+          "signals_on_last_day": false,
+          "code": "601899",
+          "name": "紫金矿业",
+          "excluded_live": false
+        }
+      ],
+      "candidates": 21
+    },
+    "算力概念": {
+      "combo": {
+        "full": {
+          "n": 13472,
+          "wins": 6607,
+          "win_rate": 0.49042458432304037,
+          "mean_ret": 0.014904828523074495,
+          "payoff": 1.52562670426925
+        },
+        "calibration": {
+          "n": 9065,
+          "wins": 4475,
+          "win_rate": 0.4936569222283508,
+          "mean_ret": 0.018098487323619752,
+          "payoff": 1.6654331342603517
+        },
+        "validation": {
+          "n": 4407,
+          "wins": 2132,
+          "win_rate": 0.4837758112094395,
+          "mean_ret": 0.008335616581403806,
+          "payoff": 1.3035763402394185
+        }
+      },
+      "top3": [
+        {
+          "full": {
+            "n": 20,
+            "wins": 16,
+            "win_rate": 0.8,
+            "mean_ret": 0.028714052116323146,
+            "payoff": 0.939867970649384
+          },
+          "validation": {
+            "n": 20,
+            "wins": 16,
+            "win_rate": 0.8,
+            "mean_ret": 0.028714052116323146,
+            "payoff": 0.939867970649384
+          },
+          "last_signal": "2026-09-21",
+          "signals_2026": 20,
+          "signals_on_last_day": false,
+          "code": "301682",
+          "name": "宏明电子",
+          "excluded_live": true
+        },
+        {
+          "full": {
+            "n": 134,
+            "wins": 85,
+            "win_rate": 0.6343283582089553,
+            "mean_ret": 0.031200552500074887,
+            "payoff": 1.3800494784953874
+          },
+          "validation": {
+            "n": 60,
+            "wins": 35,
+            "win_rate": 0.5833333333333334,
+            "mean_ret": 0.03642293242831696,
+            "payoff": 1.4308504056656735
+          },
+          "last_signal": "2026-10-29",
+          "signals_2026": 60,
+          "signals_on_last_day": false,
+          "code": "605287",
+          "name": "德才股份",
+          "excluded_live": false
+        },
+        {
+          "full": {
+            "n": 210,
+            "wins": 122,
+            "win_rate": 0.580952380952381,
+            "mean_ret": 0.033907928432105834,
+            "payoff": 1.5909294532426883
+          },
+          "validation": {
+            "n": 59,
+            "wins": 36,
+            "win_rate": 0.6101694915254238,
+            "mean_ret": 0.0318343638254329,
+            "payoff": 1.3417055595312453
+          },
+          "last_signal": "2026-09-22",
+          "signals_2026": 59,
+          "signals_on_last_day": false,
+          "code": "300857",
+          "name": "协创数据",
+          "excluded_live": true
+        }
+      ],
+      "candidates": 106
+    },
+    "化工原料": {
+      "combo": {
+        "full": {
+          "n": 2075,
+          "wins": 1006,
+          "win_rate": 0.48481927710843375,
+          "mean_ret": 0.005394259090065412,
+          "payoff": 1.2660581701143205
+        },
+        "calibration": {
+          "n": 1226,
+          "wins": 578,
+          "win_rate": 0.47145187601957583,
+          "mean_ret": 0.004725006982962134,
+          "payoff": 1.3345348872220448
+        },
+        "validation": {
+          "n": 849,
+          "wins": 428,
+          "win_rate": 0.5041224970553593,
+          "mean_ret": 0.00636069381716626,
+          "payoff": 1.1731037056635425
+        }
+      },
+      "top3": [
+        {
+          "full": {
+            "n": 59,
+            "wins": 36,
+            "win_rate": 0.6101694915254238,
+            "mean_ret": 0.015930775281280726,
+            "payoff": 1.0639869844292684
+          },
+          "validation": {
+            "n": 39,
+            "wins": 25,
+            "win_rate": 0.6410256410256411,
+            "mean_ret": 0.025483998923180828,
+            "payoff": 1.0782387207684463
+          },
+          "last_signal": "2026-08-11",
+          "signals_2026": 39,
+          "signals_on_last_day": false,
+          "code": "600188",
+          "name": "兖矿能源",
+          "excluded_live": false
+        },
+        {
+          "full": {
+            "n": 94,
+            "wins": 53,
+            "win_rate": 0.5638297872340425,
+            "mean_ret": 0.029646363025347025,
+            "payoff": 1.741182983741572
+          },
+          "validation": {
+            "n": 33,
+            "wins": 22,
+            "win_rate": 0.6666666666666666,
+            "mean_ret": 0.06591914441378163,
+            "payoff": 2.130822117419766
+          },
+          "last_signal": "2026-08-26",
+          "signals_2026": 33,
+          "signals_on_last_day": false,
+          "code": "600722",
+          "name": "金牛化工",
+          "excluded_live": false
+        },
+        {
+          "full": {
+            "n": 121,
+            "wins": 66,
+            "win_rate": 0.5454545454545454,
+            "mean_ret": 0.02207293726837558,
+            "payoff": 1.671678573827652
+          },
+          "validation": {
+            "n": 37,
+            "wins": 20,
+            "win_rate": 0.5405405405405406,
+            "mean_ret": 0.014146751715420266,
+            "payoff": 1.2536606746288952
+          },
+          "last_signal": "2026-08-31",
+          "signals_2026": 37,
+          "signals_on_last_day": false,
+          "code": "600160",
+          "name": "巨化股份",
+          "excluded_live": false
+        }
+      ],
+      "candidates": 24
+    },
+    "电力": {
+      "combo": {
+        "full": {
+          "n": 2246,
+          "wins": 983,
+          "win_rate": 0.43766696349065004,
+          "mean_ret": 0.003201816094682822,
+          "payoff": 1.4090550947276625
+        },
+        "calibration": {
+          "n": 1322,
+          "wins": 587,
+          "win_rate": 0.44402420574886536,
+          "mean_ret": 0.006270510491567254,
+          "payoff": 1.5662145262559335
+        },
+        "validation": {
+          "n": 924,
+          "wins": 396,
+          "win_rate": 0.42857142857142855,
+          "mean_ret": -0.0011886752393877624,
+          "payoff": 1.2979074992859014
+        }
+      },
+      "top3": [
+        {
+          "full": {
+            "n": 85,
+            "wins": 52,
+            "win_rate": 0.611764705882353,
+            "mean_ret": 0.06377835812783139,
+            "payoff": 2.307402586772705
+          },
+          "validation": {
+            "n": 33,
+            "wins": 23,
+            "win_rate": 0.696969696969697,
+            "mean_ret": 0.14198719152140038,
+            "payoff": 2.726707377506624
+          },
+          "last_signal": "2026-09-11",
+          "signals_2026": 33,
+          "signals_on_last_day": false,
+          "code": "600396",
+          "name": "华电辽能",
+          "excluded_live": false
+        },
+        {
+          "full": {
+            "n": 94,
+            "wins": 51,
+            "win_rate": 0.5425531914893617,
+            "mean_ret": 0.006759226938897058,
+            "payoff": 1.039638851130046
+          },
+          "validation": {
+            "n": 41,
+            "wins": 22,
+            "win_rate": 0.5365853658536586,
+            "mean_ret": 0.0032481712598717138,
+            "payoff": 0.9372335149090157
+          },
+          "last_signal": "2026-09-23",
+          "signals_2026": 41,
+          "signals_on_last_day": false,
+          "code": "605162",
+          "name": "新中港",
+          "excluded_live": false
+        },
+        {
+          "full": {
+            "n": 102,
+            "wins": 54,
+            "win_rate": 0.5294117647058824,
+            "mean_ret": 0.018924694906934367,
+            "payoff": 1.900357120895042
+          },
+          "validation": {
+            "n": 37,
+            "wins": 18,
+            "win_rate": 0.4864864864864865,
+            "mean_ret": 0.012555971267130456,
+            "payoff": 1.5993189115926256
+          },
+          "last_signal": "2026-10-23",
+          "signals_2026": 37,
+          "signals_on_last_day": false,
+          "code": "601778",
+          "name": "晶科科技",
+          "excluded_live": false
+        }
+      ],
+      "candidates": 38
+    },
+    "电网概念": {
+      "combo": {
+        "full": {
+          "n": 7347,
+          "wins": 3495,
+          "win_rate": 0.47570436913025727,
+          "mean_ret": 0.009974464493163478,
+          "payoff": 1.4698551208549777
+        },
+        "calibration": {
+          "n": 4804,
+          "wins": 2236,
+          "win_rate": 0.46544546211490423,
+          "mean_ret": 0.009763163655979167,
+          "payoff": 1.5569025822718219
+        },
+        "validation": {
+          "n": 2543,
+          "wins": 1259,
+          "win_rate": 0.49508454581203304,
+          "mean_ret": 0.010373634458493177,
+          "payoff": 1.3264090891266438
+        }
+      },
+      "top3": [
+        {
+          "full": {
+            "n": 62,
+            "wins": 38,
+            "win_rate": 0.6129032258064516,
+            "mean_ret": 0.0382410346636076,
+            "payoff": 1.4435809657638556
+          },
+          "validation": {
+            "n": 21,
+            "wins": 8,
+            "win_rate": 0.38095238095238093,
+            "mean_ret": -0.003669664168333454,
+            "payoff": 1.528527760853316
+          },
+          "last_signal": "2026-07-28",
+          "signals_2026": 21,
+          "signals_on_last_day": false,
+          "code": "300139",
+          "name": "晓程科技",
+          "excluded_live": true
+        },
+        {
+          "full": {
+            "n": 143,
+            "wins": 85,
+            "win_rate": 0.5944055944055944,
+            "mean_ret": 0.031109236243859376,
+            "payoff": 1.6775623377979594
+          },
+          "validation": {
+            "n": 59,
+            "wins": 40,
+            "win_rate": 0.6779661016949152,
+            "mean_ret": 0.04933963136681398,
+            "payoff": 1.4756671775260655
+          },
+          "last_signal": "2026-09-09",
+          "signals_2026": 59,
+          "signals_on_last_day": false,
+          "code": "601126",
+          "name": "四方股份",
+          "excluded_live": false
+        },
+        {
+          "full": {
+            "n": 118,
+            "wins": 69,
+            "win_rate": 0.5847457627118644,
+            "mean_ret": 0.029661795055350704,
+            "payoff": 1.8571470337282605
+          },
+          "validation": {
+            "n": 33,
+            "wins": 25,
+            "win_rate": 0.7575757575757576,
+            "mean_ret": 0.061288285351665896,
+            "payoff": 1.8305642542481013
+          },
+          "last_signal": "2026-09-01",
+          "signals_2026": 33,
+          "signals_on_last_day": false,
+          "code": "000533",
+          "name": "顺钠股份",
+          "excluded_live": false
+        }
+      ],
+      "candidates": 64
+    },
+    "军工": {
+      "combo": {
+        "full": {
+          "n": 16364,
+          "wins": 8083,
+          "win_rate": 0.49395013444145686,
+          "mean_ret": 0.013763643711994383,
+          "payoff": 1.4969892095174402
+        },
+        "calibration": {
+          "n": 11024,
+          "wins": 5479,
+          "win_rate": 0.4970065312046444,
+          "mean_ret": 0.01676152042265419,
+          "payoff": 1.6574780188355032
+        },
+        "validation": {
+          "n": 5340,
+          "wins": 2604,
+          "win_rate": 0.48764044943820223,
+          "mean_ret": 0.007574768644894434,
+          "payoff": 1.2646649860299193
+        }
+      },
+      "top3": [
+        {
+          "full": {
+            "n": 20,
+            "wins": 16,
+            "win_rate": 0.8,
+            "mean_ret": 0.028714052116323146,
+            "payoff": 0.939867970649384
+          },
+          "validation": {
+            "n": 20,
+            "wins": 16,
+            "win_rate": 0.8,
+            "mean_ret": 0.028714052116323146,
+            "payoff": 0.939867970649384
+          },
+          "last_signal": "2026-09-21",
+          "signals_2026": 20,
+          "signals_on_last_day": false,
+          "code": "301682",
+          "name": "宏明电子",
+          "excluded_live": true
+        },
+        {
+          "full": {
+            "n": 158,
+            "wins": 95,
+            "win_rate": 0.6012658227848101,
+            "mean_ret": 0.022339297074831954,
+            "payoff": 1.3382102100980042
+          },
+          "validation": {
+            "n": 45,
+            "wins": 27,
+            "win_rate": 0.6,
+            "mean_ret": 0.006002663902215634,
+            "payoff": 0.7881370200210904
+          },
+          "last_signal": "2026-09-09",
+          "signals_2026": 45,
+          "signals_on_last_day": false,
+          "code": "603308",
+          "name": "应流股份",
+          "excluded_live": false
+        },
+        {
+          "full": {
+            "n": 115,
+            "wins": 68,
+            "win_rate": 0.591304347826087,
+            "mean_ret": 0.05214429889359103,
+            "payoff": 2.30618619258227
+          },
+          "validation": {
+            "n": 27,
+            "wins": 10,
+            "win_rate": 0.37037037037037035,
+            "mean_ret": -0.007779035859590138,
+            "payoff": 1.17358327551995
+          },
+          "last_signal": "2026-10-26",
+          "signals_2026": 27,
+          "signals_on_last_day": false,
+          "code": "002611",
+          "name": "东方精工",
+          "excluded_live": false
+        }
+      ],
+      "candidates": 136
+    },
+    "电池": {
+      "combo": {
+        "full": {
+          "n": 6805,
+          "wins": 3352,
+          "win_rate": 0.4925789860396767,
+          "mean_ret": 0.010693273329150627,
+          "payoff": 1.4019430765213392
+        },
+        "calibration": {
+          "n": 4845,
+          "wins": 2411,
+          "win_rate": 0.49762641898864807,
+          "mean_ret": 0.014400254724959115,
+          "payoff": 1.5439765866695487
+        },
+        "validation": {
+          "n": 1960,
+          "wins": 941,
+          "win_rate": 0.4801020408163265,
+          "mean_ret": 0.0015298422767566875,
+          "payoff": 1.129399269059322
+        }
+      },
+      "top3": [
+        {
+          "full": {
+            "n": 28,
+            "wins": 19,
+            "win_rate": 0.6785714285714286,
+            "mean_ret": 0.023680694358462373,
+            "payoff": 1.3285720932458351
+          },
+          "validation": {
+            "n": 7,
+            "wins": 5,
+            "win_rate": 0.7142857142857143,
+            "mean_ret": 0.018557583929455407,
+            "payoff": 2.0046768052606714
+          },
+          "last_signal": "2026-07-27",
+          "signals_2026": 7,
+          "signals_on_last_day": false,
+          "code": "300750",
+          "name": "宁德时代",
+          "excluded_live": true
+        },
+        {
+          "full": {
+            "n": 146,
+            "wins": 88,
+            "win_rate": 0.6027397260273972,
+            "mean_ret": 0.025163871149403588,
+            "payoff": 1.4402867249374491
+          },
+          "validation": {
+            "n": 45,
+            "wins": 25,
+            "win_rate": 0.5555555555555556,
+            "mean_ret": 0.023159777921239043,
+            "payoff": 1.3865810771878244
+          },
+          "last_signal": "2026-08-18",
+          "signals_2026": 45,
+          "signals_on_last_day": false,
+          "code": "002245",
+          "name": "蔚蓝锂芯",
+          "excluded_live": false
+        },
+        {
+          "full": {
+            "n": 193,
+            "wins": 113,
+            "win_rate": 0.5854922279792746,
+            "mean_ret": 0.04647890281604528,
+            "payoff": 1.9832394645264086
+          },
+          "validation": {
+            "n": 75,
+            "wins": 49,
+            "win_rate": 0.6533333333333333,
+            "mean_ret": 0.07596492334377798,
+            "payoff": 1.884070466321257
+          },
+          "last_signal": "2026-09-16",
+          "signals_2026": 75,
+          "signals_on_last_day": false,
+          "code": "301511",
+          "name": "德福科技",
+          "excluded_live": true
+        }
+      ],
+      "candidates": 52
+    },
+    "储能概念": {
+      "combo": {
+        "full": {
+          "n": 19708,
+          "wins": 9631,
+          "win_rate": 0.4886847980515527,
+          "mean_ret": 0.009273342631478613,
+          "payoff": 1.3770356275094593
+        },
+        "calibration": {
+          "n": 13418,
+          "wins": 6561,
+          "win_rate": 0.48897004024444773,
+          "mean_ret": 0.01191291560716352,
+          "payoff": 1.5154986170535212
+        },
+        "validation": {
+          "n": 6290,
+          "wins": 3070,
+          "win_rate": 0.48807631160572335,
+          "mean_ret": 0.003642533380645531,
+          "payoff": 1.1566060996808383
+        }
+      },
+      "top3": [
+        {
+          "full": {
+            "n": 20,
+            "wins": 16,
+            "win_rate": 0.8,
+            "mean_ret": 0.028714052116323146,
+            "payoff": 0.939867970649384
+          },
+          "validation": {
+            "n": 20,
+            "wins": 16,
+            "win_rate": 0.8,
+            "mean_ret": 0.028714052116323146,
+            "payoff": 0.939867970649384
+          },
+          "last_signal": "2026-09-21",
+          "signals_2026": 20,
+          "signals_on_last_day": false,
+          "code": "301682",
+          "name": "宏明电子",
+          "excluded_live": true
+        },
+        {
+          "full": {
+            "n": 28,
+            "wins": 19,
+            "win_rate": 0.6785714285714286,
+            "mean_ret": 0.023680694358462373,
+            "payoff": 1.3285720932458351
+          },
+          "validation": {
+            "n": 7,
+            "wins": 5,
+            "win_rate": 0.7142857142857143,
+            "mean_ret": 0.018557583929455407,
+            "payoff": 2.0046768052606714
+          },
+          "last_signal": "2026-07-27",
+          "signals_2026": 7,
+          "signals_on_last_day": false,
+          "code": "300750",
+          "name": "宁德时代",
+          "excluded_live": true
+        },
+        {
+          "full": {
+            "n": 131,
+            "wins": 84,
+            "win_rate": 0.6412213740458015,
+            "mean_ret": 0.047698343772170276,
+            "payoff": 1.7544276883822345
+          },
+          "validation": {
+            "n": 67,
+            "wins": 46,
+            "win_rate": 0.6865671641791045,
+            "mean_ret": 0.07273675848497821,
+            "payoff": 1.5743174770057815
+          },
+          "last_signal": "2026-10-16",
+          "signals_2026": 67,
+          "signals_on_last_day": false,
+          "code": "002980",
+          "name": "华盛昌",
+          "excluded_live": false
+        }
+      ],
+      "candidates": 167
+    },
+    "光伏概念": {
+      "combo": {
+        "full": {
+          "n": 18196,
+          "wins": 8766,
+          "win_rate": 0.48175423169927456,
+          "mean_ret": 0.00947400856350709,
+          "payoff": 1.4092962359509795
+        },
+        "calibration": {
+          "n": 12016,
+          "wins": 5716,
+          "win_rate": 0.47569906790945404,
+          "mean_ret": 0.009743972674208897,
+          "payoff": 1.493021296670792
+        },
+        "validation": {
+          "n": 6180,
+          "wins": 3050,
+          "win_rate": 0.4935275080906149,
+          "mean_ret": 0.008949107470595612,
+          "payoff": 1.277567832241382
+        }
+      },
+      "top3": [
+        {
+          "full": {
+            "n": 182,
+            "wins": 119,
+            "win_rate": 0.6538461538461539,
+            "mean_ret": 0.03704859942617634,
+            "payoff": 1.3864257247048402
+          },
+          "validation": {
+            "n": 70,
+            "wins": 51,
+            "win_rate": 0.7285714285714285,
+            "mean_ret": 0.054938449411806485,
+            "payoff": 1.1960453053712925
+          },
+          "last_signal": "2026-08-12",
+          "signals_2026": 70,
+          "signals_on_last_day": false,
+          "code": "605376",
+          "name": "博迁新材",
+          "excluded_live": false
+        },
+        {
+          "full": {
+            "n": 62,
+            "wins": 38,
+            "win_rate": 0.6129032258064516,
+            "mean_ret": 0.0382410346636076,
+            "payoff": 1.4435809657638556
+          },
+          "validation": {
+            "n": 21,
+            "wins": 8,
+            "win_rate": 0.38095238095238093,
+            "mean_ret": -0.003669664168333454,
+            "payoff": 1.528527760853316
+          },
+          "last_signal": "2026-07-28",
+          "signals_2026": 21,
+          "signals_on_last_day": false,
+          "code": "300139",
+          "name": "晓程科技",
+          "excluded_live": true
+        },
+        {
+          "full": {
+            "n": 124,
+            "wins": 75,
+            "win_rate": 0.6048387096774194,
+            "mean_ret": 0.022383739972926215,
+            "payoff": 1.1770208643241054
+          },
+          "validation": {
+            "n": 65,
+            "wins": 33,
+            "win_rate": 0.5076923076923077,
+            "mean_ret": 0.01749636037117558,
+            "payoff": 1.3698984294133134
+          },
+          "last_signal": "2026-09-18",
+          "signals_2026": 65,
+          "signals_on_last_day": false,
+          "code": "600330",
+          "name": "天通股份",
+          "excluded_live": false
+        }
+      ],
+      "candidates": 166
+    },
+    "固态电池": {
+      "combo": {
+        "full": {
+          "n": 14007,
+          "wins": 7021,
+          "win_rate": 0.5012493753123438,
+          "mean_ret": 0.012332989458923612,
+          "payoff": 1.422087104805487
+        },
+        "calibration": {
+          "n": 9338,
+          "wins": 4623,
+          "win_rate": 0.49507389162561577,
+          "mean_ret": 0.012799715978277542,
+          "payoff": 1.5095325054877173
+        },
+        "validation": {
+          "n": 4669,
+          "wins": 2398,
+          "win_rate": 0.5136003426857999,
+          "mean_ret": 0.01139953642021575,
+          "payoff": 1.2753921972886617
+        }
+      },
+      "top3": [
+        {
+          "full": {
+            "n": 28,
+            "wins": 19,
+            "win_rate": 0.6785714285714286,
+            "mean_ret": 0.023680694358462373,
+            "payoff": 1.3285720932458351
+          },
+          "validation": {
+            "n": 7,
+            "wins": 5,
+            "win_rate": 0.7142857142857143,
+            "mean_ret": 0.018557583929455407,
+            "payoff": 2.0046768052606714
+          },
+          "last_signal": "2026-07-27",
+          "signals_2026": 7,
+          "signals_on_last_day": false,
+          "code": "300750",
+          "name": "宁德时代",
+          "excluded_live": true
+        },
+        {
+          "full": {
+            "n": 146,
+            "wins": 88,
+            "win_rate": 0.6027397260273972,
+            "mean_ret": 0.025163871149403588,
+            "payoff": 1.4402867249374491
+          },
+          "validation": {
+            "n": 45,
+            "wins": 25,
+            "win_rate": 0.5555555555555556,
+            "mean_ret": 0.023159777921239043,
+            "payoff": 1.3865810771878244
+          },
+          "last_signal": "2026-08-18",
+          "signals_2026": 45,
+          "signals_on_last_day": false,
+          "code": "002245",
+          "name": "蔚蓝锂芯",
+          "excluded_live": false
+        },
+        {
+          "full": {
+            "n": 155,
+            "wins": 92,
+            "win_rate": 0.5935483870967742,
+            "mean_ret": 0.02934842501388759,
+            "payoff": 1.6085011638675968
+          },
+          "validation": {
+            "n": 63,
+            "wins": 43,
+            "win_rate": 0.6825396825396826,
+            "mean_ret": 0.05687421435125923,
+            "payoff": 1.5413824965906038
+          },
+          "last_signal": "2026-09-18",
+          "signals_2026": 63,
+          "signals_on_last_day": false,
+          "code": "002008",
+          "name": "大族激光",
+          "excluded_live": false
+        }
+      ],
+      "candidates": 110
+    }
+  },
+  "verify": {
+    "ok": true,
+    "checked_stocks": 1769,
+    "mismatches": []
+  }
+}

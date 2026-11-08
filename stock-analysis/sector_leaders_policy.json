@@ -1,0 +1,21 @@
+{
+  "base": "ret5>=5%",
+  "kept_filters": [
+    "vol_ratio_le_3",
+    "turnover_1_20"
+  ],
+  "filters": {
+    "vol_ratio_ge_1_5": "量比>=1.5",
+    "vol_ratio_le_3": "量比<=3",
+    "ma_bull": "均线多头 MA5>MA10>MA20 且收盘>MA5",
+    "rs_sector_ge_5": "相对强度：20日涨幅高于同板块中位数 5pp",
+    "ret20_ge_10": "20日涨幅>=10%",
+    "turnover_1_20": "换手率 1%~20%",
+    "amount_ge_100m": "成交额>=1亿元",
+    "ret5_ge_10": "5日涨幅>=10%"
+  },
+  "min_signals_for_ranking": 20,
+  "hold_days": 5,
+  "ranking": "win_rate desc, n desc, mean_ret desc",
+  "note": "research only; not wired into /api/screen or /api/prediction"
+}
