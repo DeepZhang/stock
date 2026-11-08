@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>短线选股 · 股票看板</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0e17;color:#e5e7eb;font-family:"PingFang SC","Microsoft YaHei",sans-serif;font-size:13px;line-height:1.8}
+nav{background:#111827;border-bottom:1px solid #1f2937;padding:14px 24px;display:flex;gap:24px;flex-wrap:wrap}
+a{color:#9ca3af;text-decoration:none}a:hover{color:#fff}.brand,.active,h2{color:#ff9f43}
+main{max-width:1100px;margin:auto;padding:20px 16px}.card{background:#111827;border:1px solid #1f2937;border-radius:12px;padding:18px 20px;margin-bottom:16px}
+h1{font-size:22px}h2{font-size:17px;margin-bottom:10px}h3{font-size:15px;color:#fff}.muted,dt{color:#9ca3af}.notice{color:#fbbf24}.meta{margin:8px 0 18px;color:#9ca3af}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(285px,1fr));gap:12px}.pick{background:#0a0e17;border:1px solid #1f2937;border-radius:8px;padding:14px}
+dl{display:grid;grid-template-columns:90px 1fr;gap:4px;margin-top:8px}dd{overflow-wrap:anywhere}.empty{color:#9ca3af;padding:20px 0}.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;white-space:nowrap}th,td{text-align:left;padding:8px;border-bottom:1px solid #1f2937}th{color:#9ca3af;font-weight:normal}pre{white-space:pre-wrap;font:inherit;color:#9ca3af}summary{cursor:pointer;color:#ff9f43}.rate{color:#ff9f43;font-weight:bold}
+</style>
+</head>
+<body>
+<nav><strong class="brand">📊 股票看板</strong><a href="/">资金流向</a><a href="/screener">选股器</a><a href="/shortterm" class="active">短线选股</a><a href="/daily">每日复盘</a></nav>
+<main>
+<h1>短线选股 · 研究候选</h1>
+<div class="meta" id="meta">正在读取每日结果…</div>
+<div class="card notice">预期胜率为 2024–2025 同类历史收盘信号收益胜率，不代表次日开盘买入盈利概率。次日新买仓位当天不可卖，须遵守 T+1。买入参考和止损公式待实际报价确认，仅用于研究，不自动交易。公告和封单数据缺失，风险未完全覆盖。</div>
+<section class="card"><h2>主策略 Top 10 · 涨停次日</h2><p class="muted">换手及量比过滤，按同类历史胜率、成交额排序。最多展示 10 只。</p><div id="limit_up" class="grid"></div></section>
+<section class="card"><h2>副策略 Top 10 · 超跌反弹</h2><p class="muted">RSI 超卖与五日跌幅双信号，研究持有 3–5 个交易日。</p><div id="oversold" class="grid"></div></section>
+<section class="card"><h2>历史回测</h2><p id="backtestNote" class="muted"></p><div class="table-wrap"><table><thead><tr><th>信号 / 情景</th><th>统计期</th><th>胜场 / 样本</th><th>胜率</th><th>平均收益</th><th>盈亏比</th></tr></thead><tbody id="history"></tbody></table></div><p class="muted">来源：<span id="source">stock-analysis/shortterm_backtest.md</span>。涨停信号收益为信号收盘至下一日收盘；超跌信号为未来五日收盘。情景收益另行列示，盘中成交与分批卖出未经验证。</p></section>
+<details class="card"><summary>当日候选摘要（仅生成，未发送）</summary><pre id="summary"></pre></details>
+</main>
+<script>
+const text = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const number = (v, digits=3) => v === null || v === undefined ? '—' : Number(v).toFixed(digits);
+function render(d) {
+  document.getElementById('meta').textContent = d.as_of ? `数据日期：${d.as_of}（最近一次任务信号日） | 生成时间：${d.generated_at} | 筛后主策略 ${d.counts.limit_up} 只 / 副策略 ${d.counts.oversold} 只` : '暂无每日结果，请等待收盘任务生成；当前无可用行情日期。';
+  for (const key of ['limit_up', 'oversold']) {
+    document.getElementById(key).innerHTML = (d[key] || []).slice(0,10).map(s => {
+      const p = s.plan || {};
+      const code = (s.code.startsWith('6') ? 'sh' : s.code.startsWith('8') || s.code.startsWith('4') || s.code.startsWith('9') ? 'bj' : 'sz') + s.code;
+      return `<article class="pick"><h3><a href="/kline?code=${encodeURIComponent(code)}&name=${encodeURIComponent(s.name)}">${text(s.name)} · ${text(s.code)}</a></h3><dl>
+        <dt>信号类型</dt><dd>${key==='limit_up' ? '涨停次日 · '+text(s.board_type) : '超跌双信号'}</dd>
+        <dt>数据日期</dt><dd>${text(s.date)}</dd>
+        <dt>预期胜率</dt><dd class="rate">${number(s.expected_win_rate)}% <span class="muted">（历史 n=${text(s.historical_n)}）</span></dd>
+        <dt>信号收盘价</dt><dd>${number(s.close,2)}（前复权，非入场价）</dd>
+        <dt>买入参考</dt><dd>${text(p.buy_reference)}</dd>
+        <dt>止损位</dt><dd>${text(p.stop_formula)}${p.recent_low ? '；近期低点 '+number(p.recent_low,2) : ''}</dd>
+        <dt>止盈规则</dt><dd>${text(p.take_profit_rule)}</dd>
+        <dt>执行约束</dt><dd>${text(p.execution_note)}</dd>
+      </dl></article>`;
+    }).join('') || '<p class="empty">该信号日暂无符合条件的候选。</p>';
+  }
+  const b = d.backtest || {};
+  document.getElementById('history').innerHTML = (b.rows || []).map(r => `<tr><td>${text(r.signal)}</td><td>${text(r.period)}</td><td>${text(r.wins)} / ${text(r.n)}</td><td>${number(r.win_rate)}%</td><td>${number(r.mean_pct)}%</td><td>${number(r.payoff_ratio)}</td></tr>`).join('') || '<tr><td colspan="6">暂无回测快照</td></tr>';
+  document.getElementById('backtestNote').textContent = b.note || '';
+  document.getElementById('source').textContent = b.source || 'stock-analysis/shortterm_backtest.md';
+  document.getElementById('summary').textContent = d.summary || '暂无摘要';
+}
+fetch('/api/shortterm', {cache:'no-store'}).then(r => {if (!r.ok) throw Error(r.status); return r.json();}).then(render).catch(e => {document.getElementById('meta').textContent='读取失败：'+e.message;});
+</script>
+</body>
+</html>
