@@ -18,6 +18,7 @@ log.disabled = True
 import stock_data
 import market_data
 import kline_api
+import unified
 
 app = Flask(__name__)
 
@@ -686,6 +687,7 @@ def shortterm_page():
     return send_file("static/shortterm.html")
 
 SECTOR_LEADERS_RESULT = os.path.join(BASE_DIR, "data/sector_leaders_picks.json")
+SECTOR_MEMBERS_FILE = os.path.join(BASE_DIR, "stock-analysis/sector_members.json")
 SECTOR_LEADERS_BACKTEST = os.path.join(BASE_DIR, "stock-analysis/sector_leaders_results.json")
 
 
@@ -775,6 +777,22 @@ def api_sector_leaders():
 @app.route("/sector-leaders")
 def sector_leaders_page():
     return send_file("static/sector-leaders.html")
+
+@app.route("/api/unified")
+def api_unified():
+    # 统一榜单：只读三份每日产物与冻结的板块成员文件做合并。
+    leaders = unified.load_json(SECTOR_LEADERS_RESULT)
+    if leaders is None:
+        leaders = _sector_leaders_from_backtest()
+    payload = unified.build_unified(
+        shortterm=unified.load_json(SHORTTERM_RESULT),
+        leaders=leaders,
+        screen=unified.load_json(SCREEN_CACHE),
+        members=unified.load_json(SECTOR_MEMBERS_FILE),
+    )
+    response = jsonify(payload)
+    response.headers["Cache-Control"] = "no-store"
+    return response
 
 
 @app.route("/")
