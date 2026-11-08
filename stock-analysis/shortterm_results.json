@@ -1,0 +1,1077 @@
+{
+  "universe_sha256": "a61506728642585565571b3e4b872b5a2574db3b0d87270fac5167bb0b588e29",
+  "event_rows": 119658,
+  "coverage": {
+    "bars": 1059442,
+    "min_rows": 4,
+    "max_rows": 731
+  },
+  "universe_n": 5563,
+  "sample_n": 1500,
+  "universe_fetched_at": "2026-11-08T05:40:10.280355+00:00",
+  "strategies": {
+    "limit_up": {
+      "raw": {
+        "n": 16659,
+        "wins": 10357,
+        "win_rate": 62.17059847529864,
+        "mean_pct": 2.5072848541139496,
+        "payoff_ratio": 1.5407373401169058
+      },
+      "base": {
+        "n": 15641,
+        "wins": 9491,
+        "win_rate": 60.680263410267884,
+        "mean_pct": 2.177576089518765,
+        "payoff_ratio": 1.4817466498193526
+      },
+      "filters": [
+        {
+          "filter": "amount_ge_100m",
+          "before": {
+            "n": 15641,
+            "wins": 9491,
+            "win_rate": 60.680263410267884,
+            "mean_pct": 2.177576089518765,
+            "payoff_ratio": 1.4817466498193526
+          },
+          "after": {
+            "n": 15180,
+            "wins": 9182,
+            "win_rate": 60.48748353096179,
+            "mean_pct": 2.1526066955895327,
+            "payoff_ratio": 1.4759445929667336
+          },
+          "calibration_before": {
+            "n": 9319,
+            "wins": 5640,
+            "win_rate": 60.52151518403262,
+            "mean_pct": 2.261325608638594,
+            "payoff_ratio": 1.4820086985304368
+          },
+          "calibration_after": {
+            "n": 8920,
+            "wins": 5369,
+            "win_rate": 60.190582959641254,
+            "mean_pct": 2.2232075123226673,
+            "payoff_ratio": 1.473483753168778
+          },
+          "validation_before": {
+            "n": 6127,
+            "wins": 3723,
+            "win_rate": 60.76383221805125,
+            "mean_pct": 2.0357477625851454,
+            "payoff_ratio": 1.4807196623193524
+          },
+          "validation_after": {
+            "n": 6065,
+            "wins": 3685,
+            "win_rate": 60.758450123660346,
+            "mean_pct": 2.0333736028409164,
+            "payoff_ratio": 1.4809894489350266
+          },
+          "keep": false,
+          "combination": {
+            "filter": "amount_ge_100m",
+            "before": {
+              "n": 15641,
+              "wins": 9491,
+              "win_rate": 60.680263410267884,
+              "mean_pct": 2.177576089518765,
+              "payoff_ratio": 1.4817466498193526
+            },
+            "after": {
+              "n": 15180,
+              "wins": 9182,
+              "win_rate": 60.48748353096179,
+              "mean_pct": 2.1526066955895327,
+              "payoff_ratio": 1.4759445929667336
+            },
+            "calibration_before": {
+              "n": 9319,
+              "wins": 5640,
+              "win_rate": 60.52151518403262,
+              "mean_pct": 2.261325608638594,
+              "payoff_ratio": 1.4820086985304368
+            },
+            "calibration_after": {
+              "n": 8920,
+              "wins": 5369,
+              "win_rate": 60.190582959641254,
+              "mean_pct": 2.2232075123226673,
+              "payoff_ratio": 1.473483753168778
+            },
+            "validation_before": {
+              "n": 6127,
+              "wins": 3723,
+              "win_rate": 60.76383221805125,
+              "mean_pct": 2.0357477625851454,
+              "payoff_ratio": 1.4807196623193524
+            },
+            "validation_after": {
+              "n": 6065,
+              "wins": 3685,
+              "win_rate": 60.758450123660346,
+              "mean_pct": 2.0333736028409164,
+              "payoff_ratio": 1.4809894489350266
+            },
+            "keep": false
+          },
+          "enabled": false,
+          "reason": "独立全期胜率未提升；独立校准胜率未提升；独立2026胜率未提升；组合全期胜率未提升；组合校准胜率未提升；组合2026胜率未提升"
+        },
+        {
+          "filter": "turnover_1_20",
+          "before": {
+            "n": 15641,
+            "wins": 9491,
+            "win_rate": 60.680263410267884,
+            "mean_pct": 2.177576089518765,
+            "payoff_ratio": 1.4817466498193526
+          },
+          "after": {
+            "n": 13520,
+            "wins": 8330,
+            "win_rate": 61.612426035502956,
+            "mean_pct": 2.303303694782116,
+            "payoff_ratio": 1.5513884902171249
+          },
+          "calibration_before": {
+            "n": 9319,
+            "wins": 5640,
+            "win_rate": 60.52151518403262,
+            "mean_pct": 2.261325608638594,
+            "payoff_ratio": 1.4820086985304368
+          },
+          "calibration_after": {
+            "n": 7939,
+            "wins": 4895,
+            "win_rate": 61.65763950119663,
+            "mean_pct": 2.4194264262210816,
+            "payoff_ratio": 1.5581296839480168
+          },
+          "validation_before": {
+            "n": 6127,
+            "wins": 3723,
+            "win_rate": 60.76383221805125,
+            "mean_pct": 2.0357477625851454,
+            "payoff_ratio": 1.4807196623193524
+          },
+          "validation_after": {
+            "n": 5433,
+            "wins": 3336,
+            "win_rate": 61.40254003313087,
+            "mean_pct": 2.1231981982328603,
+            "payoff_ratio": 1.5375143062310757
+          },
+          "keep": true,
+          "combination": {
+            "filter": "turnover_1_20",
+            "before": {
+              "n": 15641,
+              "wins": 9491,
+              "win_rate": 60.680263410267884,
+              "mean_pct": 2.177576089518765,
+              "payoff_ratio": 1.4817466498193526
+            },
+            "after": {
+              "n": 13520,
+              "wins": 8330,
+              "win_rate": 61.612426035502956,
+              "mean_pct": 2.303303694782116,
+              "payoff_ratio": 1.5513884902171249
+            },
+            "calibration_before": {
+              "n": 9319,
+              "wins": 5640,
+              "win_rate": 60.52151518403262,
+              "mean_pct": 2.261325608638594,
+              "payoff_ratio": 1.4820086985304368
+            },
+            "calibration_after": {
+              "n": 7939,
+              "wins": 4895,
+              "win_rate": 61.65763950119663,
+              "mean_pct": 2.4194264262210816,
+              "payoff_ratio": 1.5581296839480168
+            },
+            "validation_before": {
+              "n": 6127,
+              "wins": 3723,
+              "win_rate": 60.76383221805125,
+              "mean_pct": 2.0357477625851454,
+              "payoff_ratio": 1.4807196623193524
+            },
+            "validation_after": {
+              "n": 5433,
+              "wins": 3336,
+              "win_rate": 61.40254003313087,
+              "mean_pct": 2.1231981982328603,
+              "payoff_ratio": 1.5375143062310757
+            },
+            "keep": true
+          },
+          "enabled": true,
+          "reason": "保留"
+        },
+        {
+          "filter": "turnover_2_15",
+          "before": {
+            "n": 15641,
+            "wins": 9491,
+            "win_rate": 60.680263410267884,
+            "mean_pct": 2.177576089518765,
+            "payoff_ratio": 1.4817466498193526
+          },
+          "after": {
+            "n": 11300,
+            "wins": 6960,
+            "win_rate": 61.5929203539823,
+            "mean_pct": 2.2987657265991697,
+            "payoff_ratio": 1.5738853989421273
+          },
+          "calibration_before": {
+            "n": 9319,
+            "wins": 5640,
+            "win_rate": 60.52151518403262,
+            "mean_pct": 2.261325608638594,
+            "payoff_ratio": 1.4820086985304368
+          },
+          "calibration_after": {
+            "n": 6593,
+            "wins": 4069,
+            "win_rate": 61.71697254664038,
+            "mean_pct": 2.4322803265621054,
+            "payoff_ratio": 1.5892548869503254
+          },
+          "validation_before": {
+            "n": 6127,
+            "wins": 3723,
+            "win_rate": 60.76383221805125,
+            "mean_pct": 2.0357477625851454,
+            "payoff_ratio": 1.4807196623193524
+          },
+          "validation_after": {
+            "n": 4587,
+            "wins": 2813,
+            "win_rate": 61.32548506649226,
+            "mean_pct": 2.1004963772034717,
+            "payoff_ratio": 1.5455905194069808
+          },
+          "keep": true,
+          "combination": {
+            "filter": "turnover_2_15",
+            "before": {
+              "n": 13520,
+              "wins": 8330,
+              "win_rate": 61.612426035502956,
+              "mean_pct": 2.303303694782116,
+              "payoff_ratio": 1.5513884902171249
+            },
+            "after": {
+              "n": 11300,
+              "wins": 6960,
+              "win_rate": 61.5929203539823,
+              "mean_pct": 2.2987657265991697,
+              "payoff_ratio": 1.5738853989421273
+            },
+            "calibration_before": {
+              "n": 7939,
+              "wins": 4895,
+              "win_rate": 61.65763950119663,
+              "mean_pct": 2.4194264262210816,
+              "payoff_ratio": 1.5581296839480168
+            },
+            "calibration_after": {
+              "n": 6593,
+              "wins": 4069,
+              "win_rate": 61.71697254664038,
+              "mean_pct": 2.4322803265621054,
+              "payoff_ratio": 1.5892548869503254
+            },
+            "validation_before": {
+              "n": 5433,
+              "wins": 3336,
+              "win_rate": 61.40254003313087,
+              "mean_pct": 2.1231981982328603,
+              "payoff_ratio": 1.5375143062310757
+            },
+            "validation_after": {
+              "n": 4587,
+              "wins": 2813,
+              "win_rate": 61.32548506649226,
+              "mean_pct": 2.1004963772034717,
+              "payoff_ratio": 1.5455905194069808
+            },
+            "keep": false
+          },
+          "enabled": false,
+          "reason": "组合全期胜率未提升；组合2026胜率未提升"
+        },
+        {
+          "filter": "first_board",
+          "before": {
+            "n": 15641,
+            "wins": 9491,
+            "win_rate": 60.680263410267884,
+            "mean_pct": 2.177576089518765,
+            "payoff_ratio": 1.4817466498193526
+          },
+          "after": {
+            "n": 12592,
+            "wins": 7716,
+            "win_rate": 61.27700127064803,
+            "mean_pct": 2.225331840163679,
+            "payoff_ratio": 1.551687024271798
+          },
+          "calibration_before": {
+            "n": 9319,
+            "wins": 5640,
+            "win_rate": 60.52151518403262,
+            "mean_pct": 2.261325608638594,
+            "payoff_ratio": 1.4820086985304368
+          },
+          "calibration_after": {
+            "n": 7434,
+            "wins": 4597,
+            "win_rate": 61.837503362927094,
+            "mean_pct": 2.4494552621139123,
+            "payoff_ratio": 1.609063589287476
+          },
+          "validation_before": {
+            "n": 6127,
+            "wins": 3723,
+            "win_rate": 60.76383221805125,
+            "mean_pct": 2.0357477625851454,
+            "payoff_ratio": 1.4807196623193524
+          },
+          "validation_after": {
+            "n": 5007,
+            "wins": 3021,
+            "win_rate": 60.335530257639306,
+            "mean_pct": 1.895565036652054,
+            "payoff_ratio": 1.4639170791725975
+          },
+          "keep": false,
+          "combination": {
+            "filter": "first_board",
+            "before": {
+              "n": 13520,
+              "wins": 8330,
+              "win_rate": 61.612426035502956,
+              "mean_pct": 2.303303694782116,
+              "payoff_ratio": 1.5513884902171249
+            },
+            "after": {
+              "n": 11161,
+              "wins": 6899,
+              "win_rate": 61.81345757548607,
+              "mean_pct": 2.2967926374370093,
+              "payoff_ratio": 1.614884751211023
+            },
+            "calibration_before": {
+              "n": 7939,
+              "wins": 4895,
+              "win_rate": 61.65763950119663,
+              "mean_pct": 2.4194264262210816,
+              "payoff_ratio": 1.5581296839480168
+            },
+            "calibration_after": {
+              "n": 6507,
+              "wins": 4077,
+              "win_rate": 62.655601659751035,
+              "mean_pct": 2.5592149730235167,
+              "payoff_ratio": 1.6887158556945936
+            },
+            "validation_before": {
+              "n": 5433,
+              "wins": 3336,
+              "win_rate": 61.40254003313087,
+              "mean_pct": 2.1231981982328603,
+              "payoff_ratio": 1.5375143062310757
+            },
+            "validation_after": {
+              "n": 4533,
+              "wins": 2744,
+              "win_rate": 60.53386278402824,
+              "mean_pct": 1.9327127532717603,
+              "payoff_ratio": 1.510838152315376
+            },
+            "keep": false
+          },
+          "enabled": false,
+          "reason": "独立2026胜率未提升；组合2026胜率未提升"
+        },
+        {
+          "filter": "boards_lt_3",
+          "before": {
+            "n": 15641,
+            "wins": 9491,
+            "win_rate": 60.680263410267884,
+            "mean_pct": 2.177576089518765,
+            "payoff_ratio": 1.4817466498193526
+          },
+          "after": {
+            "n": 14625,
+            "wins": 8871,
+            "win_rate": 60.656410256410254,
+            "mean_pct": 2.1629814043977067,
+            "payoff_ratio": 1.509767900251648
+          },
+          "calibration_before": {
+            "n": 9319,
+            "wins": 5640,
+            "win_rate": 60.52151518403262,
+            "mean_pct": 2.261325608638594,
+            "payoff_ratio": 1.4820086985304368
+          },
+          "calibration_after": {
+            "n": 8693,
+            "wins": 5281,
+            "win_rate": 60.75002875877143,
+            "mean_pct": 2.293538866980636,
+            "payoff_ratio": 1.5256339687723088
+          },
+          "validation_before": {
+            "n": 6127,
+            "wins": 3723,
+            "win_rate": 60.76383221805125,
+            "mean_pct": 2.0357477625851454,
+            "payoff_ratio": 1.4807196623193524
+          },
+          "validation_after": {
+            "n": 5760,
+            "wins": 3479,
+            "win_rate": 60.39930555555556,
+            "mean_pct": 1.962289580266354,
+            "payoff_ratio": 1.4829272140116563
+          },
+          "keep": false,
+          "combination": {
+            "filter": "boards_lt_3",
+            "before": {
+              "n": 13520,
+              "wins": 8330,
+              "win_rate": 61.612426035502956,
+              "mean_pct": 2.303303694782116,
+              "payoff_ratio": 1.5513884902171249
+            },
+            "after": {
+              "n": 12833,
+              "wins": 7884,
+              "win_rate": 61.43536195745344,
+              "mean_pct": 2.2683710334886245,
+              "payoff_ratio": 1.5707664402438557
+            },
+            "calibration_before": {
+              "n": 7939,
+              "wins": 4895,
+              "win_rate": 61.65763950119663,
+              "mean_pct": 2.4194264262210816,
+              "payoff_ratio": 1.5581296839480168
+            },
+            "calibration_after": {
+              "n": 7524,
+              "wins": 4646,
+              "win_rate": 61.749069643806486,
+              "mean_pct": 2.429930532564365,
+              "payoff_ratio": 1.5937617284439478
+            },
+            "validation_before": {
+              "n": 5433,
+              "wins": 3336,
+              "win_rate": 61.40254003313087,
+              "mean_pct": 2.1231981982328603,
+              "payoff_ratio": 1.5375143062310757
+            },
+            "validation_after": {
+              "n": 5173,
+              "wins": 3150,
+              "win_rate": 60.893098782138026,
+              "mean_pct": 2.0343830639676295,
+              "payoff_ratio": 1.5328243644871637
+            },
+            "keep": false
+          },
+          "enabled": false,
+          "reason": "独立全期胜率未提升；独立2026胜率未提升；组合全期胜率未提升；组合2026胜率未提升"
+        },
+        {
+          "filter": "volume_ratio_le_3",
+          "before": {
+            "n": 15641,
+            "wins": 9491,
+            "win_rate": 60.680263410267884,
+            "mean_pct": 2.177576089518765,
+            "payoff_ratio": 1.4817466498193526
+          },
+          "after": {
+            "n": 12129,
+            "wins": 7562,
+            "win_rate": 62.346442410751095,
+            "mean_pct": 2.278636949869606,
+            "payoff_ratio": 1.5231201012486189
+          },
+          "calibration_before": {
+            "n": 9319,
+            "wins": 5640,
+            "win_rate": 60.52151518403262,
+            "mean_pct": 2.261325608638594,
+            "payoff_ratio": 1.4820086985304368
+          },
+          "calibration_after": {
+            "n": 6686,
+            "wins": 4204,
+            "win_rate": 62.87765480107688,
+            "mean_pct": 2.4423277942576522,
+            "payoff_ratio": 1.5594464477968395
+          },
+          "validation_before": {
+            "n": 6127,
+            "wins": 3723,
+            "win_rate": 60.76383221805125,
+            "mean_pct": 2.0357477625851454,
+            "payoff_ratio": 1.4807196623193524
+          },
+          "validation_after": {
+            "n": 5287,
+            "wins": 3253,
+            "win_rate": 61.52827690561755,
+            "mean_pct": 2.058423362949471,
+            "payoff_ratio": 1.4733455477846957
+          },
+          "keep": true,
+          "combination": {
+            "filter": "volume_ratio_le_3",
+            "before": {
+              "n": 13520,
+              "wins": 8330,
+              "win_rate": 61.612426035502956,
+              "mean_pct": 2.303303694782116,
+              "payoff_ratio": 1.5513884902171249
+            },
+            "after": {
+              "n": 10762,
+              "wins": 6783,
+              "win_rate": 63.02731834231555,
+              "mean_pct": 2.352311171187039,
+              "payoff_ratio": 1.5798676018934246
+            },
+            "calibration_before": {
+              "n": 7939,
+              "wins": 4895,
+              "win_rate": 61.65763950119663,
+              "mean_pct": 2.4194264262210816,
+              "payoff_ratio": 1.5581296839480168
+            },
+            "calibration_after": {
+              "n": 5828,
+              "wins": 3715,
+              "win_rate": 63.74399450926561,
+              "mean_pct": 2.532077665427161,
+              "payoff_ratio": 1.6308823034971145
+            },
+            "validation_before": {
+              "n": 5433,
+              "wins": 3336,
+              "win_rate": 61.40254003313087,
+              "mean_pct": 2.1231981982328603,
+              "payoff_ratio": 1.5375143062310757
+            },
+            "validation_after": {
+              "n": 4808,
+              "wins": 2982,
+              "win_rate": 62.021630615640596,
+              "mean_pct": 2.1224984319719664,
+              "payoff_ratio": 1.5158633280283396
+            },
+            "keep": true
+          },
+          "enabled": true,
+          "reason": "保留"
+        },
+        {
+          "filter": "volume_ratio_le_5",
+          "before": {
+            "n": 15641,
+            "wins": 9491,
+            "win_rate": 60.680263410267884,
+            "mean_pct": 2.177576089518765,
+            "payoff_ratio": 1.4817466498193526
+          },
+          "after": {
+            "n": 14598,
+            "wins": 8942,
+            "win_rate": 61.25496643375805,
+            "mean_pct": 2.229826155786998,
+            "payoff_ratio": 1.5012363221312441
+          },
+          "calibration_before": {
+            "n": 9319,
+            "wins": 5640,
+            "win_rate": 60.52151518403262,
+            "mean_pct": 2.261325608638594,
+            "payoff_ratio": 1.4820086985304368
+          },
+          "calibration_after": {
+            "n": 8518,
+            "wins": 5225,
+            "win_rate": 61.340690302888,
+            "mean_pct": 2.344987808745493,
+            "payoff_ratio": 1.5076544265741967
+          },
+          "validation_before": {
+            "n": 6127,
+            "wins": 3723,
+            "win_rate": 60.76383221805125,
+            "mean_pct": 2.0357477625851454,
+            "payoff_ratio": 1.4807196623193524
+          },
+          "validation_after": {
+            "n": 5898,
+            "wins": 3594,
+            "win_rate": 60.93591047812818,
+            "mean_pct": 2.0449723201674352,
+            "payoff_ratio": 1.487853617092219
+          },
+          "keep": true,
+          "combination": {
+            "filter": "volume_ratio_le_5",
+            "before": {
+              "n": 10762,
+              "wins": 6783,
+              "win_rate": 63.02731834231555,
+              "mean_pct": 2.352311171187039,
+              "payoff_ratio": 1.5798676018934246
+            },
+            "after": {
+              "n": 10762,
+              "wins": 6783,
+              "win_rate": 63.02731834231555,
+              "mean_pct": 2.352311171187039,
+              "payoff_ratio": 1.5798676018934246
+            },
+            "calibration_before": {
+              "n": 5828,
+              "wins": 3715,
+              "win_rate": 63.74399450926561,
+              "mean_pct": 2.532077665427161,
+              "payoff_ratio": 1.6308823034971145
+            },
+            "calibration_after": {
+              "n": 5828,
+              "wins": 3715,
+              "win_rate": 63.74399450926561,
+              "mean_pct": 2.532077665427161,
+              "payoff_ratio": 1.6308823034971145
+            },
+            "validation_before": {
+              "n": 4808,
+              "wins": 2982,
+              "win_rate": 62.021630615640596,
+              "mean_pct": 2.1224984319719664,
+              "payoff_ratio": 1.5158633280283396
+            },
+            "validation_after": {
+              "n": 4808,
+              "wins": 2982,
+              "win_rate": 62.021630615640596,
+              "mean_pct": 2.1224984319719664,
+              "payoff_ratio": 1.5158633280283396
+            },
+            "keep": false
+          },
+          "enabled": false,
+          "reason": "组合全期胜率未提升；组合校准胜率未提升；组合2026胜率未提升"
+        }
+      ],
+      "board_groups": {
+        "首板": {
+          "n": 12592,
+          "wins": 7716,
+          "win_rate": 61.27700127064803,
+          "mean_pct": 2.225331840163679,
+          "payoff_ratio": 1.551687024271798
+        },
+        "连板2+": {
+          "n": 3049,
+          "wins": 1775,
+          "win_rate": 58.21580846179075,
+          "mean_pct": 1.980350634575912,
+          "payoff_ratio": 1.319417337296489
+        },
+        "高位3+": {
+          "n": 1016,
+          "wins": 620,
+          "win_rate": 61.023622047244096,
+          "mean_pct": 2.3876619850851726,
+          "payoff_ratio": 1.224353517277142
+        }
+      },
+      "one_price": {
+        "filter": "排除一字板",
+        "before": {
+          "n": 16659,
+          "wins": 10357,
+          "win_rate": 62.17059847529864,
+          "mean_pct": 2.5072848541139496,
+          "payoff_ratio": 1.5407373401169058
+        },
+        "after": {
+          "n": 15641,
+          "wins": 9491,
+          "win_rate": 60.680263410267884,
+          "mean_pct": 2.177576089518765,
+          "payoff_ratio": 1.4817466498193526
+        },
+        "calibration_before": {
+          "n": 9970,
+          "wins": 6190,
+          "win_rate": 62.08625877632899,
+          "mean_pct": 2.6067291909171666,
+          "payoff_ratio": 1.5385940045074868
+        },
+        "calibration_after": {
+          "n": 9319,
+          "wins": 5640,
+          "win_rate": 60.52151518403262,
+          "mean_pct": 2.261325608638594,
+          "payoff_ratio": 1.4820086985304368
+        },
+        "validation_before": {
+          "n": 6480,
+          "wins": 4026,
+          "win_rate": 62.129629629629626,
+          "mean_pct": 2.337681972718373,
+          "payoff_ratio": 1.542325180858783
+        },
+        "validation_after": {
+          "n": 6127,
+          "wins": 3723,
+          "win_rate": 60.76383221805125,
+          "mean_pct": 2.0357477625851454,
+          "payoff_ratio": 1.4807196623193524
+        },
+        "keep": false
+      },
+      "selected": {
+        "n": 10762,
+        "wins": 6783,
+        "win_rate": 63.02731834231555,
+        "mean_pct": 2.352311171187039,
+        "payoff_ratio": 1.5798676018934246
+      },
+      "selected_2026": {
+        "n": 4808,
+        "wins": 2982,
+        "win_rate": 62.021630615640596,
+        "mean_pct": 2.1224984319719664,
+        "payoff_ratio": 1.5158633280283396
+      },
+      "years": {
+        "2024": {
+          "n": 3000,
+          "wins": 1985,
+          "win_rate": 66.16666666666667,
+          "mean_pct": 2.8743140653655916,
+          "payoff_ratio": 1.6072546971320558
+        },
+        "2025": {
+          "n": 2954,
+          "wins": 1816,
+          "win_rate": 61.47596479350034,
+          "mean_pct": 2.19622822183376,
+          "payoff_ratio": 1.6396471859963122
+        },
+        "2026": {
+          "n": 4808,
+          "wins": 2982,
+          "win_rate": 62.021630615640596,
+          "mean_pct": 2.1224984319719664,
+          "payoff_ratio": 1.5158633280283396
+        }
+      },
+      "without_202409": {
+        "n": 10409,
+        "wins": 6467,
+        "win_rate": 62.12892689019118,
+        "mean_pct": 2.17309870644965,
+        "payoff_ratio": 1.5389231793616385
+      },
+      "current_name_sensitivity": {
+        "n": 10681,
+        "wins": 6734,
+        "win_rate": 63.0465312236682,
+        "mean_pct": 2.3555534434144425,
+        "payoff_ratio": 1.5800568948356564
+      },
+      "horizons": {
+        "ret_1": {
+          "n": 10762,
+          "wins": 6783,
+          "win_rate": 63.02731834231555,
+          "mean_pct": 2.352311171187039,
+          "payoff_ratio": 1.5798676018934246
+        },
+        "ret_3": {
+          "n": 10613,
+          "wins": 6073,
+          "win_rate": 57.2222745689249,
+          "mean_pct": 3.055075784279396,
+          "payoff_ratio": 1.5749939600684055
+        },
+        "ret_f5": {
+          "n": 10529,
+          "wins": 5710,
+          "win_rate": 54.2311710513819,
+          "mean_pct": 3.227377079212853,
+          "payoff_ratio": 1.5781423178452822
+        },
+        "open_close_1": {
+          "n": 10762,
+          "wins": 5088,
+          "win_rate": 47.27745772161308,
+          "mean_pct": 0.07047917325759993,
+          "payoff_ratio": 1.0368809860363253
+        }
+      },
+      "intraday_research": {
+        "n": 10762,
+        "wins": 4394,
+        "win_rate": 40.828842222635195,
+        "mean_pct": -0.44140260499228046,
+        "payoff_ratio": 0.9865173710283728
+      },
+      "t1_daily_plan": {
+        "n": 10711,
+        "wins": 4908,
+        "win_rate": 45.8220520959761,
+        "mean_pct": -0.08328202319702421,
+        "payoff_ratio": 1.1442530485763778
+      },
+      "intraday_both_n": 1898,
+      "close_plan": {
+        "n": 10762,
+        "wins": 6783,
+        "win_rate": 63.02731834231555,
+        "mean_pct": 2.352311171187039,
+        "payoff_ratio": 1.5798676018934246
+      }
+    },
+    "oversold": {
+      "raw": {
+        "n": 101774,
+        "wins": 51587,
+        "win_rate": 50.687798455401186,
+        "mean_pct": 0.9331896628842127,
+        "payoff_ratio": 1.2426494096329683
+      },
+      "base": {
+        "n": 101774,
+        "wins": 51587,
+        "win_rate": 50.687798455401186,
+        "mean_pct": 0.9331896628842127,
+        "payoff_ratio": 1.2426494096329683
+      },
+      "filters": [
+        {
+          "filter": "double_signal",
+          "before": {
+            "n": 101774,
+            "wins": 51587,
+            "win_rate": 50.687798455401186,
+            "mean_pct": 0.9331896628842127,
+            "payoff_ratio": 1.2426494096329683
+          },
+          "after": {
+            "n": 3213,
+            "wins": 2218,
+            "win_rate": 69.03205726735139,
+            "mean_pct": 7.63619985741483,
+            "payoff_ratio": 1.8850704758884673
+          },
+          "calibration_before": {
+            "n": 58713,
+            "wins": 32999,
+            "win_rate": 56.20390714151891,
+            "mean_pct": 2.0338296147564163,
+            "payoff_ratio": 1.4171176503004355
+          },
+          "calibration_after": {
+            "n": 2828,
+            "wins": 2011,
+            "win_rate": 71.11032531824611,
+            "mean_pct": 8.593781778921933,
+            "payoff_ratio": 1.9452958682493986
+          },
+          "validation_before": {
+            "n": 42882,
+            "wins": 18472,
+            "win_rate": 43.07634905088382,
+            "mean_pct": -0.5907507746958442,
+            "payoff_ratio": 1.136413520999064
+          },
+          "validation_after": {
+            "n": 385,
+            "wins": 207,
+            "win_rate": 53.76623376623377,
+            "mean_pct": 0.602325379435371,
+            "payoff_ratio": 1.0155947211909933
+          },
+          "keep": true,
+          "combination": {
+            "filter": "double_signal",
+            "before": {
+              "n": 101774,
+              "wins": 51587,
+              "win_rate": 50.687798455401186,
+              "mean_pct": 0.9331896628842127,
+              "payoff_ratio": 1.2426494096329683
+            },
+            "after": {
+              "n": 3213,
+              "wins": 2218,
+              "win_rate": 69.03205726735139,
+              "mean_pct": 7.63619985741483,
+              "payoff_ratio": 1.8850704758884673
+            },
+            "calibration_before": {
+              "n": 58713,
+              "wins": 32999,
+              "win_rate": 56.20390714151891,
+              "mean_pct": 2.0338296147564163,
+              "payoff_ratio": 1.4171176503004355
+            },
+            "calibration_after": {
+              "n": 2828,
+              "wins": 2011,
+              "win_rate": 71.11032531824611,
+              "mean_pct": 8.593781778921933,
+              "payoff_ratio": 1.9452958682493986
+            },
+            "validation_before": {
+              "n": 42882,
+              "wins": 18472,
+              "win_rate": 43.07634905088382,
+              "mean_pct": -0.5907507746958442,
+              "payoff_ratio": 1.136413520999064
+            },
+            "validation_after": {
+              "n": 385,
+              "wins": 207,
+              "win_rate": 53.76623376623377,
+              "mean_pct": 0.602325379435371,
+              "payoff_ratio": 1.0155947211909933
+            },
+            "keep": true
+          },
+          "enabled": true,
+          "reason": "保留"
+        }
+      ],
+      "selected": {
+        "n": 3213,
+        "wins": 2218,
+        "win_rate": 69.03205726735139,
+        "mean_pct": 7.63619985741483,
+        "payoff_ratio": 1.8850704758884673
+      },
+      "selected_2026": {
+        "n": 385,
+        "wins": 207,
+        "win_rate": 53.76623376623377,
+        "mean_pct": 0.602325379435371,
+        "payoff_ratio": 1.0155947211909933
+      },
+      "years": {
+        "2024": {
+          "n": 2547,
+          "wins": 1767,
+          "win_rate": 69.37573616018845,
+          "mean_pct": 8.751383790557247,
+          "payoff_ratio": 2.0084089659884556
+        },
+        "2025": {
+          "n": 281,
+          "wins": 244,
+          "win_rate": 86.83274021352314,
+          "mean_pct": 7.16526817167943,
+          "payoff_ratio": 2.4475734723623366
+        },
+        "2026": {
+          "n": 385,
+          "wins": 207,
+          "win_rate": 53.76623376623377,
+          "mean_pct": 0.602325379435371,
+          "payoff_ratio": 1.0155947211909933
+        }
+      },
+      "without_202409": {
+        "n": 3181,
+        "wins": 2201,
+        "win_rate": 69.19207796290475,
+        "mean_pct": 7.649810674220972,
+        "payoff_ratio": 1.8716546850791194
+      },
+      "current_name_sensitivity": {
+        "n": 3176,
+        "wins": 2199,
+        "win_rate": 69.23803526448363,
+        "mean_pct": 7.702903420833632,
+        "payoff_ratio": 1.902972796470022
+      },
+      "horizons": {
+        "ret_1": {
+          "n": 3248,
+          "wins": 1768,
+          "win_rate": 54.433497536945815,
+          "mean_pct": 0.4072542590003074,
+          "payoff_ratio": 0.9596048556614224
+        },
+        "ret_3": {
+          "n": 3248,
+          "wins": 2149,
+          "win_rate": 66.16379310344827,
+          "mean_pct": 4.393826807957396,
+          "payoff_ratio": 1.2257305277544734
+        },
+        "ret_f5": {
+          "n": 3213,
+          "wins": 2218,
+          "win_rate": 69.03205726735139,
+          "mean_pct": 7.63619985741483,
+          "payoff_ratio": 1.8850704758884673
+        },
+        "open_close_1": {
+          "n": 3248,
+          "wins": 1827,
+          "win_rate": 56.25,
+          "mean_pct": 0.9759300827785821,
+          "payoff_ratio": 1.0756844031660207
+        }
+      },
+      "intraday_research": {
+        "n": 3248,
+        "wins": 1241,
+        "win_rate": 38.20812807881774,
+        "mean_pct": -0.6961902035861748,
+        "payoff_ratio": 0.9167716475651984
+      },
+      "t1_daily_plan": {
+        "n": 3248,
+        "wins": 1687,
+        "win_rate": 51.939655172413794,
+        "mean_pct": 0.7553618376492712,
+        "payoff_ratio": 1.1650626786298792
+      },
+      "intraday_both_n": 636,
+      "close_plan": {
+        "n": 3213,
+        "wins": 1651,
+        "win_rate": 51.38499844382197,
+        "mean_pct": 3.5632392992442687,
+        "payoff_ratio": 2.1163499699646993
+      }
+    }
+  }
+}

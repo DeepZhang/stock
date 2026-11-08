@@ -1,0 +1,91 @@
+{
+  "calibration_end": "2025-12-31",
+  "selection_end": "2026-11-06",
+  "filters": {
+    "limit_up": [
+      "turnover_1_20",
+      "volume_ratio_le_3"
+    ],
+    "oversold": [
+      "double_signal"
+    ]
+  },
+  "calibration": {
+    "limit_up": {
+      "all": {
+        "n": 5828,
+        "wins": 3715,
+        "win_rate": 63.74399450926561,
+        "mean_pct": 2.532077665427161,
+        "payoff_ratio": 1.6308823034971145
+      },
+      "first": {
+        "n": 4971,
+        "wins": 3164,
+        "win_rate": 63.64916515791591,
+        "mean_pct": 2.498346215219534,
+        "payoff_ratio": 1.719733569909178
+      },
+      "multi": {
+        "n": 857,
+        "wins": 551,
+        "win_rate": 64.29404900816803,
+        "mean_pct": 2.727735820598827,
+        "payoff_ratio": 1.309471610278833
+      }
+    },
+    "oversold": {
+      "all": {
+        "n": 2828,
+        "wins": 2011,
+        "win_rate": 71.11032531824611,
+        "mean_pct": 8.593781778921933,
+        "payoff_ratio": 1.9452958682493986
+      },
+      "double": {
+        "n": 2828,
+        "wins": 2011,
+        "win_rate": 71.11032531824611,
+        "mean_pct": 8.593781778921933,
+        "payoff_ratio": 1.9452958682493986
+      },
+      "single": {
+        "n": 0,
+        "wins": 0,
+        "win_rate": null,
+        "mean_pct": null,
+        "payoff_ratio": null
+      }
+    }
+  },
+  "note": "2024–25校准；2026过滤审计，仍有筛选偏差，非严格独立检验",
+  "universe_sha256": "a61506728642585565571b3e4b872b5a2574db3b0d87270fac5167bb0b588e29",
+  "audit": {
+    "limit_up": {
+      "selected_2026": {
+        "n": 4808,
+        "wins": 2982,
+        "win_rate": 62.021630615640596,
+        "mean_pct": 2.1224984319719664,
+        "payoff_ratio": 1.5158633280283396
+      },
+      "next_open_scenario": {
+        "n": 10711,
+        "wins": 4908,
+        "win_rate": 45.8220520959761,
+        "mean_pct": -0.08328202319702421,
+        "payoff_ratio": 1.1442530485763778
+      }
+    },
+    "oversold": {
+      "selected_2026": {
+        "n": 385,
+        "wins": 207,
+        "win_rate": 53.76623376623377,
+        "mean_pct": 0.602325379435371,
+        "payoff_ratio": 1.0155947211909933
+      },
+      "next_open_scenario": null
+    }
+  }
+}

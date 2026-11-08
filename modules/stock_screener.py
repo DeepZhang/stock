@@ -90,6 +90,12 @@ def ema_series(arr, n):
 def check_stock(code, name):
     qtmk = _market_prefix(code) + code
     bars = fetch_kline_bars(qtmk, 120)
+    return check_breakout_bars(code, name, bars)
+
+
+def check_breakout_bars(code, name, bars):
+    """旧突破规则的纯数据入口，供固定日期回归复用。"""
+    qtmk = _market_prefix(code) + code
     if len(bars) < N + 30:
         return None
 
@@ -163,3 +169,65 @@ def run_screen():
     results.sort(key=lambda x: x["vol_ratio"], reverse=True)
     print(f"[选股] 完成，命中 {len(results)} 只")
     return results
+
+
+# Phase 1 引擎入口，旧 run_screen/API 契约保持原样。
+try:
+    from .shortterm_rules import strat_limit_up, strat_oversold
+except ImportError:
+    from shortterm_rules import strat_limit_up, strat_oversold
+
+
+def run_shortterm(as_of="2026-11-06", history_dir=None, policy_path=None):
+    """仅扫描本地缓存；返回分策略 Top10，无网站路由或日程副作用。"""
+    import json
+    from pathlib import Path
+    import pandas as pd
+    try:
+        from .shortterm_rules import features, rank_candidates, eligible
+    except ImportError:
+        from shortterm_rules import features, rank_candidates, eligible
+    root = Path(__file__).resolve().parents[1]
+    cache = Path(history_dir or root / "data/history")
+    policy = json.loads(Path(policy_path or root / "stock-analysis/shortterm_policy.json").read_text())
+    if as_of <= policy['calibration_end']:
+        raise ValueError("评分仅能用于校准期结束后的日期，禁止回看未来")
+    if as_of < policy.get('selection_end', policy['calibration_end']):
+        raise ValueError("过滤取舍使用了截至selection_end的收益，不可回测更早日期")
+    universe = json.loads((cache / "universe.json").read_text())["stocks"]
+    out = {"limit_up": [], "oversold": []}
+    missing = []
+    unavailable = {}
+    checkpoint = cache / "checkpoint.json"
+    known_unavailable = json.loads(checkpoint.read_text()).get('unavailable', {}) if checkpoint.exists() else {}
+    stages = {k: {"raw": 0, "eligible": 0, "not_one_price": 0} for k in out}
+    for stock in universe:
+        path = cache / (stock["code"] + ".parquet")
+        if not path.exists():
+            reason = known_unavailable.get(stock['code'], '')
+            if reason.startswith('empty history confirmed'):
+                unavailable[stock['code']] = reason
+            else:
+                missing.append(stock["code"])
+            continue
+        d = pd.read_parquet(path)
+        d = d[d["date"] <= as_of].sort_values("date")
+        if d.empty or str(d.iloc[-1]["date"])[:10] != as_of or len(d) < 21:
+            continue
+        row = features(d, stock["code"]).iloc[-1]
+        raw_signals = {"limit_up": bool(row['is_limit_up']),
+                       "oversold": bool(row['ret_5'] <= -.08 or row['rsi14'] <= 20)}
+        for strategy, signal in raw_signals.items():
+            if signal:
+                stages[strategy]['raw'] += 1
+                if eligible(stock['name'], row):
+                    stages[strategy]['eligible'] += 1
+                    if strategy != 'limit_up' or not row['one_price']:
+                        stages[strategy]['not_one_price'] += 1
+        for strategy, fn in (("limit_up", strat_limit_up), ("oversold", strat_oversold)):
+            item = fn(stock["code"], stock["name"], row, policy)
+            if item:
+                out[strategy].append(item)
+    counts = {k: len(v) for k, v in out.items()}
+    return {"as_of": as_of, "counts": counts, "stages": stages, "missing_codes": missing, "unavailable_codes": unavailable,
+            **{k: rank_candidates(v) for k, v in out.items()}}
