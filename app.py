@@ -7,6 +7,9 @@ import datetime
 import os
 import glob
 import logging
+import threading
+import time
+import tempfile
 
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
@@ -375,13 +378,72 @@ def api_sector_stocks():
 
 SCREEN_CACHE = os.path.join(BASE_DIR, "data/stock_picks.json")
 
+# 单进程 Flask 的所有入口（手动、启动、定时）共享同一把锁。
+_screen_lock = threading.Lock()
+_screen_scanning = False
+SCREEN_CACHE_MAX_AGE = 24 * 60 * 60
+
+
+def _read_screen_cache():
+    try:
+        with open(SCREEN_CACHE, encoding="utf-8") as f:
+            cached = json.load(f)
+        if not isinstance(cached.get("list"), list):
+            raise ValueError("screen cache list required")
+        return cached
+    except (OSError, ValueError, AttributeError):
+        return {"time": "", "list": []}
+
+
+def _screen_worker():
+    global _screen_scanning
+    tmp = None
+    try:
+        import stock_screener
+        results = stock_screener.run_screen()
+        payload = {"time": datetime.datetime.now().isoformat(timespec="microseconds"), "list": results}
+        os.makedirs(os.path.dirname(SCREEN_CACHE), exist_ok=True)
+        with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", dir=os.path.dirname(SCREEN_CACHE),
+                                         delete=False) as f:
+            tmp = f.name
+            json.dump(payload, f, ensure_ascii=False, allow_nan=False)
+        os.replace(tmp, SCREEN_CACHE)
+    except Exception:
+        app.logger.exception("后台选股失败，保留原缓存")
+    finally:
+        if tmp and os.path.exists(tmp):
+            os.unlink(tmp)
+        with _screen_lock:
+            _screen_scanning = False
+
+
+def _start_screen(force=False):
+    global _screen_scanning
+    with _screen_lock:
+        if _screen_scanning:
+            return True
+        cached = _read_screen_cache()
+        try:
+            age = time.time() - os.path.getmtime(SCREEN_CACHE)
+        except OSError:
+            age = SCREEN_CACHE_MAX_AGE
+        if not force and cached.get("time") and age < SCREEN_CACHE_MAX_AGE:
+            return False
+        _screen_scanning = True
+        try:
+            threading.Thread(target=_screen_worker, name="stock-screen", daemon=True).start()
+        except Exception:
+            _screen_scanning = False
+            raise
+        return True
+
+
 @app.route("/api/screen")
 def api_screen():
-    import stock_screener, datetime
-    results = stock_screener.run_screen()
-    with open(SCREEN_CACHE, "w", encoding="utf-8") as f:
-        json.dump({"time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"), "list": results}, f, ensure_ascii=False)
-    return jsonify({"list": results, "count": len(results)})
+    cached = _read_screen_cache()
+    scanning = _start_screen(force=request.args.get("force") == "1")
+    return jsonify({"list": cached["list"], "count": len(cached["list"]),
+                    "time": cached.get("time", ""), "scanning": scanning})
 
 @app.route("/api/screen_cached")
 def api_screen_cached():
@@ -464,19 +526,8 @@ def precious_page():
     return send_file("static/precious.html")
 
 def _auto_screen():
-    import datetime, os
-    if not os.path.exists(SCREEN_CACHE):
-        print("[启动] 无缓存，自动跑选股...")
-        try:
-            import stock_screener
-            r = stock_screener.run_screen()
-            with open(SCREEN_CACHE, "w", encoding="utf-8") as f:
-                json.dump({"time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"), "list": r}, f, ensure_ascii=False)
-        except Exception as e:
-            print(f"[启动] 选股失败: {e}")
+    _start_screen()
 
-import threading
-import time
 
 def _daily_screen():
     """每天15:30自动跑选股更新缓存，非交易日不跑"""
@@ -495,17 +546,8 @@ def _daily_screen():
             print(f"[定时选股] {target.strftime('%Y-%m-%d')} 非交易日，跳过")
             continue
         print(f"[定时选股] 开始运行...")
-        try:
-            import stock_screener
-            r = stock_screener.run_screen()
-            with open(SCREEN_CACHE, "w", encoding="utf-8") as f:
-                json.dump({"time": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"), "list": r}, f, ensure_ascii=False)
-            print(f"[定时选股] 完成，{len(r)}只")
-        except Exception as e:
-            print(f"[定时选股] 失败: {e}")
+        _start_screen(force=True)
 
-threading.Thread(target=_auto_screen, daemon=True).start()
-threading.Thread(target=_daily_screen, daemon=True).start()
 
 
 @app.route("/screener")
@@ -618,5 +660,7 @@ def serve_shot(filename):
     return send_from_directory(os.path.join(BASE_DIR, "shots"), filename)
 
 if __name__ == "__main__":
+    threading.Thread(target=_auto_screen, daemon=True).start()
+    threading.Thread(target=_daily_screen, daemon=True).start()
     stock_data.start_collector()
     app.run(host="0.0.0.0", port=5000, debug=False)

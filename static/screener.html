@@ -46,6 +46,7 @@
     <a href="/rank">排行榜</a>
     <a href="/kline">个股K线</a>
     <a href="/screener" class="active">选股器</a>
+    <a href="/shortterm">短线选股</a>
     <a href="/precious">贵金属</a>
   </div>
 </nav>
@@ -101,7 +102,8 @@ let currentList = [];
 
 function renderResult(list, time) {
   currentList = list;
-  document.getElementById("updateTime").textContent = "更新时间: " + time + " | 共 " + list.length + " 只";
+  const dates = [...new Set(list.map(s => s.date).filter(Boolean))].sort();
+  document.getElementById("updateTime").textContent = "数据日期: " + (dates.join("、") || "未知") + " | 生成时间: " + time + " | 共 " + list.length + " 只";
   document.getElementById("empty").style.display = "none";
 
   // 按板块分组
@@ -180,20 +182,35 @@ async function fetchRealtime() {
 
 async function runScreen() {
   const btn = document.getElementById("btnScreen");
+  const status = document.getElementById("loading");
   btn.disabled = true;
-  btn.textContent = "选股中...";
-  document.getElementById("loading").style.display = "block";
-  document.getElementById("resultArea").innerHTML = "";
+  btn.textContent = "后台重扫中...";
+  status.style.display = "block";
+  status.textContent = "后台重扫中，仍展示已有缓存；完成后自动刷新。";
   try {
-    const res = await fetch("/api/screen");
+    const res = await fetch("/api/screen?force=1");
+    if (!res.ok) throw new Error("HTTP " + res.status);
     const j = await res.json();
-    renderResult(j.list || [], new Date().toLocaleString("zh-CN"));
+    const previous = j.time || "";
+    const started = Date.now();
+    while (Date.now() - started < 30 * 60 * 1000) {
+      await new Promise(resolve => setTimeout(resolve, 3000));
+      const r = await fetch("/api/screen_cached", {cache: "no-store"});
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      const cached = await r.json();
+      if (cached.time && cached.time !== previous) {
+        renderResult(cached.list || [], cached.time);
+        document.getElementById("empty").style.display = cached.list?.length ? "none" : "block";
+        status.style.display = "none";
+        return;
+      }
+    }
+    status.textContent = "尚未收到新结果，请稍后重试；已有缓存仍可查看。";
   } catch(e) {
-    alert("选股失败: " + e);
+    status.textContent = "后台扫描状态获取失败：" + e.message + "；已有缓存仍可查看。";
   } finally {
     btn.disabled = false;
     btn.textContent = "重新选股";
-    document.getElementById("loading").style.display = "none";
   }
 }
 
