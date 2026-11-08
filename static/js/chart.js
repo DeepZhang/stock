@@ -320,13 +320,16 @@ async function loadData() {
       const d = json.date;
       const titleEl = document.getElementById('fundTitle');
       if (titleEl) titleEl.textContent = parseInt(d.slice(5,7)) + '月' + parseInt(d.slice(8,10)) + '日 资金流向';
+        // 后端回退到上一可用日期时，同步日历按钮，避免显示错日期
+        const dateBtn = document.getElementById("dateBtn");
+        if (dateBtn) dateBtn.textContent = "📅 " + d;
     }
 
     // 更新时间
     updateTime();
     
-    // 空数据处理：彻底清空所有线条和标题
-    if (times.length === 0 || Object.keys(sectors).length === 0) {
+    // 空数据或单点处理：单点画不成线，按无数据处理，彻底清空所有线条和标题
+    if (times.length < 2 || Object.keys(sectors).length === 0) {
       document.getElementById('loading').style.display = 'none';
       document.getElementById('emptyState').style.display = 'block';
       // 重置标题（不显示昨天的日期）
