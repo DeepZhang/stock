@@ -156,6 +156,28 @@ def generate_shortterm_summary(result):
     return text + "\n仅研究，不下单；信号胜率非开盘买入盈利概率。新买仓位须遵守T+1。"
 
 
+def generate_sector_leaders_summary(result):
+    """板块龙头每日摘要：分板块 TOP3 名单与回测口径；纯格式化，零行情/发送调用。"""
+    counts = result.get("counts", {})
+    text = f"【板块龙头摘要（{result["as_of"]}）】（研究完成）\n"
+    text += (f"当日强势 {counts.get("strong", 0)} 只，"
+             f"入榜 {counts.get("picks", 0)} 只，覆盖 {counts.get("sectors", 0)} 个板块\n")
+    shown = 0
+    for sec, info in result.get("sectors", {}).items():
+        for pick in info.get("top3", []):
+            rate = pick.get("win_rate")
+            score = "历史信号不足" if rate is None else f"历史 5 日胜率 {rate:.1%}(n={pick.get("n")})"
+            text += f"{sec}：{pick["name"]}（{pick["code"]}）{pick.get("signal", "")}，{score}\n"
+            shown += 1
+        if shown >= 15:
+            break
+    combo = result.get("backtest", {}).get("combo", {}).get("full", {})
+    if combo.get("win_rate") is not None:
+        text += (f"\n回测组合胜率 {combo["win_rate"]:.2%}（n={combo["n"]}），未过 50%；"
+                 "Top 3 为挑选后的结果，胜率高于组合不代表可复制。\n")
+    return text + "\n仅研究，不下单；信号胜率并非买入盈利概率。"
+
+
 def send_to_feishu(text):
     data = {
         "msg_type": "text",
