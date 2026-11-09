@@ -686,6 +686,28 @@ def api_shortterm():
 def shortterm_page():
     return send_file("static/shortterm.html")
 
+PREDICTION_RESULT = os.path.join(BASE_DIR, "data/prediction.json")
+
+
+@app.route("/api/prediction")
+def api_prediction():
+    # 只读每日预测产物（stock-daily-predict 写 data/prediction.json）；缺失或损坏时返回空结构。
+    # 绝不在请求中拉数据、重算回测或调用外部服务。
+    empty = {"date": "", "next_trading_day": "", "total": 0, "verdict": "",
+             "verdict_cn": "", "reason": "", "signals": [],
+             "disclaimer": "历史规律参考，不构成买卖建议；广度对次日市场方向的预测力本身较弱。"}
+    try:
+        with open(PREDICTION_RESULT, encoding="utf-8") as f:
+            result = json.load(f)
+        if not isinstance(result, dict):
+            raise ValueError("prediction result object required")
+        empty.update(result)
+    except (OSError, ValueError):
+        pass
+    response = jsonify(empty)
+    response.headers["Cache-Control"] = "no-store"
+    return response
+
 SECTOR_LEADERS_RESULT = os.path.join(BASE_DIR, "data/sector_leaders_picks.json")
 SECTOR_MEMBERS_FILE = os.path.join(BASE_DIR, "stock-analysis/sector_members.json")
 SECTOR_LEADERS_BACKTEST = os.path.join(BASE_DIR, "stock-analysis/sector_leaders_results.json")

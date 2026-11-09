@@ -100,7 +100,10 @@ class SectorLeadersApiTest(unittest.TestCase):
             self.assertEqual(data["sectors"], {})
 
     def test_screen_and_prediction_contracts_unchanged(self):
-        self.assertEqual(self.client.get("/api/prediction").status_code, 404)
+        # /api/prediction 现已接通：只读 data/prediction.json，缺失时返回空结构（不再 404）。
+        body = self.client.get("/api/prediction").get_json()
+        self.assertEqual(body["date"], "")
+        self.assertEqual(body["signals"], [])
         self.assertEqual(self.client.get("/api/screen").status_code, 200)
 
 

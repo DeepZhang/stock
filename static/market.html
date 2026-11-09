@@ -292,6 +292,49 @@
 
 
 
+<!-- 明日展望 -->
+<div style="max-width:1200px;margin:20px auto 0;padding:12px">
+  <div style="background:#111827;border:1px solid #1f2937;border-radius:8px;padding:16px">
+    <h2 style="color:#fbbf24;font-size:16px;margin-bottom:12px;border-bottom:1px solid #1f2937;padding-bottom:8px">🔮 明日展望</h2>
+    <div id="predictionBox"><div style="color:#6b7280;text-align:center;padding:20px">加载中...</div></div>
+  </div>
+</div>
+<script>
+async function loadPrediction(){
+  const el = document.getElementById("predictionBox");
+  if(!el) return;
+  try{
+    const r = await fetch("/api/prediction");
+    if(!r.ok) throw new Error("prediction unavailable");
+    const d = await r.json();
+    if(!d || !d.date){
+      el.innerHTML = "<div style='color:#6b7280;text-align:center;padding:12px'>今日展望尚未生成（每日约 16:00 收盘后更新）</div>";
+      return;
+    }
+    const vc = (d.verdict === "bullish" || d.verdict === "slightly_bullish") ? "#ef4444"
+      : ((d.verdict === "bearish" || d.verdict === "slightly_bearish") ? "#22c55e" : "#9ca3af");
+    let h = '<div style="margin-bottom:10px"><span style="font-size:20px;font-weight:700;color:' + vc + '">' + d.next_trading_day + '：' + d.verdict_cn + '</span></div>';
+    h += '<div style="color:#d1d5db;font-size:13px;line-height:1.8;margin-bottom:12px">' + d.reason + '</div>';
+    h += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px">';
+    (d.signals || []).forEach(function(s){
+      const f1 = (s.fwd_1_test !== null && s.fwd_1_test !== undefined) ? s.fwd_1_test : "—";
+      const w1 = (s.fwd_1_test_win !== null && s.fwd_1_test_win !== undefined) ? s.fwd_1_test_win : "—";
+      h += '<div style="background:#0a0e17;padding:10px;border-radius:6px">';
+      h += '<div style="font-size:12px;color:#9ca3af;margin-bottom:4px">' + s.name + '</div>';
+      h += '<div style="font-size:16px;font-weight:700">' + s.value_pct + '% <span style="font-size:11px;color:#6b7280;font-weight:400">' + s.bucket + '</span></div>';
+      h += '<div style="font-size:11px;color:#6b7280;margin-top:4px">次日历史均值 ' + f1 + '%（胜率 ' + w1 + '%）</div>';
+      h += '</div>';
+    });
+    h += '</div>';
+    h += '<div style="font-size:11px;color:#6b7280;margin-top:12px">' + (d.disclaimer || "") + ' · 数据日期 ' + d.date + '，样本 ' + d.total + ' 只</div>';
+    el.innerHTML = h;
+  }catch(e){
+    el.innerHTML = "<div style='color:#6b7280;text-align:center;padding:12px'>展望暂不可用，稍后重试</div>";
+  }
+}
+loadPrediction();
+</script>
+
 <!-- 每日复盘模块 -->
 <div style="max-width:1200px;margin:20px auto;padding:12px">
   <div style="background:#111827;border:1px solid #1f2937;border-radius:8px;padding:16px;margin-bottom:16px">
