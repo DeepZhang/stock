@@ -163,23 +163,37 @@ def _check_new_day():
 # ===================== 一次性拉取所有板块资金流 =====================
 def fetch_all_sectors_fund():
     url = f"{API_BASE}/api/qt/clist/get"
-    params = {
-        "pn": "1", "pz": "1000", "po": "1", "np": "1", "fltt": "2", "invt": "2",
+    base_params = {
+        "pz": "1000", "po": "1", "np": "1", "fltt": "2", "invt": "2",
         "fid": "f62", "fs": "m:90+t:2,m:90+t:3",
         "fields": "f12,f14,f62",
     }
     for attempt in range(RETRY_TIMES + 1):
         try:
-            r = requests.get(url, params=params, headers=HEADERS, timeout=10)
-            r.raise_for_status()
-            j = r.json()
-            diff = j.get("data", {}).get("diff", [])
-            if not diff:
+            all_diff = []
+            total = None
+            pn = 1
+            while True:
+                params = dict(base_params)
+                params["pn"] = str(pn)
+                r = requests.get(url, params=params, headers=HEADERS, timeout=10)
+                r.raise_for_status()
+                data = r.json().get("data", {})
+                diff = data.get("diff", [])
+                if total is None:
+                    total = data.get("total", 0)
+                all_diff.extend(diff)
+                if not diff or (total and len(all_diff) >= total):
+                    break
+                pn += 1
+                if pn > 10:
+                    break
+            if not all_diff:
                 if attempt < RETRY_TIMES:
                     time.sleep(1)
                     continue
                 return None
-            code_map = {item["f12"]: item["f62"] for item in diff}
+            code_map = {item["f12"]: item["f62"] for item in all_diff}
             result = {}
             for name, code in SECTOR_MAP.items():
                 val = code_map.get(code)
