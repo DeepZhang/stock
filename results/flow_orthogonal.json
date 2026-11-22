@@ -1,0 +1,62 @@
+{
+ "flow_strength_rank_corr": 0.3043,
+ "corr_nw_t": 7.51,
+ "rows": [
+  {
+   "horizon": 10,
+   "stratum": "弱",
+   "pct": 1.336,
+   "nw_t": 2.14,
+   "n": 342
+  },
+  {
+   "horizon": 10,
+   "stratum": "中",
+   "pct": 0.404,
+   "nw_t": 0.65,
+   "n": 332
+  },
+  {
+   "horizon": 10,
+   "stratum": "强",
+   "pct": -0.264,
+   "nw_t": -0.48,
+   "n": 348
+  },
+  {
+   "horizon": 10,
+   "stratum": "ALL_pooled",
+   "pct": 0.588,
+   "nw_t": 1.43,
+   "n": 358
+  },
+  {
+   "horizon": 20,
+   "stratum": "弱",
+   "pct": 2.085,
+   "nw_t": 1.52,
+   "n": 310
+  },
+  {
+   "horizon": 20,
+   "stratum": "中",
+   "pct": 3.017,
+   "nw_t": 3.64,
+   "n": 305
+  },
+  {
+   "horizon": 20,
+   "stratum": "强",
+   "pct": 0.502,
+   "nw_t": 0.5,
+   "n": 319
+  },
+  {
+   "horizon": 20,
+   "stratum": "ALL_pooled",
+   "pct": 1.769,
+   "nw_t": 2.75,
+   "n": 330
+  }
+ ]
+}

@@ -1,0 +1,941 @@
+{
+ "sample": {
+  "sectors": 23,
+  "days": 2887,
+  "start": "2015-01-05",
+  "end": "2026-11-20",
+  "cost_round_trip_pct": 0.3
+ },
+ "quadrants": [
+  {
+   "horizon": 10,
+   "feature": "dist_high60",
+   "regime": "深跌(dd<-20%)",
+   "quadrant": "强+资金高",
+   "excess_pct": -0.079,
+   "nw_t": -0.46,
+   "n": 363,
+   "net_pct": -0.379
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high60",
+   "regime": "深跌(dd<-20%)",
+   "quadrant": "强+资金低",
+   "excess_pct": -0.282,
+   "nw_t": -1.87,
+   "n": 361,
+   "net_pct": -0.582
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high60",
+   "regime": "深跌(dd<-20%)",
+   "quadrant": "弱+资金高",
+   "excess_pct": 0.383,
+   "nw_t": 2.01,
+   "n": 358,
+   "net_pct": 0.083
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high60",
+   "regime": "深跌(dd<-20%)",
+   "quadrant": "弱+资金低",
+   "excess_pct": 0.044,
+   "nw_t": 0.2,
+   "n": 361,
+   "net_pct": -0.256
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high60",
+   "regime": "中度(-20~-10%)",
+   "quadrant": "强+资金高",
+   "excess_pct": -0.11,
+   "nw_t": -0.98,
+   "n": 607,
+   "net_pct": -0.41
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high60",
+   "regime": "中度(-20~-10%)",
+   "quadrant": "强+资金低",
+   "excess_pct": -0.04,
+   "nw_t": -0.33,
+   "n": 597,
+   "net_pct": -0.34
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high60",
+   "regime": "中度(-20~-10%)",
+   "quadrant": "弱+资金高",
+   "excess_pct": 0.032,
+   "nw_t": 0.21,
+   "n": 596,
+   "net_pct": -0.268
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high60",
+   "regime": "中度(-20~-10%)",
+   "quadrant": "弱+资金低",
+   "excess_pct": 0.118,
+   "nw_t": 0.88,
+   "n": 607,
+   "net_pct": -0.182
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high60",
+   "regime": "浅回撤(-10~0%)",
+   "quadrant": "强+资金高",
+   "excess_pct": 0.252,
+   "nw_t": 3.2,
+   "n": 1491,
+   "net_pct": -0.048
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high60",
+   "regime": "浅回撤(-10~0%)",
+   "quadrant": "强+资金低",
+   "excess_pct": 0.166,
+   "nw_t": 1.82,
+   "n": 1447,
+   "net_pct": -0.134
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high60",
+   "regime": "浅回撤(-10~0%)",
+   "quadrant": "弱+资金高",
+   "excess_pct": -0.179,
+   "nw_t": -1.77,
+   "n": 1434,
+   "net_pct": -0.479
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high60",
+   "regime": "浅回撤(-10~0%)",
+   "quadrant": "弱+资金低",
+   "excess_pct": -0.269,
+   "nw_t": -2.73,
+   "n": 1490,
+   "net_pct": -0.569
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high60",
+   "regime": "高位(dd>=0)",
+   "quadrant": "强+资金高",
+   "excess_pct": 0.095,
+   "nw_t": 0.63,
+   "n": 297,
+   "net_pct": -0.205
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high60",
+   "regime": "高位(dd>=0)",
+   "quadrant": "强+资金低",
+   "excess_pct": 0.472,
+   "nw_t": 3.44,
+   "n": 294,
+   "net_pct": 0.172
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high60",
+   "regime": "高位(dd>=0)",
+   "quadrant": "弱+资金高",
+   "excess_pct": -0.833,
+   "nw_t": -3.23,
+   "n": 215,
+   "net_pct": -1.133
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high60",
+   "regime": "高位(dd>=0)",
+   "quadrant": "弱+资金低",
+   "excess_pct": -0.243,
+   "nw_t": -1.29,
+   "n": 270,
+   "net_pct": -0.543
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high250",
+   "regime": "深跌(dd<-20%)",
+   "quadrant": "强+资金高",
+   "excess_pct": 0.014,
+   "nw_t": 0.08,
+   "n": 363,
+   "net_pct": -0.286
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high250",
+   "regime": "深跌(dd<-20%)",
+   "quadrant": "强+资金低",
+   "excess_pct": -0.08,
+   "nw_t": -0.51,
+   "n": 363,
+   "net_pct": -0.38
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high250",
+   "regime": "深跌(dd<-20%)",
+   "quadrant": "弱+资金高",
+   "excess_pct": 0.151,
+   "nw_t": 0.69,
+   "n": 363,
+   "net_pct": -0.149
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high250",
+   "regime": "深跌(dd<-20%)",
+   "quadrant": "弱+资金低",
+   "excess_pct": -0.086,
+   "nw_t": -0.35,
+   "n": 363,
+   "net_pct": -0.386
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high250",
+   "regime": "中度(-20~-10%)",
+   "quadrant": "强+资金高",
+   "excess_pct": -0.111,
+   "nw_t": -0.96,
+   "n": 607,
+   "net_pct": -0.411
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high250",
+   "regime": "中度(-20~-10%)",
+   "quadrant": "强+资金低",
+   "excess_pct": -0.063,
+   "nw_t": -0.5,
+   "n": 600,
+   "net_pct": -0.363
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high250",
+   "regime": "中度(-20~-10%)",
+   "quadrant": "弱+资金高",
+   "excess_pct": -0.013,
+   "nw_t": -0.08,
+   "n": 600,
+   "net_pct": -0.313
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high250",
+   "regime": "中度(-20~-10%)",
+   "quadrant": "弱+资金低",
+   "excess_pct": 0.198,
+   "nw_t": 1.58,
+   "n": 606,
+   "net_pct": -0.102
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high250",
+   "regime": "浅回撤(-10~0%)",
+   "quadrant": "强+资金高",
+   "excess_pct": 0.251,
+   "nw_t": 2.87,
+   "n": 1491,
+   "net_pct": -0.049
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high250",
+   "regime": "浅回撤(-10~0%)",
+   "quadrant": "强+资金低",
+   "excess_pct": 0.16,
+   "nw_t": 1.84,
+   "n": 1459,
+   "net_pct": -0.14
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high250",
+   "regime": "浅回撤(-10~0%)",
+   "quadrant": "弱+资金高",
+   "excess_pct": -0.162,
+   "nw_t": -1.63,
+   "n": 1459,
+   "net_pct": -0.462
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high250",
+   "regime": "浅回撤(-10~0%)",
+   "quadrant": "弱+资金低",
+   "excess_pct": -0.263,
+   "nw_t": -2.64,
+   "n": 1489,
+   "net_pct": -0.563
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high250",
+   "regime": "高位(dd>=0)",
+   "quadrant": "强+资金高",
+   "excess_pct": 0.07,
+   "nw_t": 0.47,
+   "n": 297,
+   "net_pct": -0.23
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high250",
+   "regime": "高位(dd>=0)",
+   "quadrant": "强+资金低",
+   "excess_pct": 0.435,
+   "nw_t": 3.07,
+   "n": 294,
+   "net_pct": 0.135
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high250",
+   "regime": "高位(dd>=0)",
+   "quadrant": "弱+资金高",
+   "excess_pct": -0.559,
+   "nw_t": -3.02,
+   "n": 266,
+   "net_pct": -0.859
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high250",
+   "regime": "高位(dd>=0)",
+   "quadrant": "弱+资金低",
+   "excess_pct": -0.141,
+   "nw_t": -0.8,
+   "n": 284,
+   "net_pct": -0.441
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high60",
+   "regime": "深跌(dd<-20%)",
+   "quadrant": "强+资金高",
+   "excess_pct": 0.04,
+   "nw_t": 0.13,
+   "n": 353,
+   "net_pct": -0.26
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high60",
+   "regime": "深跌(dd<-20%)",
+   "quadrant": "强+资金低",
+   "excess_pct": -0.519,
+   "nw_t": -2.0,
+   "n": 351,
+   "net_pct": -0.819
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high60",
+   "regime": "深跌(dd<-20%)",
+   "quadrant": "弱+资金高",
+   "excess_pct": 0.662,
+   "nw_t": 2.49,
+   "n": 348,
+   "net_pct": 0.362
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high60",
+   "regime": "深跌(dd<-20%)",
+   "quadrant": "弱+资金低",
+   "excess_pct": -0.125,
+   "nw_t": -0.37,
+   "n": 351,
+   "net_pct": -0.425
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high60",
+   "regime": "中度(-20~-10%)",
+   "quadrant": "强+资金高",
+   "excess_pct": -0.152,
+   "nw_t": -0.85,
+   "n": 607,
+   "net_pct": -0.452
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high60",
+   "regime": "中度(-20~-10%)",
+   "quadrant": "强+资金低",
+   "excess_pct": 0.111,
+   "nw_t": 0.62,
+   "n": 597,
+   "net_pct": -0.189
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high60",
+   "regime": "中度(-20~-10%)",
+   "quadrant": "弱+资金高",
+   "excess_pct": -0.195,
+   "nw_t": -0.84,
+   "n": 596,
+   "net_pct": -0.495
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high60",
+   "regime": "中度(-20~-10%)",
+   "quadrant": "弱+资金低",
+   "excess_pct": 0.221,
+   "nw_t": 1.08,
+   "n": 607,
+   "net_pct": -0.079
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high60",
+   "regime": "浅回撤(-10~0%)",
+   "quadrant": "强+资金高",
+   "excess_pct": 0.365,
+   "nw_t": 2.56,
+   "n": 1491,
+   "net_pct": 0.065
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high60",
+   "regime": "浅回撤(-10~0%)",
+   "quadrant": "强+资金低",
+   "excess_pct": 0.058,
+   "nw_t": 0.41,
+   "n": 1447,
+   "net_pct": -0.242
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high60",
+   "regime": "浅回撤(-10~0%)",
+   "quadrant": "弱+资金高",
+   "excess_pct": -0.209,
+   "nw_t": -1.17,
+   "n": 1434,
+   "net_pct": -0.509
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high60",
+   "regime": "浅回撤(-10~0%)",
+   "quadrant": "弱+资金低",
+   "excess_pct": -0.279,
+   "nw_t": -1.65,
+   "n": 1490,
+   "net_pct": -0.579
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high60",
+   "regime": "高位(dd>=0)",
+   "quadrant": "强+资金高",
+   "excess_pct": 0.173,
+   "nw_t": 0.88,
+   "n": 297,
+   "net_pct": -0.127
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high60",
+   "regime": "高位(dd>=0)",
+   "quadrant": "强+资金低",
+   "excess_pct": 0.574,
+   "nw_t": 2.6,
+   "n": 294,
+   "net_pct": 0.274
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high60",
+   "regime": "高位(dd>=0)",
+   "quadrant": "弱+资金高",
+   "excess_pct": -1.234,
+   "nw_t": -2.88,
+   "n": 215,
+   "net_pct": -1.534
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high60",
+   "regime": "高位(dd>=0)",
+   "quadrant": "弱+资金低",
+   "excess_pct": -0.388,
+   "nw_t": -1.37,
+   "n": 270,
+   "net_pct": -0.688
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high250",
+   "regime": "深跌(dd<-20%)",
+   "quadrant": "强+资金高",
+   "excess_pct": 0.199,
+   "nw_t": 0.63,
+   "n": 353,
+   "net_pct": -0.101
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high250",
+   "regime": "深跌(dd<-20%)",
+   "quadrant": "强+资金低",
+   "excess_pct": -0.381,
+   "nw_t": -2.07,
+   "n": 353,
+   "net_pct": -0.681
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high250",
+   "regime": "深跌(dd<-20%)",
+   "quadrant": "弱+资金高",
+   "excess_pct": 0.328,
+   "nw_t": 1.07,
+   "n": 353,
+   "net_pct": 0.028
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high250",
+   "regime": "深跌(dd<-20%)",
+   "quadrant": "弱+资金低",
+   "excess_pct": -0.146,
+   "nw_t": -0.42,
+   "n": 353,
+   "net_pct": -0.446
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high250",
+   "regime": "中度(-20~-10%)",
+   "quadrant": "强+资金高",
+   "excess_pct": -0.115,
+   "nw_t": -0.66,
+   "n": 607,
+   "net_pct": -0.415
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high250",
+   "regime": "中度(-20~-10%)",
+   "quadrant": "强+资金低",
+   "excess_pct": 0.062,
+   "nw_t": 0.29,
+   "n": 600,
+   "net_pct": -0.238
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high250",
+   "regime": "中度(-20~-10%)",
+   "quadrant": "弱+资金高",
+   "excess_pct": -0.284,
+   "nw_t": -1.21,
+   "n": 600,
+   "net_pct": -0.584
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high250",
+   "regime": "中度(-20~-10%)",
+   "quadrant": "弱+资金低",
+   "excess_pct": 0.284,
+   "nw_t": 1.27,
+   "n": 606,
+   "net_pct": -0.016
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high250",
+   "regime": "浅回撤(-10~0%)",
+   "quadrant": "强+资金高",
+   "excess_pct": 0.373,
+   "nw_t": 2.43,
+   "n": 1491,
+   "net_pct": 0.073
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high250",
+   "regime": "浅回撤(-10~0%)",
+   "quadrant": "强+资金低",
+   "excess_pct": 0.097,
+   "nw_t": 0.68,
+   "n": 1459,
+   "net_pct": -0.203
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high250",
+   "regime": "浅回撤(-10~0%)",
+   "quadrant": "弱+资金高",
+   "excess_pct": -0.268,
+   "nw_t": -1.6,
+   "n": 1459,
+   "net_pct": -0.568
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high250",
+   "regime": "浅回撤(-10~0%)",
+   "quadrant": "弱+资金低",
+   "excess_pct": -0.315,
+   "nw_t": -1.86,
+   "n": 1489,
+   "net_pct": -0.615
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high250",
+   "regime": "高位(dd>=0)",
+   "quadrant": "强+资金高",
+   "excess_pct": 0.152,
+   "nw_t": 0.73,
+   "n": 297,
+   "net_pct": -0.148
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high250",
+   "regime": "高位(dd>=0)",
+   "quadrant": "强+资金低",
+   "excess_pct": 0.469,
+   "nw_t": 2.05,
+   "n": 294,
+   "net_pct": 0.169
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high250",
+   "regime": "高位(dd>=0)",
+   "quadrant": "弱+资金高",
+   "excess_pct": -0.918,
+   "nw_t": -2.35,
+   "n": 266,
+   "net_pct": -1.218
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high250",
+   "regime": "高位(dd>=0)",
+   "quadrant": "弱+资金低",
+   "excess_pct": -0.207,
+   "nw_t": -0.76,
+   "n": 284,
+   "net_pct": -0.507
+  }
+ ],
+ "flow_only": [
+  {
+   "horizon": 10,
+   "feature": "dist_high60",
+   "regime": "深跌(dd<-20%)",
+   "group": "资金高",
+   "excess_pct": 0.095,
+   "nw_t": 1.0,
+   "n": 363
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high60",
+   "regime": "深跌(dd<-20%)",
+   "group": "资金低",
+   "excess_pct": -0.112,
+   "nw_t": -1.06,
+   "n": 363
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high60",
+   "regime": "中度(-20~-10%)",
+   "group": "资金高",
+   "excess_pct": -0.09,
+   "nw_t": -1.2,
+   "n": 607
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high60",
+   "regime": "中度(-20~-10%)",
+   "group": "资金低",
+   "excess_pct": 0.098,
+   "nw_t": 1.2,
+   "n": 607
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high60",
+   "regime": "浅回撤(-10~0%)",
+   "group": "资金高",
+   "excess_pct": 0.103,
+   "nw_t": 1.72,
+   "n": 1491
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high60",
+   "regime": "浅回撤(-10~0%)",
+   "group": "资金低",
+   "excess_pct": -0.112,
+   "nw_t": -1.72,
+   "n": 1491
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high60",
+   "regime": "高位(dd>=0)",
+   "group": "资金高",
+   "excess_pct": -0.157,
+   "nw_t": -1.54,
+   "n": 297
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high60",
+   "regime": "高位(dd>=0)",
+   "group": "资金低",
+   "excess_pct": 0.171,
+   "nw_t": 1.54,
+   "n": 297
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high250",
+   "regime": "深跌(dd<-20%)",
+   "group": "资金高",
+   "excess_pct": 0.095,
+   "nw_t": 1.0,
+   "n": 363
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high250",
+   "regime": "深跌(dd<-20%)",
+   "group": "资金低",
+   "excess_pct": -0.112,
+   "nw_t": -1.06,
+   "n": 363
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high250",
+   "regime": "中度(-20~-10%)",
+   "group": "资金高",
+   "excess_pct": -0.09,
+   "nw_t": -1.2,
+   "n": 607
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high250",
+   "regime": "中度(-20~-10%)",
+   "group": "资金低",
+   "excess_pct": 0.098,
+   "nw_t": 1.2,
+   "n": 607
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high250",
+   "regime": "浅回撤(-10~0%)",
+   "group": "资金高",
+   "excess_pct": 0.103,
+   "nw_t": 1.72,
+   "n": 1491
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high250",
+   "regime": "浅回撤(-10~0%)",
+   "group": "资金低",
+   "excess_pct": -0.112,
+   "nw_t": -1.72,
+   "n": 1491
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high250",
+   "regime": "高位(dd>=0)",
+   "group": "资金高",
+   "excess_pct": -0.157,
+   "nw_t": -1.54,
+   "n": 297
+  },
+  {
+   "horizon": 10,
+   "feature": "dist_high250",
+   "regime": "高位(dd>=0)",
+   "group": "资金低",
+   "excess_pct": 0.171,
+   "nw_t": 1.54,
+   "n": 297
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high60",
+   "regime": "深跌(dd<-20%)",
+   "group": "资金高",
+   "excess_pct": 0.273,
+   "nw_t": 1.62,
+   "n": 353
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high60",
+   "regime": "深跌(dd<-20%)",
+   "group": "资金低",
+   "excess_pct": -0.3,
+   "nw_t": -1.63,
+   "n": 353
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high60",
+   "regime": "中度(-20~-10%)",
+   "group": "资金高",
+   "excess_pct": -0.184,
+   "nw_t": -1.77,
+   "n": 607
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high60",
+   "regime": "中度(-20~-10%)",
+   "group": "资金低",
+   "excess_pct": 0.201,
+   "nw_t": 1.77,
+   "n": 607
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high60",
+   "regime": "浅回撤(-10~0%)",
+   "group": "资金高",
+   "excess_pct": 0.157,
+   "nw_t": 1.47,
+   "n": 1491
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high60",
+   "regime": "浅回撤(-10~0%)",
+   "group": "资金低",
+   "excess_pct": -0.171,
+   "nw_t": -1.47,
+   "n": 1491
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high60",
+   "regime": "高位(dd>=0)",
+   "group": "资金高",
+   "excess_pct": -0.166,
+   "nw_t": -1.34,
+   "n": 297
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high60",
+   "regime": "高位(dd>=0)",
+   "group": "资金低",
+   "excess_pct": 0.181,
+   "nw_t": 1.34,
+   "n": 297
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high250",
+   "regime": "深跌(dd<-20%)",
+   "group": "资金高",
+   "excess_pct": 0.273,
+   "nw_t": 1.62,
+   "n": 353
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high250",
+   "regime": "深跌(dd<-20%)",
+   "group": "资金低",
+   "excess_pct": -0.3,
+   "nw_t": -1.63,
+   "n": 353
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high250",
+   "regime": "中度(-20~-10%)",
+   "group": "资金高",
+   "excess_pct": -0.184,
+   "nw_t": -1.77,
+   "n": 607
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high250",
+   "regime": "中度(-20~-10%)",
+   "group": "资金低",
+   "excess_pct": 0.201,
+   "nw_t": 1.77,
+   "n": 607
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high250",
+   "regime": "浅回撤(-10~0%)",
+   "group": "资金高",
+   "excess_pct": 0.157,
+   "nw_t": 1.47,
+   "n": 1491
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high250",
+   "regime": "浅回撤(-10~0%)",
+   "group": "资金低",
+   "excess_pct": -0.171,
+   "nw_t": -1.47,
+   "n": 1491
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high250",
+   "regime": "高位(dd>=0)",
+   "group": "资金高",
+   "excess_pct": -0.166,
+   "nw_t": -1.34,
+   "n": 297
+  },
+  {
+   "horizon": 20,
+   "feature": "dist_high250",
+   "regime": "高位(dd>=0)",
+   "group": "资金低",
+   "excess_pct": 0.181,
+   "nw_t": 1.34,
+   "n": 297
+  }
+ ]
+}

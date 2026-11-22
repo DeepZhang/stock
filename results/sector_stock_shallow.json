@@ -1,0 +1,365 @@
+{
+ "cost_round_trip_pct": 0.3,
+ "rows": [
+  {
+   "horizon": 10,
+   "regime": "浅回撤(-10~0%)",
+   "bucket": "最弱",
+   "bucket_idx": 0,
+   "excess_pct": -0.213,
+   "nw_t": -1.92,
+   "n": 1491,
+   "net_pct": -0.513
+  },
+  {
+   "horizon": 10,
+   "regime": "浅回撤(-10~0%)",
+   "bucket": "第2档",
+   "bucket_idx": 1,
+   "excess_pct": -0.136,
+   "nw_t": -1.61,
+   "n": 1491,
+   "net_pct": -0.436
+  },
+  {
+   "horizon": 10,
+   "regime": "浅回撤(-10~0%)",
+   "bucket": "第3档",
+   "bucket_idx": 2,
+   "excess_pct": -0.057,
+   "nw_t": -0.82,
+   "n": 1491,
+   "net_pct": -0.357
+  },
+  {
+   "horizon": 10,
+   "regime": "浅回撤(-10~0%)",
+   "bucket": "第4档",
+   "bucket_idx": 3,
+   "excess_pct": 0.094,
+   "nw_t": 1.39,
+   "n": 1491,
+   "net_pct": -0.206
+  },
+  {
+   "horizon": 10,
+   "regime": "浅回撤(-10~0%)",
+   "bucket": "最强",
+   "bucket_idx": 4,
+   "excess_pct": 0.312,
+   "nw_t": 2.46,
+   "n": 1491,
+   "net_pct": 0.012
+  },
+  {
+   "horizon": 10,
+   "regime": "浅回撤(-10~0%)",
+   "bucket": "最强-最弱",
+   "bucket_idx": 99,
+   "excess_pct": 0.524,
+   "nw_t": 2.51,
+   "n": 1491,
+   "net_pct": null
+  },
+  {
+   "horizon": 10,
+   "regime": "深跌(dd<-20%)",
+   "bucket": "最弱",
+   "bucket_idx": 0,
+   "excess_pct": -0.038,
+   "nw_t": -0.18,
+   "n": 363,
+   "net_pct": -0.338
+  },
+  {
+   "horizon": 10,
+   "regime": "深跌(dd<-20%)",
+   "bucket": "第2档",
+   "bucket_idx": 1,
+   "excess_pct": 0.201,
+   "nw_t": 1.4,
+   "n": 363,
+   "net_pct": -0.099
+  },
+  {
+   "horizon": 10,
+   "regime": "深跌(dd<-20%)",
+   "bucket": "第3档",
+   "bucket_idx": 2,
+   "excess_pct": 0.428,
+   "nw_t": 2.71,
+   "n": 363,
+   "net_pct": 0.128
+  },
+  {
+   "horizon": 10,
+   "regime": "深跌(dd<-20%)",
+   "bucket": "第4档",
+   "bucket_idx": 3,
+   "excess_pct": 0.103,
+   "nw_t": 0.56,
+   "n": 363,
+   "net_pct": -0.197
+  },
+  {
+   "horizon": 10,
+   "regime": "深跌(dd<-20%)",
+   "bucket": "最强",
+   "bucket_idx": 4,
+   "excess_pct": -0.691,
+   "nw_t": -2.38,
+   "n": 363,
+   "net_pct": -0.991
+  },
+  {
+   "horizon": 10,
+   "regime": "深跌(dd<-20%)",
+   "bucket": "最强-最弱",
+   "bucket_idx": 99,
+   "excess_pct": -0.653,
+   "nw_t": -1.49,
+   "n": 363,
+   "net_pct": null
+  },
+  {
+   "horizon": 10,
+   "regime": "中度(-20~-10%)",
+   "bucket": "最弱",
+   "bucket_idx": 0,
+   "excess_pct": 0.283,
+   "nw_t": 1.77,
+   "n": 607,
+   "net_pct": -0.017
+  },
+  {
+   "horizon": 10,
+   "regime": "中度(-20~-10%)",
+   "bucket": "第2档",
+   "bucket_idx": 1,
+   "excess_pct": 0.04,
+   "nw_t": 0.33,
+   "n": 607,
+   "net_pct": -0.26
+  },
+  {
+   "horizon": 10,
+   "regime": "中度(-20~-10%)",
+   "bucket": "第3档",
+   "bucket_idx": 2,
+   "excess_pct": 0.044,
+   "nw_t": 0.39,
+   "n": 607,
+   "net_pct": -0.256
+  },
+  {
+   "horizon": 10,
+   "regime": "中度(-20~-10%)",
+   "bucket": "第4档",
+   "bucket_idx": 3,
+   "excess_pct": -0.016,
+   "nw_t": -0.15,
+   "n": 607,
+   "net_pct": -0.316
+  },
+  {
+   "horizon": 10,
+   "regime": "中度(-20~-10%)",
+   "bucket": "最强",
+   "bucket_idx": 4,
+   "excess_pct": -0.352,
+   "nw_t": -2.02,
+   "n": 607,
+   "net_pct": -0.652
+  },
+  {
+   "horizon": 10,
+   "regime": "中度(-20~-10%)",
+   "bucket": "最强-最弱",
+   "bucket_idx": 99,
+   "excess_pct": -0.636,
+   "nw_t": -2.1,
+   "n": 607,
+   "net_pct": null
+  },
+  {
+   "horizon": 20,
+   "regime": "浅回撤(-10~0%)",
+   "bucket": "最弱",
+   "bucket_idx": 0,
+   "excess_pct": -0.279,
+   "nw_t": -1.32,
+   "n": 1491,
+   "net_pct": -0.579
+  },
+  {
+   "horizon": 20,
+   "regime": "浅回撤(-10~0%)",
+   "bucket": "第2档",
+   "bucket_idx": 1,
+   "excess_pct": -0.13,
+   "nw_t": -0.93,
+   "n": 1491,
+   "net_pct": -0.43
+  },
+  {
+   "horizon": 20,
+   "regime": "浅回撤(-10~0%)",
+   "bucket": "第3档",
+   "bucket_idx": 2,
+   "excess_pct": -0.038,
+   "nw_t": -0.36,
+   "n": 1491,
+   "net_pct": -0.338
+  },
+  {
+   "horizon": 20,
+   "regime": "浅回撤(-10~0%)",
+   "bucket": "第4档",
+   "bucket_idx": 3,
+   "excess_pct": 0.052,
+   "nw_t": 0.44,
+   "n": 1491,
+   "net_pct": -0.248
+  },
+  {
+   "horizon": 20,
+   "regime": "浅回撤(-10~0%)",
+   "bucket": "最强",
+   "bucket_idx": 4,
+   "excess_pct": 0.394,
+   "nw_t": 1.78,
+   "n": 1491,
+   "net_pct": 0.094
+  },
+  {
+   "horizon": 20,
+   "regime": "浅回撤(-10~0%)",
+   "bucket": "最强-最弱",
+   "bucket_idx": 99,
+   "excess_pct": 0.673,
+   "nw_t": 1.72,
+   "n": 1491,
+   "net_pct": null
+  },
+  {
+   "horizon": 20,
+   "regime": "深跌(dd<-20%)",
+   "bucket": "最弱",
+   "bucket_idx": 0,
+   "excess_pct": 0.079,
+   "nw_t": 0.24,
+   "n": 353,
+   "net_pct": -0.221
+  },
+  {
+   "horizon": 20,
+   "regime": "深跌(dd<-20%)",
+   "bucket": "第2档",
+   "bucket_idx": 1,
+   "excess_pct": 0.246,
+   "nw_t": 1.2,
+   "n": 353,
+   "net_pct": -0.054
+  },
+  {
+   "horizon": 20,
+   "regime": "深跌(dd<-20%)",
+   "bucket": "第3档",
+   "bucket_idx": 2,
+   "excess_pct": 0.4,
+   "nw_t": 2.05,
+   "n": 353,
+   "net_pct": 0.1
+  },
+  {
+   "horizon": 20,
+   "regime": "深跌(dd<-20%)",
+   "bucket": "第4档",
+   "bucket_idx": 3,
+   "excess_pct": 0.155,
+   "nw_t": 0.51,
+   "n": 353,
+   "net_pct": -0.145
+  },
+  {
+   "horizon": 20,
+   "regime": "深跌(dd<-20%)",
+   "bucket": "最强",
+   "bucket_idx": 4,
+   "excess_pct": -0.877,
+   "nw_t": -1.72,
+   "n": 353,
+   "net_pct": -1.177
+  },
+  {
+   "horizon": 20,
+   "regime": "深跌(dd<-20%)",
+   "bucket": "最强-最弱",
+   "bucket_idx": 99,
+   "excess_pct": -0.957,
+   "nw_t": -1.25,
+   "n": 353,
+   "net_pct": null
+  },
+  {
+   "horizon": 20,
+   "regime": "中度(-20~-10%)",
+   "bucket": "最弱",
+   "bucket_idx": 0,
+   "excess_pct": 0.262,
+   "nw_t": 0.88,
+   "n": 607,
+   "net_pct": -0.038
+  },
+  {
+   "horizon": 20,
+   "regime": "中度(-20~-10%)",
+   "bucket": "第2档",
+   "bucket_idx": 1,
+   "excess_pct": 0.038,
+   "nw_t": 0.2,
+   "n": 607,
+   "net_pct": -0.262
+  },
+  {
+   "horizon": 20,
+   "regime": "中度(-20~-10%)",
+   "bucket": "第3档",
+   "bucket_idx": 2,
+   "excess_pct": 0.1,
+   "nw_t": 0.53,
+   "n": 607,
+   "net_pct": -0.2
+  },
+  {
+   "horizon": 20,
+   "regime": "中度(-20~-10%)",
+   "bucket": "第4档",
+   "bucket_idx": 3,
+   "excess_pct": 0.021,
+   "nw_t": 0.11,
+   "n": 607,
+   "net_pct": -0.279
+  },
+  {
+   "horizon": 20,
+   "regime": "中度(-20~-10%)",
+   "bucket": "最强",
+   "bucket_idx": 4,
+   "excess_pct": -0.42,
+   "nw_t": -1.49,
+   "n": 607,
+   "net_pct": -0.72
+  },
+  {
+   "horizon": 20,
+   "regime": "中度(-20~-10%)",
+   "bucket": "最强-最弱",
+   "bucket_idx": 99,
+   "excess_pct": -0.682,
+   "nw_t": -1.36,
+   "n": 607,
+   "net_pct": null
+  }
+ ]
+}

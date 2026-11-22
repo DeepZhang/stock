@@ -1,0 +1,293 @@
+{
+ "cost_round_trip_pct": 0.3,
+ "rows": [
+  {
+   "horizon": 10,
+   "regime": "深跌(dd<-20%)",
+   "variant": "A 个股信号单独",
+   "excess_pct": 1.157,
+   "nw_t": 2.02,
+   "n": 358,
+   "net_pct": 0.857
+  },
+  {
+   "horizon": 10,
+   "regime": "深跌(dd<-20%)",
+   "variant": "B ∩ 板块强",
+   "excess_pct": 0.986,
+   "nw_t": 2.33,
+   "n": 316,
+   "net_pct": 0.686
+  },
+  {
+   "horizon": 10,
+   "regime": "深跌(dd<-20%)",
+   "variant": "C ∩ 板块弱",
+   "excess_pct": 0.962,
+   "nw_t": 1.85,
+   "n": 357,
+   "net_pct": 0.662
+  },
+  {
+   "horizon": 10,
+   "regime": "深跌(dd<-20%)",
+   "variant": "D ∩ 板块资金高",
+   "excess_pct": 1.779,
+   "nw_t": 3.98,
+   "n": 331,
+   "net_pct": 1.479
+  },
+  {
+   "horizon": 10,
+   "regime": "中度(-20~-10%)",
+   "variant": "A 个股信号单独",
+   "excess_pct": -0.102,
+   "nw_t": -0.32,
+   "n": 607,
+   "net_pct": -0.402
+  },
+  {
+   "horizon": 10,
+   "regime": "中度(-20~-10%)",
+   "variant": "B ∩ 板块强",
+   "excess_pct": -0.349,
+   "nw_t": -1.07,
+   "n": 525,
+   "net_pct": -0.649
+  },
+  {
+   "horizon": 10,
+   "regime": "中度(-20~-10%)",
+   "variant": "C ∩ 板块弱",
+   "excess_pct": -0.006,
+   "nw_t": -0.02,
+   "n": 601,
+   "net_pct": -0.306
+  },
+  {
+   "horizon": 10,
+   "regime": "中度(-20~-10%)",
+   "variant": "D ∩ 板块资金高",
+   "excess_pct": 0.094,
+   "nw_t": 0.27,
+   "n": 556,
+   "net_pct": -0.206
+  },
+  {
+   "horizon": 10,
+   "regime": "浅回撤(-10~0%)",
+   "variant": "A 个股信号单独",
+   "excess_pct": -1.081,
+   "nw_t": -5.94,
+   "n": 1491,
+   "net_pct": -1.381
+  },
+  {
+   "horizon": 10,
+   "regime": "浅回撤(-10~0%)",
+   "variant": "B ∩ 板块强",
+   "excess_pct": -0.696,
+   "nw_t": -3.05,
+   "n": 1441,
+   "net_pct": -0.996
+  },
+  {
+   "horizon": 10,
+   "regime": "浅回撤(-10~0%)",
+   "variant": "C ∩ 板块弱",
+   "excess_pct": -0.895,
+   "nw_t": -4.38,
+   "n": 1491,
+   "net_pct": -1.195
+  },
+  {
+   "horizon": 10,
+   "regime": "浅回撤(-10~0%)",
+   "variant": "D ∩ 板块资金高",
+   "excess_pct": -0.695,
+   "nw_t": -3.14,
+   "n": 1442,
+   "net_pct": -0.995
+  },
+  {
+   "horizon": 10,
+   "regime": "高位(dd>=0)",
+   "variant": "A 个股信号单独",
+   "excess_pct": -1.518,
+   "nw_t": -7.47,
+   "n": 297,
+   "net_pct": -1.818
+  },
+  {
+   "horizon": 10,
+   "regime": "高位(dd>=0)",
+   "variant": "B ∩ 板块强",
+   "excess_pct": -1.282,
+   "nw_t": -5.43,
+   "n": 296,
+   "net_pct": -1.582
+  },
+  {
+   "horizon": 10,
+   "regime": "高位(dd>=0)",
+   "variant": "C ∩ 板块弱",
+   "excess_pct": -1.593,
+   "nw_t": -7.32,
+   "n": 296,
+   "net_pct": -1.893
+  },
+  {
+   "horizon": 10,
+   "regime": "高位(dd>=0)",
+   "variant": "D ∩ 板块资金高",
+   "excess_pct": -1.294,
+   "nw_t": -5.39,
+   "n": 296,
+   "net_pct": -1.594
+  },
+  {
+   "horizon": 20,
+   "regime": "深跌(dd<-20%)",
+   "variant": "A 个股信号单独",
+   "excess_pct": 1.226,
+   "nw_t": 1.36,
+   "n": 330,
+   "net_pct": 0.926
+  },
+  {
+   "horizon": 20,
+   "regime": "深跌(dd<-20%)",
+   "variant": "B ∩ 板块强",
+   "excess_pct": -0.095,
+   "nw_t": -0.12,
+   "n": 285,
+   "net_pct": -0.395
+  },
+  {
+   "horizon": 20,
+   "regime": "深跌(dd<-20%)",
+   "variant": "C ∩ 板块弱",
+   "excess_pct": 1.24,
+   "nw_t": 1.17,
+   "n": 328,
+   "net_pct": 0.94
+  },
+  {
+   "horizon": 20,
+   "regime": "深跌(dd<-20%)",
+   "variant": "D ∩ 板块资金高",
+   "excess_pct": 2.043,
+   "nw_t": 2.53,
+   "n": 300,
+   "net_pct": 1.743
+  },
+  {
+   "horizon": 20,
+   "regime": "中度(-20~-10%)",
+   "variant": "A 个股信号单独",
+   "excess_pct": -0.968,
+   "nw_t": -1.69,
+   "n": 575,
+   "net_pct": -1.268
+  },
+  {
+   "horizon": 20,
+   "regime": "中度(-20~-10%)",
+   "variant": "B ∩ 板块强",
+   "excess_pct": -1.113,
+   "nw_t": -1.96,
+   "n": 489,
+   "net_pct": -1.413
+  },
+  {
+   "horizon": 20,
+   "regime": "中度(-20~-10%)",
+   "variant": "C ∩ 板块弱",
+   "excess_pct": -0.773,
+   "nw_t": -1.08,
+   "n": 567,
+   "net_pct": -1.073
+  },
+  {
+   "horizon": 20,
+   "regime": "中度(-20~-10%)",
+   "variant": "D ∩ 板块资金高",
+   "excess_pct": -1.071,
+   "nw_t": -1.53,
+   "n": 522,
+   "net_pct": -1.371
+  },
+  {
+   "horizon": 20,
+   "regime": "浅回撤(-10~0%)",
+   "variant": "A 个股信号单独",
+   "excess_pct": -2.142,
+   "nw_t": -7.06,
+   "n": 1491,
+   "net_pct": -2.442
+  },
+  {
+   "horizon": 20,
+   "regime": "浅回撤(-10~0%)",
+   "variant": "B ∩ 板块强",
+   "excess_pct": -1.845,
+   "nw_t": -5.01,
+   "n": 1405,
+   "net_pct": -2.145
+  },
+  {
+   "horizon": 20,
+   "regime": "浅回撤(-10~0%)",
+   "variant": "C ∩ 板块弱",
+   "excess_pct": -2.072,
+   "nw_t": -5.59,
+   "n": 1487,
+   "net_pct": -2.372
+  },
+  {
+   "horizon": 20,
+   "regime": "浅回撤(-10~0%)",
+   "variant": "D ∩ 板块资金高",
+   "excess_pct": -1.774,
+   "nw_t": -5.14,
+   "n": 1417,
+   "net_pct": -2.074
+  },
+  {
+   "horizon": 20,
+   "regime": "高位(dd>=0)",
+   "variant": "A 个股信号单独",
+   "excess_pct": -2.46,
+   "nw_t": -7.53,
+   "n": 297,
+   "net_pct": -2.76
+  },
+  {
+   "horizon": 20,
+   "regime": "高位(dd>=0)",
+   "variant": "B ∩ 板块强",
+   "excess_pct": -2.239,
+   "nw_t": -6.34,
+   "n": 296,
+   "net_pct": -2.539
+  },
+  {
+   "horizon": 20,
+   "regime": "高位(dd>=0)",
+   "variant": "C ∩ 板块弱",
+   "excess_pct": -2.8,
+   "nw_t": -7.16,
+   "n": 296,
+   "net_pct": -3.1
+  },
+  {
+   "horizon": 20,
+   "regime": "高位(dd>=0)",
+   "variant": "D ∩ 板块资金高",
+   "excess_pct": -2.753,
+   "nw_t": -6.06,
+   "n": 288,
+   "net_pct": -3.053
+  }
+ ]
+}
