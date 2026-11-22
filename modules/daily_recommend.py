@@ -42,6 +42,12 @@ LIMIT_UP_GAP = 0.093     # T+1 开盘涨幅超过此值视为买不到（涨停/
 HOLD_DAYS = 10           # 回测最优持有期
 STOP_LOSS = -0.08        # 提示用的止损位
 
+# 只加载每只股票的尾部若干根 bar。最长窗口是市场净值的 750 根滚动分位，
+# 它需要 250 根回撤预热 + 750 根样本 = 999 根才能填满，取 1050 留余量。
+# 实测 1050 根与全历史 2887 根的所有输出完全一致（回撤分位亦对齐）；
+# 全历史在 1.8G 内存的线上会被 OOM 杀掉。
+TAIL_BARS = 1050
+
 # 状态 -> 打法。usable=False 时不给个股推荐，只给规避提示。
 REGIME_PLAYBOOK = {
     "deep_drawdown": {
@@ -82,8 +88,17 @@ _cache = {}
 
 # ---------------------------------------------------------------- 数据装载
 
-def _read_all(limit=None):
-    """读取全部个股日线，返回 close/amount/open 三张对齐矩阵。"""
+def _read_all(limit=None, tail_bars=None, with_open=False):
+    """读取全部个股日线，返回 close/amount（可选 open）三张对齐矩阵。
+
+    tail_bars 只保留每只股票最后 N 根 bar。全历史约 2887 根，而本模块最长
+    的窗口是市场净值的 750 根滚动分位（250 根回撤窗口 + 分位样本），
+    再多读纯属浪费内存。线上 1.8G 内存加载全历史会被 OOM 杀掉，
+    限制尾部后内存稳定在三分之一以内，指标口径不变。
+
+    with_open 默认 False：open 矩阵原本每次都会构建却从未被读取，
+    白占约三分之一的峰值内存，改为按需构建。
+    """
     import sys
     sys.path.insert(0, os.path.join(BASE_DIR, "modules"))
     from price_clean import load_clean
@@ -97,15 +112,18 @@ def _read_all(limit=None):
         d, _ = load_clean(os.path.join(HIST_DIR, fn))
         if d is None or len(d) < 80:
             continue
+        if tail_bars:
+            d = d.iloc[-tail_bars:]
         idx = pd.DatetimeIndex(d["date"])
         close[code] = pd.Series(d["close"].values, index=idx)
         if "amount" in d.columns:
             amount[code] = pd.Series(d["amount"].values, index=idx)
-        if "open" in d.columns:
+        if with_open and "open" in d.columns:
             opn[code] = pd.Series(d["open"].values, index=idx)
     CL = pd.DataFrame(close).sort_index()
     AM = pd.DataFrame(amount).sort_index().reindex(index=CL.index, columns=CL.columns)
-    OP = pd.DataFrame(opn).sort_index().reindex(index=CL.index, columns=CL.columns)
+    OP = (pd.DataFrame(opn).sort_index().reindex(index=CL.index, columns=CL.columns)
+          if with_open else None)
     return CL, AM, OP
 
 
@@ -323,7 +341,7 @@ def sector_fund_flow(CL_sector):
 def build(force=False):
     """构建每日复盘结论。带进程内缓存，按交易日缓存。"""
     with _lock:
-        CL, AM, OP = _read_all()
+        CL, AM, OP = _read_all(tail_bars=TAIL_BARS)
         if CL.empty:
             return {"error": "no_history", "date": None}
 
