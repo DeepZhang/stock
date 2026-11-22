@@ -96,6 +96,16 @@ REGIME_PLAYBOOK = {
 _lock = threading.Lock()
 _cache = {}
 
+# 落盘缓存：进程内缓存重启即失效，而线上 1.8G 内存下完整构建一次要读
+# 5478 只 parquet、峰值约 950MB、耗时约 60 秒。若服务在开盘前重启
+# （OOM 或部署），早上第一次打开页面就要干等一分钟。
+#
+# 失效判据用**数据自身的指纹**而非墙钟时间：历史 parquet 与板块指数由
+# 不同脚本按需拉取（实测 parquet 停在 11-20、指数在 11-22），拿当天日期
+# 做判据会把旧行情当成新数据。因此校验两个目录的指纹（文件数 + 最新
+# mtime）是否变化，任一变化即重建——宁可慢一次，也不给出过期结论。
+DISK_CACHE = os.path.join(CACHE_DIR, "daily_recommend.json")
+
 
 # ---------------------------------------------------------------- 数据装载
 
@@ -472,12 +482,95 @@ def build(force=False):
         }
 
 
+def _dir_fingerprint(path):
+    """目录指纹：parquet/json 文件数 + 最新 mtime。
+
+    数据是按需拉取的，用最新 mtime 能捕捉到「又拉了一批」，
+    用文件数能捕捉到「新增了标的」。两者都很便宜（只 stat 不读内容）。
+    """
+    if not os.path.isdir(path):
+        return [0, 0]
+    count, newest = 0, 0
+    for fn in os.listdir(path):
+        if not (fn.endswith(".parquet") or fn.endswith(".json")):
+            continue
+        try:
+            m = os.path.getmtime(os.path.join(path, fn))
+        except OSError:
+            continue
+        count += 1
+        if m > newest:
+            newest = m
+    return [count, round(newest, 3)]
+
+
+def _load_disk_cache():
+    """读落盘缓存；不存在、损坏或指纹不匹配时返回 None。"""
+    if not os.path.exists(DISK_CACHE):
+        return None
+    try:
+        with open(DISK_CACHE, encoding="utf-8") as f:
+            blob = json.load(f)
+    except Exception:
+        return None
+    if not isinstance(blob, dict) or "data" not in blob:
+        return None
+    fp = blob.get("fingerprint") or {}
+    if fp.get("history") != _dir_fingerprint(HIST_DIR):
+        return None
+    if fp.get("index") != _dir_fingerprint(IDX_DIR):
+        return None
+    data = blob["data"]
+    if not isinstance(data, dict) or data.get("error"):
+        return None
+    return data
+
+
+def _save_disk_cache(data):
+    """原子写落盘缓存，避免读到写了一半的文件。"""
+    if not isinstance(data, dict) or data.get("error") or not data.get("date"):
+        return
+    blob = {
+        "data": data,
+        "fingerprint": {
+            "history": _dir_fingerprint(HIST_DIR),
+            "index": _dir_fingerprint(IDX_DIR),
+        },
+    }
+    tmp = "%s.tmp.%d" % (DISK_CACHE, os.getpid())
+    try:
+        os.makedirs(CACHE_DIR, exist_ok=True)
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(blob, f, ensure_ascii=False)
+        os.replace(tmp, DISK_CACHE)
+    except Exception:
+        # 写缓存失败绝不能影响主流程：删掉半截文件后静默返回，
+        # 下次请求会重新构建。
+        try:
+            os.remove(tmp)
+        except Exception:
+            pass
+
+
 def get(force=False):
     key = "daily"
     with _lock:
         if not force and key in _cache:
             return _cache[key]
+
+    # 进程内缓存未命中：先试落盘缓存（重启后也能秒开）。
+    # force=True 表示调用方明确要求重算（如 15:30 定时预热），跳过落盘。
+    if not force:
+        cached = _load_disk_cache()
+        if cached is not None:
+            with _lock:
+                _cache[key] = cached
+            return cached
+
     data = build(force=force)
     with _lock:
         _cache[key] = data
+    # force 只表示「别用旧结果」，新算出来的结果仍要落盘——
+    # 15:30 定时预热走的正是这条路径，不写入就白预热了。
+    _save_disk_cache(data)
     return data
