@@ -182,6 +182,34 @@ def _index_metrics(d):
     }
 
 
+def _fund_flow_last():
+    """板块资金流最新值：近5日均额 / 近20日均额 - 1（%）。
+
+    与 daily_recommend.sector_fund_flow 同一口径（实测两边差值恒为 0：
+    官方板块指数数据干净，clean_frame 不触发打洞）。样本不足 300 行的
+    板块（光纤、电网、固态电池）自动排除，不返回伪造值。
+    """
+    F = _fund_flow_series()
+    return F.iloc[-1].to_dict() if not F.empty else {}
+
+
+def _fund_flow_series():
+    out = {}
+    for name, info in load_members().items():
+        d = _sector_index(info["bk"])
+        if d is None or len(d) < 300:
+            # 与 daily_recommend 同门槛：短历史板块（光纤154行、电网169行、
+            # 固态电池0字节）不参与，避免用薄样本算出的资金值误导
+            continue
+        out[name] = d.set_index("date")["amount"]
+    if not out:
+        return pd.DataFrame()
+    A = pd.DataFrame(out).sort_index()
+    m5 = A.rolling(5, min_periods=3).mean()
+    m20 = A.rolling(20, min_periods=10).mean()
+    return (m5 / m20 - 1) * 100
+
+
 def _percentile(sorted_vals, v):
     """v 在 sorted_vals 中的分位（0~100，越大越强）。"""
     if not len(sorted_vals):
@@ -333,6 +361,7 @@ def build_panel(force=False):
             "name": name,
             "bk": info["bk"],
             "has_index": idxm is not None,
+            "fund": None,
             "strength": strength,
             "breadth": {
                 "label": breadth,
@@ -357,6 +386,21 @@ def build_panel(force=False):
     for i, s in enumerate(sectors, 1):
         s["rank"] = i
 
+    # 资金流：纯观察项，只给数值，不划分强弱档。
+    # 【为什么不分档】板块层的「强势+资金高」已被配对差分否证
+    # （10日 Δ-0.079% t=-0.59，20日 Δ-0.213% t=-0.97），
+    # 在板块页标强弱等于展示一个已知无效的划分。个股超跌池内的
+    # 分档才有证据（+0.626% t=2.56），那套标签留在个股页。
+    flow = _fund_flow_last()
+    fv = [flow[s["name"]] for s in sectors
+          if s["name"] in flow and np.isfinite(flow[s["name"]])]
+    fmed = float(np.median(fv)) if fv else None
+    for s in sectors:
+        v = flow.get(s["name"])
+        s["fund"] = round(float(v), 1) if v is not None and np.isfinite(v) else None
+    # 全市场口径提示：正值板块数 / 有效板块数
+    fpos = sum(1 for x in fv if x > 0)
+
     panel = {
         "generated_at": pd.Timestamp.now().strftime("%Y-%m-%d %H:%M:%S"),
         "as_of": max([s["strength"].get("date") or "" for s in sectors] or [""]),
@@ -379,6 +423,26 @@ def build_panel(force=False):
                       "其余脏 bar 置 NaN 打洞，不删行" % (RET_LIMIT * 100, STRUCT_BARS)),
             "holes": "洞与洞后一根的收益均为 NaN，区间收益遇洞返回 NaN，不跨洞拼接",
             "note": "旧版按整只股票丢弃 125/4370 只，使锂矿概念年化低估 4.39pct",
+        },
+        "fund_factor": {
+            "median": round(fmed, 1) if fmed is not None else None,
+            "n": len(fv),
+            "positive_n": fpos,
+            "no_tag": "板块层不分强弱档（该划分已在配对差分中被否证），只给数值供参考",
+            "field": "fund = 近5日均额 / 近20日均额 - 1（%）",
+            "is_proxy": ("成交额代理变量，非真实主力资金流；无龙虎榜/北向/大单数据"),
+            "evidence": {
+                "scope": "深跌区 · 个股超跌池内 · 按所属板块资金配对差分",
+                "delta_10d_pct": 0.626, "t_10d": 2.56,
+                "delta_20d_pct": 1.435, "t_20d": 2.77,
+                "independent_periods": 27,
+                "split_robust": "30/50/70 分位切分均为正，前/后半样本同向，20日 4/4 独立时段为正",
+            },
+            "at_sector_level": (
+                "板块层「强势+资金高」被否证：配对差分后全持有期不显著且多为负"
+                "（10日 Δ-0.079% t=-0.59；20日 Δ-0.213% t=-0.97）。"
+                "故本列只作观察，不参与板块排序，也不作为买入信号。"
+            ),
         },
     }
 

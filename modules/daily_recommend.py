@@ -14,11 +14,22 @@
      （t=-4.84），是全部测试里最强的反向关系。抗跌票在深跌区系统性跑输。
   3. 板块强度对超跌个股没有加成（强板块 vs 弱板块差 +0.001%，t=0.27）。
      板块只用于「观察 + 规避提示」，不参与个股打分。
-  4. 板块强度×资金的四象限绝对收益全部不显著（最高 t=2.24），
-     因此不按板块择时，只标注资金与强度方向供人工参考。
+  4. **板块资金流在深跌区超跌池内有效**（2026-11 新增，见
+     docs/sector_signal_backtest.md）：池内按所属板块资金高低配对差分，
+     10日 Δ=+0.626%(t=2.56)，20日 Δ=+1.435%(t=2.77)。切分阈值 30/50/70
+     分位都为正，前/后半样本同向，20日 4/4 独立时段为正。
+     资金与强度秩相关 +0.304(t=7.51) 存在共线，但强度分层后资金在弱/中层
+     仍有效（20日 中层 t=3.64）——资金不是强度的代理变量。
+     **限制**：深跌区 353 天仅 27 个独立时段，证据强度按 27 计。
+  5. **板块层「强势 + 资金」不可交易**（本次否证）：先进前25%强势池再按资金
+     分高低配对差分，10日 Δ=-0.079%(t=-0.59)、20日 Δ=-0.213%(t=-0.97)，
+     全部持有期不显著且多为负。2×2 象限表看似「强+资金高」更优，
+     但那是「强/弱」维度的边界效应，配对差分后消失——**页面不得展示
+     未做增量检验的象限表**。
 
 因此本模块的推荐逻辑是单层的：先用市场状态决定「今天该不该出手」，
-再在可交易池里按超跌 + 放量排序。板块强弱单独成栏，明确标注仅供参考。
+再在可交易池里按超跌 + 放量排序；深跌区在此之上叠加板块资金流分档。
+板块强弱单独成栏，明确标注仅供参考。
 """
 import json
 import os
@@ -173,9 +184,22 @@ def market_regime(lvl):
 # ---------------------------------------------------------------- 选股
 
 def pick_pale_stocks(CL, AM, regime, top_n=20):
-    """深跌区选股：20日跌幅最深 + 量比放大。
+    """深跌区选股：20日跌幅最深 + 量比放大 + 所属板块资金流入。
 
-    打分只用两个已在回测中验证为正的维度，不加板块强度（实测 t=0.27 无效）。
+    打分维度（均在回测中验证为正）：
+      1. 20 日跌幅前 10% 成池（主筛）
+      2. 池内按量比排序（已验证 +3.16%/10日）
+      3. 池内板块资金流排序（新增，配对差分验证）
+
+    第 3 项的依据（verify_deep_drawdown_incr.py / verify_flow_robust.py）：
+    在深跌区超跌池内，按个股所属板块资金流高低做配对差分：
+      10日 Δ=+0.626%(t=2.56)，20日 Δ=+1.435%(t=2.77)
+    切分阈值 30/50/70 分位都为正；前/后半样本同向；20日 4/4 独立时段为正。
+    正交化检验（verify_flow_orthogonal.py）：资金与强度秩相关 +0.304(t=7.51)，
+    存在共线，但强度分层后资金在弱/中层仍有效（20日 中层 t=3.64）。
+    板块强度本身在深跌区无效（t=0.27），故只加资金、不加强度。
+
+    样本限制：深跌区 353 个交易日仅来自 27 个独立时段，证据强度按 27 计。
     """
     if regime != "deep_drawdown":
         return [], None
@@ -211,14 +235,30 @@ def pick_pale_stocks(CL, AM, regime, top_n=20):
     if not codes:
         codes = list(pale_rank.nsmallest(min(top_n, len(pale_rank))).index)
 
-    nm = _names()
+    # 所属板块资金流（深跌区超跌池内的有效增量因子，见函数 docstring）
     c2s = _code_sectors()
+    sec_flow = {}
+    try:
+        F = sector_fund_flow_series()
+        if not F.empty:
+            last_f = F.iloc[-1]
+            sec_flow = {k: float(v) for k, v in last_f.items() if v == v}
+    except Exception:
+        sec_flow = {}
+
+    def _stock_flow(code):
+        """个股所属板块资金流的最大值（多板块取最强）。"""
+        v = [sec_flow[s] for s in c2s.get(code, []) if s in sec_flow]
+        return max(v) if v else float("nan")
+
+    nm = _names()
     rows = []
     for c in codes:
         r20 = float(ret20[c])
         vr = float(vol_ratio.get(c, np.nan))
         c_now = float(cl[c].iloc[-1])
         hi60 = float(cl[c].iloc[-60:].max()) if len(cl) > 60 else np.nan
+        sf = _stock_flow(c)
         rows.append({
             "code": c,
             "name": nm.get(c, ""),
@@ -227,15 +267,40 @@ def pick_pale_stocks(CL, AM, regime, top_n=20):
             "ret5": round(float(cl[c].iloc[-1] / cl[c].iloc[-6] - 1) * 100, 2) if len(cl) > 6 else None,
             "dist_high60": round((c_now / hi60 - 1) * 100, 2) if hi60 == hi60 else None,
             "vol_ratio": round(vr, 2) if vr == vr else None,
+            "sector_flow": round(sf, 1) if sf == sf else None,
             "sectors": c2s.get(c, [])[:3],
             "score": round(float(pale_rank[c]) * 100, 1),
         })
-    rows.sort(key=lambda x: (-(x["vol_ratio"] or 0), x["ret20"]))
+
+    # 板块资金流的口径：回测是在「已选出的 top_n 只」内部按资金中位数分高低
+    # 比较（verify_deep_drawdown_incr.py），不是在量比同档之间比较。
+    # 因此保持 top_n 的选取集合不变（不削弱已验证的量比主信号），
+    # 只把资金高的排到前面，并标出哪一半是资金强的一档。
+    flows = [r["sector_flow"] for r in rows if r["sector_flow"] is not None]
+    flow_med = float(np.median(flows)) if flows else None
+    for r in rows:
+        f = r["sector_flow"]
+        r["flow_strong"] = None if (f is None or flow_med is None) else bool(f >= flow_med)
+    if flow_med is not None:
+        # 回测证据只支持「两档之间」的差别（资金强的一半 > 资金弱的一半），
+        # 不支持按资金数值逐只排序。因此先按档位分前后，档内仍按量比——
+        # 量比是已验证的主信号，不能因为资金档位被打乱。
+        rows.sort(key=lambda x: (0 if x.get("flow_strong") else 1,
+                                 -(x["vol_ratio"] or 0)))
     return rows[:top_n], {
+        "flow_median": round(flow_med, 1) if flow_med is not None else None,
+        "flow_strong_n": sum(1 for r in rows if r.get("flow_strong")),
         "pool_size": int(len(pool)),
         "pale_pool": int(len(pool_codes)),
-        "rule": "20日跌幅前10%% 成池，池内按当日成交额/20日均额排序取前%d" % top_n,
+        "rule": ("20日跌幅前10%% 成池，池内按量比取前%d（不变量比主信号），"
+                 "再按所属板块资金流排序，并标出资金强/弱两档" % top_n),
         "backtest": {"mean_10d": 3.16, "t": 2.10, "win_rate": 53.9, "n_days": 337},
+        "flow_factor": {
+            "delta_10d_pct": 0.626, "t_10d": 2.56,
+            "delta_20d_pct": 1.435, "t_20d": 2.77,
+            "note": "深跌区超跌池内，板块资金高低配对差分；20日4/4独立时段为正",
+            "caveat": "27 个独立时段",
+        },
     }
 
 
@@ -302,14 +367,18 @@ def load_sector_close():
     return pd.DataFrame(cols).sort_index()
 
 
-def sector_fund_flow(CL_sector):
-    """资金方向：近5日均额 / 近20日均额。仅作方向提示。"""
+def sector_fund_flow_series():
+    """板块资金流序列：近5日均额 / 近20日均额 - 1（百分比）。
+
+    返回 DataFrame（index=日期, columns=板块名）。只保留行数>=300 的板块，
+    数据不完整的（如光纤154行、电网169行、固态电池0字节）会被自动排除。
+    """
     with open(MEMBERS_FILE, encoding="utf-8") as f:
         raw = json.load(f)
     amt = {}
     for name, v in (raw.get("sectors") or {}).items():
         p = os.path.join(IDX_DIR, "%s.json" % v.get("bk"))
-        if not os.path.exists(p):
+        if not os.path.exists(p) or os.path.getsize(p) == 0:
             continue
         try:
             with open(p, encoding="utf-8") as fh:
@@ -330,10 +399,20 @@ def sector_fund_flow(CL_sector):
         idx = pd.DatetimeIndex([r[0] for r in rows])
         amt[name] = pd.Series([r[1] for r in rows], index=idx)
     if not amt:
-        return {}
+        return pd.DataFrame()
     A = pd.DataFrame(amt).sort_index()
-    flow = A.rolling(5).mean().iloc[-1] / A.rolling(20).mean().iloc[-1] - 1
-    return {k: round(float(v) * 100, 1) for k, v in flow.items() if v == v}
+    m5 = A.rolling(5, min_periods=3).mean()
+    m20 = A.rolling(20, min_periods=10).mean()
+    return (m5 / m20 - 1) * 100
+
+
+def sector_fund_flow(CL_sector=None):
+    """资金方向：近5日均额 / 近20日均额。仅作方向提示。"""
+    F = sector_fund_flow_series()
+    if F.empty:
+        return {}
+    flow = F.iloc[-1]
+    return {k: round(float(v), 1) for k, v in flow.items() if v == v}
 
 
 # ---------------------------------------------------------------- 对外入口

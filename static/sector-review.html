@@ -86,6 +86,7 @@ button:hover{background:#374151}button.on{background:#ff9f43;color:#0a0e17;borde
       <button class="on" data-sort="strength">板块强度</button>
       <button data-sort="newhigh">创新高数</button>
       <button data-sort="tradable">可交易数</button>
+      <button data-sort="fund">资金</button>
       <span style="flex:1"></span>
       <button id="refresh">重新计算</button>
     </div>
@@ -93,13 +94,14 @@ button:hover{background:#374151}button.on{background:#ff9f43;color:#0a0e17;borde
       <table id="tbl">
         <thead><tr>
           <th>#</th><th>板块</th><th>距250日高</th><th>距60日高</th><th>20日</th><th>60日</th>
-          <th>量比</th><th>MA20</th><th>成分</th><th>可交易</th><th>创新高</th><th>20日涨占比</th><th>结构</th>
+          <th>量比</th><th>资金</th><th>MA20</th><th>成分</th><th>可交易</th><th>创新高</th><th>20日涨占比</th><th>结构</th>
         </tr></thead>
-        <tbody><tr><td colspan="13" class="empty">加载中…</td></tr></tbody>
+        <tbody><tr><td colspan="14" class="empty">加载中…</td></tr></tbody>
       </table>
     </div>
     <div class="muted small" style="margin-top:8px">
       点击任意一行查看该板块成分股明细。「距250日高」用官方板块指数；成分/可交易/创新高/涨占比用本地个股日线统计。
+      <div id="fundnote" style="margin-top:8px;line-height:1.7"></div>
     </div>
   </section>
 
@@ -211,12 +213,26 @@ function strengthSort(list) {
   });
 }
 
+// 资金列：纯观察项，不给强弱档标签。
+// 板块层的「强势+资金高」已在本项目回测中被否证，标档会展示无效结论。
+function fundCell(s) {
+  if (s.fund === null || s.fund === undefined) return '<span class="muted">—</span>';
+  const c = s.fund > 0 ? 'pos' : s.fund < 0 ? 'neg' : '';
+  return `<span class="${c}">${pct(s.fund)}</span>`;
+}
+
 function renderTable() {
   if (!PANEL) return;
   let list = PANEL.sectors.slice();
   if (SORTKEY === 'strength') list = strengthSort(list);
   else if (SORTKEY === 'newhigh') list.sort((a, b) => b.breadth.new_high - a.breadth.new_high);
   else if (SORTKEY === 'tradable') list.sort((a, b) => b.breadth.tradable - a.breadth.tradable);
+  else if (SORTKEY === 'fund') list.sort((a, b) => {
+    const av = a.fund, bv = b.fund;
+    if (av === null || av === undefined) return 1;
+    if (bv === null || bv === undefined) return -1;
+    return bv - av;
+  });
 
   const rows = list.map((s, i) => {
     const st = s.strength, b = s.breadth;
@@ -232,6 +248,7 @@ function renderTable() {
       <td class="${cls(st.ret20)}">${pct(st.ret20)}</td>
       <td class="${cls(st.ret60)}">${pct(st.ret60)}</td>
       <td>${fmt(st.vol_ratio)}</td>
+      <td>${fundCell(s)}</td>
       <td>${ma20}</td>
       <td>${b.count}</td>
       <td>${b.tradable}</td>
@@ -241,7 +258,7 @@ function renderTable() {
     </tr>`;
   }).join('');
   $('tbl').querySelector('tbody').innerHTML = rows ||
-    '<tr><td colspan="13" class="empty">无数据</td></tr>';
+    '<tr><td colspan="14" class="empty">无数据</td></tr>';
   $('tbl').querySelectorAll('tbody tr[data-sector]').forEach(tr => {
     tr.onclick = () => loadStocks(tr.dataset.sector);
   });
@@ -295,6 +312,14 @@ async function load(force) {
       `覆盖 ${PANEL.coverage.stocks_with_history} 只个股 / ${PANEL.coverage.sectors} 个板块 ` +
       `（${PANEL.coverage.sectors_with_index} 个有官方指数）`;
     $('cov').textContent = `（${PANEL.coverage.sectors} 个板块）`;
+    const ff = PANEL.fund_factor;
+    if (ff) {
+      $('fundnote').innerHTML =
+        `<b>资金</b> = 近5日均额 / 近20日均额 − 1，全市场 ${ff.n} 个板块中位数 <b>${pct(ff.median)}</b>，` +
+        `正值 <b>${ff.positive_n}/${ff.n}</b> 个。` +
+        `该值是<b>成交额代理变量</b>，不是真实主力资金流（无龙虎榜/北向/大单数据）。` +
+        `<span class="muted">${ff.no_tag}；${ff.at_sector_level}</span>`;
+    }
     renderRegime(PANEL.market);
     renderFacts(PANEL.market);
     renderTable();

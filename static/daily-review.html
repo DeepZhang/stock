@@ -190,15 +190,28 @@ function render(d) {
     $('picks-meta').textContent = '';
     $('picks-body').innerHTML = '<div class="empty">今天没有符合条件的标的（可交易池内超跌股不足）。空仓也是决策。</div>';
   } else {
+    const ff = pm.flow_factor;
     $('picks-meta').innerHTML =
       `规则：${pm.rule || '—'} · 可交易池 ${pm.pool_size} 只 / 超跌池 ${pm.pale_pool} 只
        · 回测 10日均值 <b>+${pm.backtest.mean_10d}%</b> t=${pm.backtest.t} 胜率 ${pm.backtest.win_rate}%`;
+    let prevTier = null;
     $('picks-body').innerHTML = `<div class="table-wrap"><table>
       <thead><tr>
         <th>#</th><th>代码</th><th>名称</th><th>收盘</th><th>20日涨跌</th>
-        <th>5日涨跌</th><th>距60日高</th><th>量比</th><th>所属板块</th>
+        <th>5日涨跌</th><th>距60日高</th><th>量比</th><th>板块资金</th><th>所属板块</th>
       </tr></thead><tbody>
-      ${picks.map((r, i) => `<tr>
+      ${picks.map((r, i) => {
+        let sep = '';
+        if (prevTier !== null && r.flow_strong !== prevTier) {
+          sep = `<tr><td colspan="10" class="small muted" style="background:rgba(127,127,127,.08);padding:6px 8px">
+            以下为<b>板块资金相对弱的一半</b>（按本批 ${d.pick_meta ? d.pick_meta.flow_median : ''}% 中位数划分，
+            回测中较另一半低 ${ff ? ff.delta_10d_pct : '0.6'}%/10日，仅作备选）。
+            <span class="muted">注意：分档是池内相对比较，数值为负不代表该板块资金流出全市场。</span></td></tr>`;
+        }
+        prevTier = r.flow_strong;
+        const fl = r.sector_flow;
+        const flCls = fl === null || fl === undefined ? '' : (fl > 0 ? 'pos' : fl < 0 ? 'neg' : '');
+        return sep + `<tr>
         <td class="rank">${i + 1}</td>
         <td>${r.code}</td>
         <td>${r.name || '—'}</td>
@@ -207,14 +220,23 @@ function render(d) {
         <td class="${cls(r.ret5)}">${pct(r.ret5)}</td>
         <td class="${cls(r.dist_high60)}">${pct(r.dist_high60)}</td>
         <td>${r.vol_ratio === null ? '—' : r.vol_ratio.toFixed(2)}</td>
+        <td class="${flCls}">${fl === null || fl === undefined ? '—' : (fl > 0 ? '+' : '') + fl + '%'}</td>
         <td class="small muted">${(r.sectors || []).join(' · ') || '—'}</td>
-      </tr>`).join('')}
+      </tr>`;
+      }).join('')}
       </tbody></table></div>
       <div class="warnbox" style="margin-top:12px">
         <b>反弹博弈，不是趋势</b>：持有 10 个交易日，止损 -8%。
         这批票 20 日已跌 ${picks[0] ? Math.abs(picks[0].ret20).toFixed(0) : '30'}+ %，
         上涨来自超跌修复而非基本面改善，务必按纪律执行。
-      </div>`;
+      </div>
+      ${ff ? `<div class="small muted" style="margin-top:10px">
+        <b>板块资金分档的实测依据</b>：深跌区超跌池内，按所属板块资金高低配对差分，
+        10日 <b>+${ff.delta_10d_pct}%</b>(t=${ff.t_10d})、20日 <b>+${ff.delta_20d_pct}%</b>(t=${ff.t_20d})。
+        切分阈值 30/50/70 分位都为正，前/后半样本同向，20日 4/4 独立时段为正。
+        <span class="muted">限制：深跌区 353 个交易日仅来自 ${ff.caveat}；
+        资金口径为「5日均额/20日均额」的代理变量，非真实主力资金流。</span>
+      </div>` : ''}`;
   }
 
   // 板块
