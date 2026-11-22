@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>每日复盘 · 股票看板</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0e17;color:#e5e7eb;font-family:"PingFang SC","Microsoft YaHei",sans-serif;font-size:13px;line-height:1.7}
+nav{background:#111827;border-bottom:1px solid #1f2937;padding:14px 24px;display:flex;gap:22px;flex-wrap:wrap}
+a{color:#9ca3af;text-decoration:none}a:hover{color:#fff}
+.brand,.active,h1,h2{color:#ff9f43}
+main{max-width:1500px;margin:auto;padding:20px 16px}
+.card{background:#111827;border:1px solid #1f2937;border-radius:12px;padding:16px 18px;margin-bottom:14px}
+h1{font-size:21px}h2{font-size:16px;margin-bottom:10px}
+.muted{color:#9ca3af}.small{font-size:12px}
+.meta{color:#9ca3af;margin:6px 0 16px}
+.hero{display:flex;align-items:center;gap:20px;flex-wrap:wrap;border-left:4px solid #6b7280;padding:18px}
+.hero.go{border-left-color:#f87171;background:#1a0f0f}
+.hero.stop{border-left-color:#10b981;background:#0a1a14}
+.hero .big{font-size:30px;font-weight:700;letter-spacing:-.5px;line-height:1.2}
+.hero .sub{font-size:13px;color:#9ca3af;margin-top:2px}
+.tag{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600}
+.tag.go{background:#7f1d1d;color:#fca5a5}
+.tag.stop{background:#064e3b;color:#34d399}
+.tag.gray{background:#1f2937;color:#9ca3af}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin-top:12px}
+.fact{background:#0a0e17;border:1px solid #1f2937;border-radius:8px;padding:11px 13px}
+.fact .k{color:#9ca3af;font-size:12px}
+.fact .v{font-size:17px;font-weight:600;font-variant-numeric:tabular-nums}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;white-space:nowrap;font-variant-numeric:tabular-nums}
+th,td{text-align:right;padding:7px 9px;border-bottom:1px solid #1b2432}
+th{color:#9ca3af;font-weight:normal;font-size:12px;position:sticky;top:0;background:#111827}
+td:first-child,th:first-child,td:nth-child(2),th:nth-child(2),td:nth-child(9),th:nth-child(9){text-align:left}
+tbody tr:hover{background:#151d2b}
+.pos{color:#f87171}.neg{color:#34d399}  /* A股习惯：红涨绿跌 */
+.rank{color:#6b7280}
+.bar{display:inline-block;height:5px;border-radius:3px;background:#1f2937;vertical-align:middle;width:60px;position:relative;overflow:hidden}
+.bar i{position:absolute;top:0;left:0;height:100%;background:#f59e0b}
+.badge{display:inline-block;padding:1px 7px;border-radius:4px;font-size:11px;font-weight:600}
+.b-hot{background:#7f1d1d;color:#fca5a5}
+.b-cold{background:#0c3a5c;color:#7dd3fc}
+.b-warn{background:#78350f;color:#fbbf24}
+button{background:#1f2937;color:#e5e7eb;border:1px solid #374151;border-radius:6px;padding:5px 12px;cursor:pointer;font-size:12px}
+button:hover{background:#374151}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.empty{color:#6b7280;padding:24px 0;text-align:center}
+.warnbox{background:#1c1408;border:1px solid #78350f;border-radius:8px;padding:12px 14px;color:#fbbf24}
+.okbox{background:#0a1a14;border:1px solid #065f46;border-radius:8px;padding:12px 14px;color:#34d399}
+.notes li{margin:5px 0 5px 18px;color:#9ca3af}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:900px){.grid2{grid-template-columns:1fr}}
+.sec-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #1b2432}
+.sec-item:last-child{border-bottom:none}
+.sec-name{font-weight:600;color:#fff}
+</style>
+</head>
+<body>
+<nav>
+  <strong class="brand">📊 股票看板</strong>
+  <a href="/">资金流向</a><a href="/market">行情总览/每日复盘</a><a href="/rank">排行榜</a>
+  <a href="/kline">个股K线</a><a href="/unified">统一榜单</a><a href="/screener">选股器</a>
+  <a href="/sector-leaders">板块龙头</a><a href="/sector-review">板块复盘</a>
+  <a href="/daily-review" class="active">每日复盘</a>
+  <a href="/shortterm">短线选股</a><a href="/precious">贵金属</a>
+</nav>
+<main>
+  <h1>每日复盘</h1>
+  <div class="meta" id="meta">正在读取本地历史数据…</div>
+
+  <section class="card hero" id="hero">
+    <div>
+      <div class="sub">今日市场状态</div>
+      <div class="big" id="regime-label">—</div>
+    </div>
+    <div id="regime-tags"></div>
+    <div style="flex:1"></div>
+    <div style="text-align:right">
+      <div class="sub">今天该不该出手</div>
+      <div class="big" id="verdict" style="font-size:22px">—</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>状态说明：为什么这么判断</h2>
+    <div class="facts" id="facts"></div>
+    <div id="playnote" style="margin-top:12px"></div>
+  </section>
+
+  <section class="card" id="picks-card">
+    <h2>今日个股清单 <span class="muted small" id="picks-meta"></span></h2>
+    <div id="picks-body"></div>
+  </section>
+
+  <div class="grid2">
+    <section class="card">
+      <h2>板块观察 · 相对强势 <span class="muted small">仅供参考</span></h2>
+      <div id="strong-body"></div>
+    </section>
+    <section class="card">
+      <h2>板块观察 · 建议规避 <span class="muted small">仅供参考</span></h2>
+      <div id="avoid-body"></div>
+    </section>
+  </div>
+
+  <section class="card">
+    <h2>数据来源与口径</h2>
+    <ul class="notes">
+      <li><b>市场状态</b>：23 个板块官方 BK 指数等权合成的净值，距 250 日高点的回撤分档。深跌 &lt;-20%，中度回撤 -20%~-10%，浅回撤 -10%~0，高位 &gt;0。</li>
+      <li><b>可交易池</b>：股价 ≥ 5 元、当日成交额 ≥ 5000 万、20 日均额 ≥ 1 亿、次日开盘非涨停（买得到）。</li>
+      <li><b>个股规则</b>：20 日跌幅前 10% 成池，池内按「当日成交额 / 20 日均额」排序取前 20。全样本 337 个深跌交易日实测：10 日持有均值 <b>+3.16%</b>，t=2.10，胜率 <b>53.9%</b>。</li>
+      <li><b>「跌得少就是强」在深跌区被数据否定</b>：距 60 日高点最近的一档，10 日超额 <b>-1.90%</b>（t=-4.84），是全部测试中最强的反向关系。</li>
+      <li><b>板块不参与选股</b>：板块强度对超跌个股无加成（强 vs 弱差 +0.001%，t=0.27）；板块强度×资金四象限绝对收益最高 t 仅 2.24。故板块只作观察与规避提示。</li>
+      <li><b>这是反弹博弈，不是趋势跟随</b>：持有期 10 个交易日，建议止损 -8%，不要追涨、不要长期持有。</li>
+    </ul>
+  </section>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+const pct = v => v === null || v === undefined ? '—' : (v > 0 ? '+' : '') + v.toFixed(2) + '%';
+const cls = v => v === null || v === undefined ? '' : (v > 0 ? 'pos' : v < 0 ? 'neg' : '');
+
+function secRow(b, showFund) {
+  const fund = b.fund === null || b.fund === undefined ? null : b.fund;
+  const fcls = fund === null ? 'b-warn' : (fund > 0 ? 'b-hot' : 'b-cold');
+  const ftxt = fund === null ? '资金 —' : '资金 ' + (fund > 0 ? '+' : '') + fund.toFixed(1) + '%';
+  return `<div class="sec-item">
+    <div>
+      <div class="sec-name">${b.name}</div>
+      <div class="small muted">20日 <span class="${cls(b.ret20)}">${pct(b.ret20)}</span>
+        · 距250日高 ${pct(b.dist_high250)}</div>
+    </div>
+    <div style="text-align:right">
+      <div><span class="badge ${fcls}">${ftxt}</span></div>
+      <div class="small muted" style="margin-top:3px">强度分位 ${b.strength_pct}</div>
+    </div>
+  </div>`;
+}
+
+async function load(force) {
+  $('meta').textContent = '正在计算…';
+  try {
+    const r = await fetch('/api/daily-review' + (force ? '?refresh=1' : ''));
+    const d = await r.json();
+    render(d);
+  } catch (e) {
+    $('meta').textContent = '加载失败：' + e;
+  }
+}
+
+function render(d) {
+  if (d.error) {
+    $('meta').textContent = '暂无数据：' + d.error;
+    return;
+  }
+  const m = d.market || {};
+  $('meta').innerHTML = `数据日期 <b>${d.date}</b> · 生成于 ${d.generated_at} · 覆盖 ${m.stock_count} 只个股
+    <button style="margin-left:12px" onclick="load(true)">重新计算</button>`;
+
+  // 顶部结论
+  const hero = $('hero');
+  hero.className = 'card hero ' + (m.usable ? 'go' : 'stop');
+  $('regime-label').textContent = m.label || '—';
+  $('regime-tags').innerHTML =
+    `<span class="tag ${m.usable ? 'go' : 'stop'}">${m.usable ? '可出手' : '不出手'}</span>
+     <span class="tag gray">${m.dd_from_250d_high > 0 ? '+' : ''}${m.dd_from_250d_high}% 距高点</span>
+     ${m.dd_percentile_3y !== null ? `<span class="tag gray">近3年分位 ${m.dd_percentile_3y}%</span>` : ''}`;
+  $('verdict').textContent = m.method || '—';
+
+  // 事实卡
+  $('facts').innerHTML = `
+    <div class="fact"><div class="k">市场状态</div><div class="v">${m.label}</div></div>
+    <div class="fact"><div class="k">距 250 日高点</div><div class="v ${cls(m.dd_from_250d_high)}">${m.dd_from_250d_high}%</div></div>
+    <div class="fact"><div class="k">该回撤深度近3年分位</div><div class="v">${m.dd_percentile_3y === null ? '—' : m.dd_percentile_3y + '%'}</div></div>
+    <div class="fact"><div class="k">建议持有期</div><div class="v">${m.hold_days ? m.hold_days + ' 个交易日' : '—'}</div></div>`;
+
+  $('playnote').innerHTML = m.usable
+    ? `<div class="okbox"><b>${m.method}</b>：${m.note}</div>`
+    : `<div class="warnbox"><b>${m.method}</b>：${m.note}</div>`;
+
+  // 个股清单
+  const picks = d.picks || [];
+  const pm = d.pick_meta || {};
+  if (!m.usable) {
+    $('picks-meta').textContent = '';
+    $('picks-body').innerHTML = '<div class="empty">当前状态不给出个股推荐。等市场状态明确后再看。</div>';
+  } else if (!picks.length) {
+    $('picks-meta').textContent = '';
+    $('picks-body').innerHTML = '<div class="empty">今天没有符合条件的标的（可交易池内超跌股不足）。空仓也是决策。</div>';
+  } else {
+    $('picks-meta').innerHTML =
+      `规则：${pm.rule || '—'} · 可交易池 ${pm.pool_size} 只 / 超跌池 ${pm.pale_pool} 只
+       · 回测 10日均值 <b>+${pm.backtest.mean_10d}%</b> t=${pm.backtest.t} 胜率 ${pm.backtest.win_rate}%`;
+    $('picks-body').innerHTML = `<div class="table-wrap"><table>
+      <thead><tr>
+        <th>#</th><th>代码</th><th>名称</th><th>收盘</th><th>20日涨跌</th>
+        <th>5日涨跌</th><th>距60日高</th><th>量比</th><th>所属板块</th>
+      </tr></thead><tbody>
+      ${picks.map((r, i) => `<tr>
+        <td class="rank">${i + 1}</td>
+        <td>${r.code}</td>
+        <td>${r.name || '—'}</td>
+        <td>${r.close}</td>
+        <td class="${cls(r.ret20)}">${pct(r.ret20)}</td>
+        <td class="${cls(r.ret5)}">${pct(r.ret5)}</td>
+        <td class="${cls(r.dist_high60)}">${pct(r.dist_high60)}</td>
+        <td>${r.vol_ratio === null ? '—' : r.vol_ratio.toFixed(2)}</td>
+        <td class="small muted">${(r.sectors || []).join(' · ') || '—'}</td>
+      </tr>`).join('')}
+      </tbody></table></div>
+      <div class="warnbox" style="margin-top:12px">
+        <b>反弹博弈，不是趋势</b>：持有 10 个交易日，止损 -8%。
+        这批票 20 日已跌 ${picks[0] ? Math.abs(picks[0].ret20).toFixed(0) : '30'}+ %，
+        上涨来自超跌修复而非基本面改善，务必按纪律执行。
+      </div>`;
+  }
+
+  // 板块
+  const s = d.sectors_strong || [], a = d.sectors_avoid || [];
+  $('strong-body').innerHTML = s.length
+    ? s.map(b => secRow(b, true)).join('') +
+      `<div class="small muted" style="margin-top:10px">${d.disclaimer || ''}</div>`
+    : '<div class="empty">无数据</div>';
+  $('avoid-body').innerHTML = a.length
+    ? a.map(b => secRow(b, true)).join('') +
+      `<div class="small muted" style="margin-top:10px">强度分位处于后 25%，且多数伴随资金流出。规避为观察建议，非做空依据。</div>`
+    : '<div class="empty">无数据</div>';
+}
+
+load(false);
+</script>
+</body>
+</html>

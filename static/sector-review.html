@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>板块复盘 · 股票看板</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0e17;color:#e5e7eb;font-family:"PingFang SC","Microsoft YaHei",sans-serif;font-size:13px;line-height:1.7}
+nav{background:#111827;border-bottom:1px solid #1f2937;padding:14px 24px;display:flex;gap:22px;flex-wrap:wrap}
+a{color:#9ca3af;text-decoration:none}a:hover{color:#fff}
+.brand,.active,h1,h2{color:#ff9f43}
+main{max-width:1500px;margin:auto;padding:20px 16px}
+.card{background:#111827;border:1px solid #1f2937;border-radius:12px;padding:16px 18px;margin-bottom:14px}
+h1{font-size:21px}h2{font-size:16px;margin-bottom:10px}
+h3{font-size:14px;color:#fff;margin-bottom:8px}
+.muted{color:#9ca3af}.small{font-size:12px}
+.meta{color:#9ca3af;margin:6px 0 16px}
+/* 市场状态横幅 */
+.regime{display:flex;align-items:center;gap:16px;flex-wrap:wrap;border-left:4px solid #6b7280}
+.regime.warn{border-left-color:#f59e0b;background:#1c1408}
+.regime.calm{border-left-color:#10b981}
+.regime .big{font-size:26px;font-weight:700;letter-spacing:-.5px}
+.regime .tag{padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600}
+.tag.warn{background:#78350f;color:#fbbf24}
+.tag.ok{background:#064e3b;color:#34d399}
+.tag.gray{background:#1f2937;color:#9ca3af}
+/* 事实清单 */
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;margin-top:12px}
+.fact{background:#0a0e17;border:1px solid #1f2937;border-radius:8px;padding:12px 14px}
+.fact b{color:#ff9f43}
+/* 表格 */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;white-space:nowrap;font-variant-numeric:tabular-nums}
+th,td{text-align:right;padding:7px 9px;border-bottom:1px solid #1b2432}
+th{color:#9ca3af;font-weight:normal;font-size:12px;position:sticky;top:0;background:#111827}
+td:first-child,th:first-child,td:nth-child(2),th:nth-child(2){text-align:left}
+tbody tr:hover{background:#151d2b}
+.neg{color:#34d399}.pos{color:#f87171}  /* A股习惯：绿跌红涨 */
+.rank{color:#6b7280;font-variant-numeric:tabular-nums}
+.bar{display:inline-block;height:5px;border-radius:3px;background:#1f2937;vertical-align:middle;width:54px;position:relative;overflow:hidden}
+.bar i{position:absolute;top:0;left:0;height:100%;background:#f59e0b}
+.badge{display:inline-block;padding:1px 7px;border-radius:4px;font-size:11px}
+.b-普涨{background:#064e3b;color:#34d399}
+.b-普跌{background:#3f1d1d;color:#f87171}
+.b-少数拉动{background:#78350f;color:#fbbf24}
+.b-分化{background:#1f2937;color:#9ca3af}
+button{background:#1f2937;color:#e5e7eb;border:1px solid #374151;border-radius:6px;padding:5px 12px;cursor:pointer;font-size:12px}
+button:hover{background:#374151}button.on{background:#ff9f43;color:#0a0e17;border-color:#ff9f43}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.detail{background:#0a0e17;border:1px solid #1f2937;border-radius:8px;padding:14px;margin-top:12px}
+.empty{color:#6b7280;padding:20px 0;text-align:center}
+.notes li{margin:4px 0 4px 18px;color:#9ca3af}
+.warnbox{background:#1c1408;border:1px solid #78350f;border-radius:8px;padding:12px 14px;margin-top:10px;color:#fbbf24}
+</style>
+</head>
+<body>
+<nav>
+  <strong class="brand">📊 股票看板</strong>
+  <a href="/">资金流向</a><a href="/market">行情总览/每日复盘</a><a href="/rank">排行榜</a>
+  <a href="/kline">个股K线</a><a href="/unified">统一榜单</a><a href="/screener">选股器</a>
+  <a href="/sector-leaders">板块龙头</a><a href="/sector-review" class="active">板块复盘</a><a href="/daily-review">每日复盘</a>
+  <a href="/shortterm">短线选股</a><a href="/precious">贵金属</a>
+</nav>
+<main>
+  <h1>板块复盘</h1>
+  <div class="meta" id="meta">正在读取本地历史数据…</div>
+
+  <!-- 市场状态 -->
+  <section class="card regime" id="regime">
+    <div><div class="muted small">市场状态（23 板块官方指数等权）</div><div class="big" id="regime-label">—</div></div>
+    <div id="regime-tags"></div>
+  </section>
+
+  <!-- 必读：条件性事实 -->
+  <section class="card" id="regime-facts">
+    <h2>先看这个：当前市场状态下，「跌得少」意味着什么</h2>
+    <div id="facts-body"></div>
+  </section>
+
+  <!-- 板块表 -->
+  <section class="card">
+    <h2>板块强弱与分化 <span class="muted small" id="cov"></span></h2>
+    <div class="toolbar">
+      <span class="muted small">排序：</span>
+      <button class="on" data-sort="strength">板块强度</button>
+      <button data-sort="newhigh">创新高数</button>
+      <button data-sort="tradable">可交易数</button>
+      <span style="flex:1"></span>
+      <button id="refresh">重新计算</button>
+    </div>
+    <div class="table-wrap">
+      <table id="tbl">
+        <thead><tr>
+          <th>#</th><th>板块</th><th>距250日高</th><th>距60日高</th><th>20日</th><th>60日</th>
+          <th>量比</th><th>MA20</th><th>成分</th><th>可交易</th><th>创新高</th><th>20日涨占比</th><th>结构</th>
+        </tr></thead>
+        <tbody><tr><td colspan="13" class="empty">加载中…</td></tr></tbody>
+      </table>
+    </div>
+    <div class="muted small" style="margin-top:8px">
+      点击任意一行查看该板块成分股明细。「距250日高」用官方板块指数；成分/可交易/创新高/涨占比用本地个股日线统计。
+    </div>
+  </section>
+
+  <!-- 明细 -->
+  <section class="card" id="detail-card" style="display:none">
+    <h2 id="detail-title">成分股明细</h2>
+    <div id="detail-breadth" class="facts" style="margin-bottom:12px"></div>
+    <div class="toolbar">
+      <span class="muted small">排序：</span>
+      <button class="on" data-dsort="dist_high60">距高点</button>
+      <button data-dsort="ret20">20日涨幅</button>
+      <button data-dsort="ret60">60日涨幅</button>
+      <button data-dsort="amount">成交额</button>
+      <span style="flex:1"></span>
+      <label class="small muted"><input type="checkbox" id="show-all"> 显示全部（含流动性不足）</label>
+    </div>
+    <div class="table-wrap">
+      <table id="dtbl">
+        <thead><tr>
+          <th>代码</th><th>名称</th><th>收盘</th><th>距60日高</th><th>距250日高</th>
+          <th>5日</th><th>20日</th><th>60日</th><th>量比</th><th>换手</th><th>成交额</th><th>板块内分位</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 口径 -->
+  <section class="card">
+    <h2>数据来源与口径</h2>
+    <ul class="notes small">
+      <li>板块强度：东方财富官方板块指数（BK）日线，22 个板块有指数；固态电池缺指数，用成分股中位替代。</li>
+      <li>成分股：本地 <code>data/history/</code> 个股前复权日线，2015 年起。板块成分按 2026-11-08 冻结快照。</li>
+      <li>距250日高 = 现价 / 过去250日最高收盘 − 1，越接近 0 代表越接近一年高位。</li>
+      <li>创新高：距60日高点在 0.5% 以内。可交易：当日成交额 ≥ 5000 万。</li>
+      <li>结构判定：20日上涨占比 ≥60% 记「普涨」，≤20% 记「普跌」，有新高但涨占比 &lt;40% 记「少数拉动」，其余「分化」。</li>
+      <li>退市/长停股票不在本地数据内，历史统计存在幸存者偏差。</li>
+    </ul>
+  </section>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+const fmt = (v, d = 2) => (v === null || v === undefined || Number.isNaN(v)) ? '—' : Number(v).toFixed(d);
+const pct = (v, d = 1) => (v === null || v === undefined) ? '—' : (v > 0 ? '+' : '') + Number(v).toFixed(d) + '%';
+const cls = v => (v === null || v === undefined) ? '' : (v > 0 ? 'pos' : (v < 0 ? 'neg' : ''));
+
+let PANEL = null, SORTKEY = 'strength', CURRENT = null, DSORT = 'dist_high60';
+
+const REGIME_TEXT = {
+  deep_drawdown: '深跌市',
+  drawdown: '中度回撤',
+  shallow: '浅回撤',
+  high: '高位/接近新高'
+};
+
+function renderRegime(m) {
+  if (!m) { $('regime-label').textContent = '数据不足'; return; }
+  const box = $('regime');
+  const deep = m.regime === 'deep_drawdown';
+  box.className = 'card regime ' + (deep ? 'warn' : (m.regime === 'high' ? 'calm' : ''));
+  $('regime-label').textContent = REGIME_TEXT[m.regime] || m.regime;
+  const tags = [];
+  tags.push(`<span class="tag ${deep ? 'warn' : 'gray'}">距250日高 ${pct(m.dd_from_250d_high)}</span>`);
+  tags.push(`<span class="tag ok">20日 ${pct(m.ret20)}</span>`);
+  tags.push(`<span class="tag ${m.above_ma20 ? 'ok' : 'warn'}">${m.above_ma20 ? '站上' : '跌破'}MA20</span>`);
+  tags.push(`<span class="tag ${m.above_ma60 ? 'ok' : 'warn'}">${m.above_ma60 ? '站上' : '跌破'}MA60</span>`);
+  $('regime-tags').innerHTML = tags.join(' ');
+}
+
+// 关键：把"跌得少"在不同市场状态下的实测含义讲清楚
+function renderFacts(m) {
+  if (!m) { $('facts-body').innerHTML = '<div class="muted">市场状态不可用</div>'; return; }
+  const deep = m.regime === 'deep_drawdown';
+  if (deep) {
+    $('facts-body').innerHTML = `
+      <div class="warnbox">
+        <b>当前是深跌市。历史实测：「谁跌得少」在这个状态下是反向指标。</b>
+      </div>
+      <div class="facts">
+        <div class="fact">深跌市（距250日高 &lt; −20%）里，<b>最抗跌的前 25% 板块</b>，未来 20 日相对 23 板块等权的超额为 <b>−0.804%</b>（NW t = −2.34）——倾向补跌。</div>
+        <div class="fact">同期 <b>中间 50% 板块</b> 的 20 日超额是 <b>+0.211%</b>，<b>最弱后 25%</b> 是 <b>+0.224%</b>。抗跌位置反而不是最好的位置。</div>
+        <div class="fact">对照组：市场在 <b>浅回撤/高位</b> 时，最抗跌前 25% 的超额是 <b>+0.444%</b>（NW t = +2.18）——强者恒强只在非深跌市成立。</div>
+        <div class="fact">证据强度有限：深跌期看似 531 个交易日，但只集中在 <b>5 个独立时段</b>（2015下半年、2016上半年、2018-2019、2022年4-5月、2024年6-9月），其中 4 次为负、1 次为正。这是「几次行情复盘」，不是统计规律。</div>
+      </div>`;
+  } else if (m.regime === 'high') {
+    $('facts-body').innerHTML = `
+      <div class="facts">
+        <div class="fact">市场处于高位：历史实测 <b>最抗跌前 25% 板块</b> 未来 20 日超额 <b>+0.444%</b>（NW t = +2.18），强者恒强成立。</div>
+        <div class="fact">同期 <b>最弱后 25%</b> 超额 <b>−0.433%</b>（NW t = −2.13）。这个状态下「跌得多」的板块继续落后。</div>
+        <div class="fact">注意：全样本最优可执行组合（成本后）年化仅 +5% 上下，且随成本迅速转负。此页只用于观察，不是交易信号。</div>
+      </div>`;
+  } else {
+    $('facts-body').innerHTML = `
+      <div class="facts">
+        <div class="fact">当前处于 <b>${REGIME_TEXT[m.regime] || m.regime}</b>，不属于深跌市。历史实测在该区间板块强度的方向性不显著，建议以观察为主。</div>
+        <div class="fact">全样本（2015-2026）：板块最强前25% 的 5 日超额仅 <b>+0.041%</b>（NW t = +1.16），统计上站不住。</div>
+        <div class="fact">而 <b>个股层面</b>追强势是显著负收益：个股最强前10% 的 5 日超额 <b>−0.366%</b>（NW t = −5.07），10 日 <b>−0.658%</b>。A股短周期是反转市。</div>
+      </div>`;
+  }
+}
+
+function strengthSort(list) {
+  return list.slice().sort((a, b) => {
+    const av = a.strength.dist_high250, bv = b.strength.dist_high250;
+    if (av === null || av === undefined) return 1;
+    if (bv === null || bv === undefined) return -1;
+    return bv - av;
+  });
+}
+
+function renderTable() {
+  if (!PANEL) return;
+  let list = PANEL.sectors.slice();
+  if (SORTKEY === 'strength') list = strengthSort(list);
+  else if (SORTKEY === 'newhigh') list.sort((a, b) => b.breadth.new_high - a.breadth.new_high);
+  else if (SORTKEY === 'tradable') list.sort((a, b) => b.breadth.tradable - a.breadth.tradable);
+
+  const rows = list.map((s, i) => {
+    const st = s.strength, b = s.breadth;
+    const ma20 = st.above_ma20 === null ? '—' :
+      `<span class="${st.above_ma20 ? 'pos' : 'neg'}">${st.above_ma20 ? '上' : '下'}</span>`;
+    const dh250 = st.dist_high250;
+    const barW = dh250 === null ? 0 : Math.max(0, Math.min(54, 54 + dh250 * 1.05));
+    return `<tr data-sector="${s.name}" style="cursor:pointer">
+      <td class="rank">${i + 1}</td>
+      <td><b>${s.name}</b></td>
+      <td class="${cls(dh250)}">${dh250 === null ? '—' : pct(dh250)} <span class="bar"><i style="width:${barW}px"></i></span></td>
+      <td class="${cls(st.dist_high60)}">${pct(st.dist_high60)}</td>
+      <td class="${cls(st.ret20)}">${pct(st.ret20)}</td>
+      <td class="${cls(st.ret60)}">${pct(st.ret60)}</td>
+      <td>${fmt(st.vol_ratio)}</td>
+      <td>${ma20}</td>
+      <td>${b.count}</td>
+      <td>${b.tradable}</td>
+      <td class="${b.new_high > 0 ? 'pos' : ''}">${b.new_high}</td>
+      <td>${fmt(b.up20_ratio, 0)}%</td>
+      <td><span class="badge b-${b.label}">${b.label}</span></td>
+    </tr>`;
+  }).join('');
+  $('tbl').querySelector('tbody').innerHTML = rows ||
+    '<tr><td colspan="13" class="empty">无数据</td></tr>';
+  $('tbl').querySelectorAll('tbody tr[data-sector]').forEach(tr => {
+    tr.onclick = () => loadStocks(tr.dataset.sector);
+  });
+}
+
+async function loadStocks(name) {
+  CURRENT = name;
+  $('detail-card').style.display = '';
+  $('detail-title').textContent = name + ' · 成分股明细';
+  $('dtbl').querySelector('tbody').innerHTML = '<tr><td colspan="12" class="empty">加载中…</td></tr>';
+  const all = $('show-all').checked ? '1' : '0';
+  const url = `/api/sector-review/stocks?sector=${encodeURIComponent(name)}&limit=200&sort=${DSORT}&all=${all}`;
+  try {
+    const r = await fetch(url);
+    const d = await r.json();
+    if (d.error) { $('dtbl').querySelector('tbody').innerHTML = `<tr><td colspan="12" class="empty">${d.error}</td></tr>`; return; }
+    const b = d.breadth;
+    $('detail-breadth').innerHTML = `
+      <div class="fact">成分 <b>${b.count}</b> 只，可交易（成交额≥5000万）<b>${b.tradable}</b> 只</div>
+      <div class="fact">创新高（距60日高≥−0.5%）<b>${b.new_high}</b> 只，深跌（距高点&lt;−40%）<b>${b.deep_low}</b> 只</div>
+      <div class="fact">20日上涨占比 <b>${fmt(b.up20_ratio, 1)}%</b>，距高点中位 <b>${pct(b.med_dist_high60)}</b></div>
+      <div class="fact">结构：<span class="badge b-${b.label}">${b.label}</span></div>`;
+    const rows = d.stocks.map(s => `<tr>
+      <td>${s.code}</td><td>${s.name || ''}</td>
+      <td>${fmt(s.close)}</td>
+      <td class="${cls(s.dist_high60)}">${pct(s.dist_high60)}</td>
+      <td class="${cls(s.dist_high250)}">${pct(s.dist_high250)}</td>
+      <td class="${cls(s.ret5)}">${pct(s.ret5)}</td>
+      <td class="${cls(s.ret20)}">${pct(s.ret20)}</td>
+      <td class="${cls(s.ret60)}">${pct(s.ret60)}</td>
+      <td>${fmt(s.vol_ratio)}</td>
+      <td>${s.turnover === null ? '—' : fmt(s.turnover) + '%'}</td>
+      <td>${s.amount ? fmt(s.amount / 1e8) + '亿' : '—'}</td>
+      <td>${s.pct_in_sector === null ? '—' : fmt(s.pct_in_sector, 0)}</td>
+    </tr>`).join('');
+    $('dtbl').querySelector('tbody').innerHTML = rows ||
+      '<tr><td colspan="12" class="empty">该板块无满足条件的成分股</td></tr>';
+    $('detail-card').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  } catch (e) {
+    $('dtbl').querySelector('tbody').innerHTML = '<tr><td colspan="12" class="empty">读取失败</td></tr>';
+  }
+}
+
+async function load(force) {
+  $('meta').textContent = '正在计算…（首次约 20 秒）';
+  try {
+    const r = await fetch('/api/sector-review' + (force ? '?refresh=1' : ''));
+    PANEL = await r.json();
+    if (PANEL.error) { $('meta').textContent = '面板不可用：' + PANEL.error; return; }
+    $('meta').innerHTML = `数据截至 <b>${PANEL.as_of}</b> · 计算于 ${PANEL.generated_at} · ` +
+      `覆盖 ${PANEL.coverage.stocks_with_history} 只个股 / ${PANEL.coverage.sectors} 个板块 ` +
+      `（${PANEL.coverage.sectors_with_index} 个有官方指数）`;
+    $('cov').textContent = `（${PANEL.coverage.sectors} 个板块）`;
+    renderRegime(PANEL.market);
+    renderFacts(PANEL.market);
+    renderTable();
+  } catch (e) {
+    $('meta').textContent = '读取失败：' + e.message;
+  }
+}
+
+document.querySelectorAll('[data-sort]').forEach(b => {
+  b.onclick = () => {
+    document.querySelectorAll('[data-sort]').forEach(x => x.classList.remove('on'));
+    b.classList.add('on'); SORTKEY = b.dataset.sort; renderTable();
+  };
+});
+document.querySelectorAll('[data-dsort]').forEach(b => {
+  b.onclick = () => {
+    document.querySelectorAll('[data-dsort]').forEach(x => x.classList.remove('on'));
+    b.classList.add('on'); DSORT = b.dataset.dsort;
+    if (CURRENT) loadStocks(CURRENT);
+  };
+});
+$('show-all').onchange = () => { if (CURRENT) loadStocks(CURRENT); };
+$('refresh').onclick = () => load(true);
+load(false);
+</script>
+</body>
+</html>

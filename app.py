@@ -19,6 +19,8 @@ import stock_data
 import market_data
 import kline_api
 import unified
+import sector_review
+import daily_recommend
 
 app = Flask(__name__)
 
@@ -653,6 +655,12 @@ def _daily_screen():
             continue
         print(f"[定时选股] 开始运行...")
         _start_screen(force=True)
+        # 同步重算每日复盘结论，页面打开即是最新的
+        try:
+            _d = daily_recommend.get(force=True)
+            print(f"[每日复盘] 已更新 {_d.get('date')} 状态={_d.get('market', {}).get('label')}")
+        except Exception as _e:
+            print(f"[每日复盘] 更新失败: {_e}")
 
 
 
@@ -924,6 +932,67 @@ def kline_js():
 @app.route("/shots/<path:filename>")
 def serve_shot(filename):
     return send_from_directory(os.path.join(BASE_DIR, "shots"), filename)
+
+
+# ===================== 板块复盘面板 =====================
+
+@app.route("/api/sector-review")
+def api_sector_review():
+    """板块强弱 + 分化度 + 市场状态。纯历史计算，不出买卖建议。"""
+    try:
+        force = request.args.get("refresh") == "1"
+        panel = sector_review.get_panel(force=force)
+    except Exception:
+        app.logger.exception("板块复盘面板构建失败")
+        return jsonify({"error": "panel_unavailable", "sectors": [], "market": None}), 200
+    resp = jsonify(panel)
+    resp.headers["Cache-Control"] = "no-store"
+    return resp
+
+
+@app.route("/api/sector-review/stocks")
+def api_sector_review_stocks():
+    name = request.args.get("sector", "")
+    limit = request.args.get("limit", "60")
+    sort = request.args.get("sort", "dist_high60")
+    liq = request.args.get("all") != "1"
+    if not name:
+        return jsonify({"error": "sector_required"}), 400
+    try:
+        data = sector_review.get_sector_stocks(
+            name, limit=limit, require_liquidity=liq, sort=sort)
+    except Exception:
+        app.logger.exception("板块成分明细读取失败")
+        return jsonify({"error": "load_failed"}), 200
+    if data is None:
+        return jsonify({"error": "sector_not_found", "sector": name}), 404
+    resp = jsonify(data)
+    resp.headers["Cache-Control"] = "no-store"
+    return resp
+
+
+@app.route("/api/daily-review")
+def api_daily_review():
+    """每日复盘：今日该不该出手、买什么、哪些板块要避。"""
+    try:
+        force = request.args.get("refresh") == "1"
+        data = daily_recommend.get(force=force)
+    except Exception:
+        app.logger.exception("每日复盘构建失败")
+        return jsonify({"error": "review_unavailable"}), 200
+    resp = jsonify(data)
+    resp.headers["Cache-Control"] = "no-store"
+    return resp
+
+
+@app.route("/sector-review")
+def sector_review_page():
+    return send_file("static/sector-review.html")
+
+
+@app.route("/daily-review")
+def daily_review_page():
+    return send_file("static/daily-review.html")
 
 if __name__ == "__main__":
     threading.Thread(target=_auto_screen, daemon=True).start()
